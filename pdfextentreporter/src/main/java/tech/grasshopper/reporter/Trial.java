@@ -4,19 +4,26 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Base64;
+import java.util.HashMap;
+import java.util.Map;
 
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.MediaEntityBuilder;
 import com.aventstack.extentreports.Status;
+import com.aventstack.extentreports.markuputils.CodeLanguage;
+import com.aventstack.extentreports.markuputils.ExtentColor;
 import com.aventstack.extentreports.markuputils.MarkupHelper;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
-
-import tech.grasshopper.reporter.structure.TableCreator;
 
 public class Trial {
 
 	private static final String CODE1 = "{\n    \"theme\": \"standard\",\n    \"encoding\": \"utf-8\n}";
 	private static final String CODE2 = "{\n    \"protocol\": \"HTTPS\",\n    \"timelineEnabled\": false\n}";
+	private static final String CODE3 = "{ name: { first: \"John\", last: \"Jane\" }, age: 31, city: \"New York\" }";
+	// private static final String CODE3 = "{ name: \"John\", age: 31, city: \"New
+	// York\" }";
+	private static final String CODE4 = "<food>\r\n" + "    <name>Belgian Waffles</name>\r\n"
+			+ "    <price>$5.95</price>\r\n    <calories>650</calories>\r\n" + "</food>";
 
 	public static void main(String[] args) throws IOException {
 
@@ -68,20 +75,45 @@ public class Trial {
 		byte[] array = Files.readAllBytes(Paths.get("src/main/resources/image.png"));
 		String base64 = Base64.getEncoder().encodeToString(array);
 
-		extent.createTest("ScreenCapture").addScreenCaptureFromPath("src/main/resources/image.png")
+		extent.createTest("ScreenCapture").generateLog(Status.FAIL, "Hello There")
+				.addScreenCaptureFromPath("src/main/resources/image.png")
 				.addScreenCaptureFromPath("src/main/resources/logo.png").assignAuthor("Screen").assignAuthor("Veena")
 				.assignAuthor("Neeta").addScreenCaptureFromBase64String(base64)
 				.pass(MediaEntityBuilder.createScreenCaptureFromPath("src/main/resources/amur.png").build());
 
-		extent.createTest("CodeBlock").pass("not").generateLog(Status.PASS,
-				MarkupHelper.createCodeBlock(CODE1, CODE2, CODE1));
+		extent.createTest("Label").generateLog(Status.FAIL, MarkupHelper.createLabel("Label Text", ExtentColor.GREEN));
 
-		String[][] data = { { "h", "d" }, { "r", "t" } };
+		extent.createTest("CodeBlock").pass("not").generateLog(Status.PASS, MarkupHelper.createCodeBlock(CODE1, CODE2))
+				.generateLog(Status.PASS, MarkupHelper.createCodeBlock(CODE4, CodeLanguage.XML))
+				.generateLog(Status.PASS, MarkupHelper.createCodeBlock(CODE3, CodeLanguage.JSON));
 
-		extent.createTest("OtherBlock").pass("not").generateLog(Status.PASS, MarkupHelper.createTable(data));
+		String[][] data = { { "hot", "damn", "coco cola coco cola coco cola coco cola coco cola" },
+				{ "roast roast roat", "ten", "pepsi" } };
+
+		extent.createTest("Table").pass("not").generateLog(Status.PASS, MarkupHelper.createTable(data))
+				.generateLog(Status.WARNING, MarkupHelper.createLabel("Label Text", ExtentColor.RED));
+
+		extent.createTest("ToTable").generateLog(Status.PASS, MarkupHelper.toTable(data));
+
+		Map<String, String> ullidata = new HashMap<>();
+		ullidata.put("1", "One");
+		ullidata.put("2", "Two");
+		ullidata.put("3", "Three");
+		ullidata.put("4",
+				"Four  multiline stuff  multiline stuff  multiline stuff multiline stuff multiline stuff multiline stuff");
+		ullidata.put("5", "Five");
+
+		extent.createTest("Ordered List").generateLog(Status.INFO, MarkupHelper.createOrderedList(ullidata));
+
+		extent.createTest("Unordered List").generateLog(Status.SKIP, MarkupHelper.createUnorderedList(ullidata));
 
 		extent.createTest("Nothing else").assignAuthor("Psuedo").assignCategory("Psuedo").assignAuthor("TheAuthor")
-				.assignCategory("Baby");
+				.assignCategory("Baby").assignCategory("baby").assignCategory("Baby");
+
+		extent.createTest(
+				"Nothing else Long long long name Long long long name Long long long name Long long long name Long long long name")
+				.assignCategory("long name");
+
 		extent.createTest("LogLevels").info("info").pass("pass").warning("warn").skip("skip").fail("fail")
 				.assignDevice("TheDevice").assignDevice("Mac");
 
@@ -131,7 +163,7 @@ public class Trial {
 		 * assignAuthor("TheAuthor") .assignCategory("TheCategory");
 		 */
 
-		extent.flush();		
+		extent.flush();
 	}
 
 	private static void rexrexrexrexrexrexrexrexrexrexrexrexrexrexrexrexrexrexrexrexrexrexrexrexrexrexrex() {

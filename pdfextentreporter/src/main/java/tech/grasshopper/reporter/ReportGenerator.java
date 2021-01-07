@@ -44,18 +44,6 @@ public class ReportGenerator {
 
 		AttributeDetails.builder().document(document).report(report).destinations(destinations).build().createSection();
 
-		
-		/*
-		 * AttributeSummaryChapter.builder().document(document).report(report).
-		 * destinations(destinations).build() .createChapter();
-		 * 
-		 * TestsChapter.builder().document(document).report(report).destinations(
-		 * destinations).build().createChapter();
-		 * 
-		 * AttributeDetailChapter.builder().document(document).report(report).
-		 * destinations(destinations).build() .createChapter();
-		 */
-
 		Bookmark bookmark = Bookmark.builder()/* .reportConfig(reportConfig) */.build();
 		PDDocumentOutline outline = bookmark.createDocumentOutline(destinations);
 

@@ -49,6 +49,14 @@ public class TestDetails extends Section {
 				yLocation = testMediaDisplay.getYlocation();
 			}
 
+			if (!test.getGeneratedLog().isEmpty()) {
+				TestGeneratedLogDisplay testGeneratedLogDisplay = TestGeneratedLogDisplay.builder().document(document)
+						.test(test).ylocation(yLocation).build();
+				testGeneratedLogDisplay.display();
+
+				yLocation = testGeneratedLogDisplay.getYlocation();
+			}
+
 			if (test.hasLog()) {
 				TestLogsDisplay testLogsDisplay = TestLogsDisplay.builder().document(document).test(test)
 						.ylocation(yLocation).build();
