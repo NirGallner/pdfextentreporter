@@ -56,21 +56,21 @@ public class ContextAttributeSummary extends AttributeSummaryDisplay {
 
 	private void createTitleRow() {
 		tableBuilder.addRow(Row.builder().height(NAME_HEIGHT).font(ReportFont.BOLD_ITALIC_FONT).fontSize(NAME_FONT_SIZE)
-				.borderWidth(0).add(TextCell.builder().text(type.toString()).textColor(Color.RED)
+				.borderWidth(0).add(TextCell.builder().text(type.toString()).textColor(titleColor())
 						.horizontalAlignment(HorizontalAlignment.LEFT).colSpan(7).build())
 				.build());
 	}
 
 	private void createHeaderRow() {
 		tableBuilder.addRow(Row.builder().height(HEADER_HEIGHT).font(ReportFont.ITALIC_FONT).fontSize(HEADER_FONT_SIZE)
-				.add(TextCell.builder().text("Name").font(ReportFont.BOLD_ITALIC_FONT).lineSpacing(MULTILINE_SPACING)
-						.horizontalAlignment(HorizontalAlignment.LEFT).build())
-				.add(TextCell.builder().text("Pass").textColor(Color.GREEN).build())
-				.add(TextCell.builder().text("Fail").textColor(Color.RED).build())
-				.add(TextCell.builder().text("Skip").textColor(Color.ORANGE).build())
-				.add(TextCell.builder().text("Warn").textColor(Color.YELLOW).build())
-				.add(TextCell.builder().text("Info").textColor(Color.BLUE).build())
-				.add(TextCell.builder().text("Pass %").textColor(Color.GREEN).build()).build());
+				.add(TextCell.builder().text("Name").textColor(nameColor()).font(ReportFont.BOLD_ITALIC_FONT)
+						.lineSpacing(MULTILINE_SPACING).horizontalAlignment(HorizontalAlignment.LEFT).build())
+				.add(TextCell.builder().text("Pass").textColor(config.getPassColor()).build())
+				.add(TextCell.builder().text("Fail").textColor(config.getFailColor()).build())
+				.add(TextCell.builder().text("Skip").textColor(config.getSkipColor()).build())
+				.add(TextCell.builder().text("Warn").textColor(config.getWarnColor()).build())
+				.add(TextCell.builder().text("Info").textColor(config.getInfoColor()).build())
+				.add(TextCell.builder().text("Pass %").textColor(config.getPassColor()).build()).build());
 	}
 
 	private void createDataRows() {
@@ -79,16 +79,42 @@ public class ContextAttributeSummary extends AttributeSummaryDisplay {
 					/ (v.values().stream().mapToInt(Integer::intValue).sum());
 			Row row = Row.builder().font(TABLE_CONTENT_FONT).fontSize(TABLE_CONTENT_FONT_SIZE).wordBreak(true)
 					.padding(TABLE_PADDING)
-					.add(TextCell.builder().text(k).lineSpacing(MULTILINE_SPACING)
+					.add(TextCell.builder().text(k).lineSpacing(MULTILINE_SPACING).textColor(nameColor())
 							.horizontalAlignment(HorizontalAlignment.LEFT).build())
-					.add(TextCell.builder().text(String.valueOf(v.getOrDefault(Status.PASS, 0))).build())
-					.add(TextCell.builder().text(String.valueOf(v.getOrDefault(Status.FAIL, 0))).build())
-					.add(TextCell.builder().text(String.valueOf(v.getOrDefault(Status.SKIP, 0))).build())
-					.add(TextCell.builder().text(String.valueOf(v.getOrDefault(Status.WARNING, 0))).build())
-					.add(TextCell.builder().text(String.valueOf(v.getOrDefault(Status.INFO, 0))).build())
-					.add(TextCell.builder().text(String.valueOf(passpercent)).build()).build();
+					.add(TextCell.builder().text(String.valueOf(v.getOrDefault(Status.PASS, 0)))
+							.textColor(config.getPassColor()).build())
+					.add(TextCell.builder().text(String.valueOf(v.getOrDefault(Status.FAIL, 0)))
+							.textColor(config.getFailColor()).build())
+					.add(TextCell.builder().text(String.valueOf(v.getOrDefault(Status.SKIP, 0)))
+							.textColor(config.getSkipColor()).build())
+					.add(TextCell.builder().text(String.valueOf(v.getOrDefault(Status.WARNING, 0)))
+							.textColor(config.getWarnColor()).build())
+					.add(TextCell.builder().text(String.valueOf(v.getOrDefault(Status.INFO, 0)))
+							.textColor(config.getInfoColor()).build())
+					.add(TextCell.builder().text(String.valueOf(passpercent)).textColor(config.getPassColor()).build())
+					.build();
 
 			tableBuilder.addRow(row);
 		});
+	}
+
+	private Color titleColor() {
+		if (type == AttributeType.CATEGORY)
+			return config.getCategoryTitleColor();
+		if (type == AttributeType.DEVICE)
+			return config.getDeviceTitleColor();
+		if (type == AttributeType.AUTHOR)
+			return config.getAuthorTitleColor();
+		return Color.RED;
+	}
+
+	private Color nameColor() {
+		if (type == AttributeType.CATEGORY)
+			return config.getCategoryNameColor();
+		if (type == AttributeType.DEVICE)
+			return config.getDeviceNameColor();
+		if (type == AttributeType.AUTHOR)
+			return config.getAuthorNameColor();
+		return Color.BLACK;
 	}
 }

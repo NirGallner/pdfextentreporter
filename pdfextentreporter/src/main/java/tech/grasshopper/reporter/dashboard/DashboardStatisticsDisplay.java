@@ -44,15 +44,14 @@ public class DashboardStatisticsDisplay extends Display {
 	private static final int DATE_FONT_SIZE = 17;
 	private static final int DATE_MILLIS_FONT_SIZE = 14;
 	private static final int DURATION_PASS_FAIL_FONT_SIZE = 20;
-	
+
 	private AnalysisStrategyDisplay strategyDisplay;
 
 	@Override
 	public void display() {
 
-		strategyDisplay = AnalysisStrategyDisplay
-				.displaySettings((report.getStats().getAnalysisStrategy()));
-		
+		strategyDisplay = AnalysisStrategyDisplay.displaySettings((report.getStats().getAnalysisStrategy()));
+
 		createTestStartedTextBox();
 		createTestFinishedTextBox();
 		createTestDurationTextBox();
@@ -62,13 +61,13 @@ public class DashboardStatisticsDisplay extends Display {
 
 	private void createTestStartedTextBox() {
 		LocalDateTime start = DateUtil.convertToLocalDateTimeFromDate(report.getStartTime());
-		List<Text> texts = createTestTexts(start, "Started : ", Color.BLACK, Color.RED, TEST_START_X_LOCATION);
+		List<Text> texts = createTestTexts(start, "Started : ", config.getStartTimesColor(), TEST_START_X_LOCATION);
 		createTestStatisticsTextBox(texts, TEST_START_X_LOCATION, CONTAINER_WIDTH);
 	}
 
 	private void createTestFinishedTextBox() {
 		LocalDateTime end = DateUtil.convertToLocalDateTimeFromDate(report.getEndTime());
-		List<Text> texts = createTestTexts(end, "Finished : ", Color.BLACK, Color.RED, TEST_END_X_LOCATION);
+		List<Text> texts = createTestTexts(end, "Finished : ", config.getFinishTimesColor(), TEST_END_X_LOCATION);
 		createTestStatisticsTextBox(texts, TEST_END_X_LOCATION, CONTAINER_WIDTH);
 	}
 
@@ -76,29 +75,28 @@ public class DashboardStatisticsDisplay extends Display {
 		LocalDateTime start = DateUtil.convertToLocalDateTimeFromDate(report.getStartTime());
 		LocalDateTime end = DateUtil.convertToLocalDateTimeFromDate(report.getEndTime());
 
-		List<Text> texts = createDurationPassFailTexts("Duration : ", DateUtil.durationValue(start, end), Color.BLACK,
-				Color.RED, TEST_DURATION_X_LOCATION);
+		List<Text> texts = createDurationPassFailTexts("Duration : ", DateUtil.durationValue(start, end),
+				config.getDurationColor(), TEST_DURATION_X_LOCATION);
 		createTestStatisticsTextBox(texts, TEST_DURATION_X_LOCATION, CONTAINER_WIDTH);
 	}
 
 	private void createFirstLevelPassedTextBox() {
 		List<Text> texts = createDurationPassFailTexts(strategyDisplay.firstLevelText() + " Passed : ",
-				String.valueOf(report.getStats().getParent().get(Status.PASS)), Color.BLACK, Color.RED,
+				String.valueOf(report.getStats().getParent().get(Status.PASS)), config.getPassCountColor(),
 				TEST_PASSED_X_LOCATION);
 		createTestStatisticsTextBox(texts, TEST_PASSED_X_LOCATION, CONTAINER_PASS_FAIL_WIDTH);
 	}
 
 	private void createFirstLevelFailedTextBox() {
 		List<Text> texts = createDurationPassFailTexts(strategyDisplay.firstLevelText() + " Failed : ",
-				String.valueOf(report.getStats().getParent().get(Status.FAIL)), Color.BLACK, Color.RED,
+				String.valueOf(report.getStats().getParent().get(Status.FAIL)),config.getFailCountColor(),
 				TEST_FAILED_X_LOCATION);
 		createTestStatisticsTextBox(texts, TEST_FAILED_X_LOCATION, CONTAINER_PASS_FAIL_WIDTH);
 	}
 
-	private List<Text> createDurationPassFailTexts(String title, String value, Color titleColor, Color valueColor,
-			float xLocation) {
+	private List<Text> createDurationPassFailTexts(String title, String value, Color valueColor, float xLocation) {
 		List<Text> texts = new ArrayList<>();
-		texts.add(Text.builder().fontSize(TITLE_FONT_SIZE).font(ReportFont.ITALIC_FONT).textColor(titleColor)
+		texts.add(Text.builder().fontSize(TITLE_FONT_SIZE).font(ReportFont.ITALIC_FONT).textColor(Color.BLACK)
 				.xlocation(xLocation + CONTAINER_PADDING).ylocation(FIRST_ROW_Y_LOCATION).text(title).build());
 		texts.add(Text.builder().fontSize(DURATION_PASS_FAIL_FONT_SIZE).font(ReportFont.BOLD_ITALIC_FONT)
 				.textColor(valueColor).xlocation(xLocation + CONTAINER_PADDING).ylocation(SECOND_ROW_Y_LOCATION)
@@ -106,14 +104,13 @@ public class DashboardStatisticsDisplay extends Display {
 		return texts;
 	}
 
-	private List<Text> createTestTexts(LocalDateTime datetime, String title, Color titleColor, Color dateTimeColor,
-			float xLocation) {
+	private List<Text> createTestTexts(LocalDateTime datetime, String title, Color dateTimeColor, float xLocation) {
 		List<Text> texts = new ArrayList<>();
-		texts.add(Text.builder().fontSize(TITLE_FONT_SIZE).font(ReportFont.ITALIC_FONT).textColor(titleColor)
+		texts.add(Text.builder().fontSize(TITLE_FONT_SIZE).font(ReportFont.ITALIC_FONT).textColor(Color.BLACK)
 				.xlocation(xLocation + CONTAINER_PADDING).ylocation(FIRST_ROW_Y_LOCATION).text(title).build());
 
-		int titleWidth = TextLengthOptimizer.builder().font(ReportFont.ITALIC_FONT).fontsize(TITLE_FONT_SIZE)
-				.build().textWidth(title);
+		int titleWidth = TextLengthOptimizer.builder().font(ReportFont.ITALIC_FONT).fontsize(TITLE_FONT_SIZE).build()
+				.textWidth(title);
 
 		texts.add(Text.builder().fontSize(DATE_FONT_SIZE).font(ReportFont.BOLD_ITALIC_FONT).textColor(dateTimeColor)
 				.xlocation(xLocation + CONTAINER_PADDING + titleWidth + 2).ylocation(FIRST_ROW_Y_LOCATION)

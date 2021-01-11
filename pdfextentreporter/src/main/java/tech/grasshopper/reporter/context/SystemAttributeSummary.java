@@ -47,21 +47,27 @@ public class SystemAttributeSummary extends AttributeSummaryDisplay {
 
 	private void createTitleRow() {
 		tableBuilder.addRow(Row.builder().height(NAME_HEIGHT).font(ReportFont.BOLD_ITALIC_FONT).fontSize(NAME_FONT_SIZE)
-				.borderWidth(0).add(TextCell.builder().text(type.toString()).textColor(Color.RED).colSpan(2).build())
+				.borderWidth(0).add(TextCell.builder().text(type.toString()).textColor(config.getSystemTitleColor())
+						.colSpan(2).build())
 				.build());
 	}
 
 	private void createHeaderRow() {
-		tableBuilder.addRow(Row.builder().font(ReportFont.BOLD_ITALIC_FONT).fontSize(HEADER_FONT_SIZE)
-				.height(HEADER_HEIGHT).add(TextCell.builder().text("Name").build())
-				.add(TextCell.builder().text("Value").build()).build());
+		tableBuilder
+				.addRow(Row.builder().font(ReportFont.BOLD_ITALIC_FONT).fontSize(HEADER_FONT_SIZE).height(HEADER_HEIGHT)
+						.add(TextCell.builder().text("Name").textColor(config.getSystemNameColor()).build())
+						.add(TextCell.builder().text("Value").textColor(config.getSystemValueColor()).build()).build());
 	}
 
 	private void createDataRows() {
 		data.forEach((k, v) -> {
 			Row row = Row.builder().font(TABLE_CONTENT_FONT).fontSize(TABLE_CONTENT_FONT_SIZE).wordBreak(true)
-					.padding(TABLE_PADDING).add(TextCell.builder().text(k).lineSpacing(MULTILINE_SPACING).build())
-					.add(TextCell.builder().text(v).lineSpacing(MULTILINE_SPACING).build()).build();
+					.padding(TABLE_PADDING)
+					.add(TextCell.builder().text(k).textColor(config.getSystemNameColor())
+							.lineSpacing(MULTILINE_SPACING).build())
+					.add(TextCell.builder().text(v).textColor(config.getSystemValueColor())
+							.lineSpacing(MULTILINE_SPACING).build())
+					.build();
 
 			tableBuilder.addRow(row);
 		});

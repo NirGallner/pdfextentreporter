@@ -31,7 +31,8 @@ public class OrderedListMarkup extends MarkupDisplay {
 		int sno = 1;
 		for (Element e : elements) {
 			tableBuilder.addRow(Row.builder().add(TextCell.builder().text(String.valueOf(sno)).build())
-					.add(TextCell.builder().text(e.text()).lineSpacing(MULTILINE_SPACING).build()).build());
+					.add(TextCell.builder().text(e.text()).textColor(textColor).lineSpacing(MULTILINE_SPACING).build())
+					.build());
 			sno++;
 		}
 

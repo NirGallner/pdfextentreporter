@@ -27,6 +27,8 @@ public class LabelMarkup extends MarkupDisplay {
 
 		try {
 			color = (Color) Color.class.getField(colorName.toLowerCase()).get(null);
+			if (color == Color.WHITE)
+				color = Color.BLACK;
 		} catch (Exception e) {
 			color = Color.BLACK;
 		}

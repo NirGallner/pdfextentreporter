@@ -34,17 +34,19 @@ public class Dashboard extends Section implements DestinationAware {
 	}
 
 	private void displayReportHeader() {
-		DashboardHeaderDisplay.builder().content(pageCreator.getContent()).build().display();
+		DashboardHeaderDisplay.builder().config(config).content(pageCreator.getContent()).build().display();
 	}
 
 	private void displayTestStatistics() {
-		DashboardStatisticsDisplay.builder().content(pageCreator.getContent()).report(report).build().display();
+		DashboardStatisticsDisplay.builder().config(config).content(pageCreator.getContent()).report(report).build()
+				.display();
 	}
 
 	private void displayTestChart() {
-		DashboardDonutChartDisplay.builder().document(document).content(pageCreator.getContent()).report(report).build()
+		DashboardDonutChartDisplay.builder().document(document).config(config).content(pageCreator.getContent())
+				.report(report).build().display();
+		DashboardChartLegendDisplay.builder().config(config).content(pageCreator.getContent()).report(report).build()
 				.display();
-		DashboardChartLegendDisplay.builder().content(pageCreator.getContent()).report(report).build().display();
 	}
 
 	private void closeContentStream() {

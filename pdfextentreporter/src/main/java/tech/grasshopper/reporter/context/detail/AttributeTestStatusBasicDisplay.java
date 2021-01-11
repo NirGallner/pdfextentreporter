@@ -66,7 +66,7 @@ public class AttributeTestStatusBasicDisplay extends Display implements Destinat
 				.add(TextCell.builder().minHeight(NAME_HEIGHT).fontSize(NAME_FONT_SIZE)
 						.font(ReportFont.BOLD_ITALIC_FONT)
 						.text(type.toString().toLowerCase() + "- " + attribute.getAttr().getName()).wordBreak(true)
-						.lineSpacing(MULTILINE_SPACING).textColor(Color.RED).build())
+						.lineSpacing(MULTILINE_SPACING).textColor(nameColor()).build())
 				.build());
 	}
 
@@ -78,10 +78,11 @@ public class AttributeTestStatusBasicDisplay extends Display implements Destinat
 		}
 		if (!statusText.isEmpty())
 			statusText = statusText + "/";
+		;
 
 		tableBuilder
 				.addRow(Row.builder().height(STATUS_HEIGHT).fontSize(STATUS_FONT_SIZE).font(ReportFont.BOLD_ITALIC_FONT)
-						.add(TextCell.builder().text(statusText).textColor(Color.BLUE).build()).build());
+						.add(TextCell.builder().text(statusText).textColor(config.getAttributeTestStatusColor()).build()).build());
 	}
 
 	protected void drawDetailsTable() {
@@ -103,5 +104,17 @@ public class AttributeTestStatusBasicDisplay extends Display implements Destinat
 	public Destination createDestination() {
 		return Destination.builder().name(type.toString().toLowerCase() + "- " + attribute.getAttr().getName())
 				.yCoord(destinationY).page(page).build();
+	}
+
+	private Color nameColor() {
+		if (type == AttributeType.CATEGORY)
+			return config.getCategoryTitleColor();
+		if (type == AttributeType.AUTHOR)
+			return config.getAuthorTitleColor();
+		if (type == AttributeType.DEVICE)
+			return config.getDeviceTitleColor();
+		if (type == AttributeType.EXCEPTION)
+			return config.getExceptionTitleColor();
+		return Color.RED;
 	}
 }

@@ -20,12 +20,14 @@ import tech.grasshopper.reporter.tests.TestDetails;
 public class ReportGenerator {
 
 	private Report report;
+	private ExtentPDFReporterConfig config;
 	private File reportFile;
 	private PDDocument document;
 	private DestinationStore destinations;
 
-	public ReportGenerator(Report report, File file) {
+	public ReportGenerator(Report report, ExtentPDFReporterConfig config, File file) {
 		this.report = report;
+		this.config = config;
 		this.reportFile = file;
 		this.document = new PDDocument();
 		this.destinations = new DestinationStore();
@@ -36,13 +38,17 @@ public class ReportGenerator {
 
 	public void generate() throws IOException {
 
-		Dashboard.builder().document(document).report(report).destinations(destinations).build().createSection();
+		Dashboard.builder().document(document).report(report).config(config).destinations(destinations).build()
+				.createSection();
 
-		AttributeSummary.builder().document(document).report(report).destinations(destinations).build().createSection();
+		AttributeSummary.builder().document(document).report(report).config(config).destinations(destinations).build()
+				.createSection();
 
-		TestDetails.builder().document(document).report(report).destinations(destinations).build().createSection();
+		TestDetails.builder().document(document).report(report).config(config).destinations(destinations).build()
+				.createSection();
 
-		AttributeDetails.builder().document(document).report(report).destinations(destinations).build().createSection();
+		AttributeDetails.builder().document(document).report(report).config(config).destinations(destinations).build()
+				.createSection();
 
 		Bookmark bookmark = Bookmark.builder()/* .reportConfig(reportConfig) */.build();
 		PDDocumentOutline outline = bookmark.createDocumentOutline(destinations);

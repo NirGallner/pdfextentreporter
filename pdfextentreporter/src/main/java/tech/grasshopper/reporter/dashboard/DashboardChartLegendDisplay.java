@@ -42,11 +42,11 @@ public class DashboardChartLegendDisplay extends Display {
 	@Override
 	public void display() {
 
-		statusColor.put(PASS, Color.GREEN);
-		statusColor.put(FAIL, Color.RED);
-		statusColor.put(SKIP, Color.ORANGE);
-		statusColor.put(WARNING, Color.YELLOW);
-		statusColor.put(INFO, Color.BLUE);
+		statusColor.put(PASS, config.getPassColor());
+		statusColor.put(FAIL, config.getFailColor());
+		statusColor.put(SKIP, config.getSkipColor());
+		statusColor.put(WARNING, config.getWarnColor());
+		statusColor.put(INFO, config.getInfoColor());
 
 		strategyDisplay = AnalysisStrategyDisplay.displaySettings((report.getStats().getAnalysisStrategy()));
 

@@ -9,6 +9,7 @@ import com.aventstack.extentreports.model.Report;
 import lombok.Builder.Default;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
+import tech.grasshopper.reporter.ExtentPDFReporterConfig;
 
 @Data
 @SuperBuilder
@@ -20,7 +21,7 @@ public abstract class Display {
 
 	protected PDPageContentStream content;
 
-	// protected ReportConfig reportConfig;
+	protected ExtentPDFReporterConfig config;
 
 	protected PDDocument document;
 

@@ -10,6 +10,7 @@ import org.vandeseer.easytable.structure.Table;
 import org.vandeseer.easytable.structure.Table.TableBuilder;
 import org.vandeseer.easytable.structure.cell.TextCell;
 
+import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.model.NamedAttribute;
 import com.aventstack.extentreports.model.context.NamedAttributeContext;
 
@@ -72,7 +73,8 @@ public class AttributeTestStatusDetailsDisplay extends Display {
 		attribute.getTestList().forEach(t -> {
 			Row row = Row.builder().font(TABLE_CONTENT_FONT).fontSize(TABLE_CONTENT_FONT_SIZE).wordBreak(true)
 					.padding(TABLE_CONTENT_COLUMN_PADDING)
-					.add(TextCell.builder().text(t.getStatus().toString()).build())
+					.add(TextCell.builder().text(t.getStatus().toString()).textColor(statusColor(t.getStatus()))
+							.build())
 					.add(TextCell.builder()
 							.text(DateUtil.formatTimeAMPM(DateUtil.convertToLocalDateTimeFromDate(t.getStartTime())))
 							.build())
@@ -88,5 +90,19 @@ public class AttributeTestStatusDetailsDisplay extends Display {
 		table.displayTable();
 
 		ylocation = table.getFinalY() - TABLE_GAP_HEIGHT;
+	}
+
+	private Color statusColor(Status status) {
+		if (status == Status.PASS)
+			return config.getPassColor();
+		if (status == Status.FAIL)
+			return config.getFailColor();
+		if (status == Status.SKIP)
+			return config.getSkipColor();
+		if (status == Status.WARNING)
+			return config.getWarnColor();
+		if (status == Status.INFO)
+			return config.getInfoColor();
+		return Color.BLACK;
 	}
 }

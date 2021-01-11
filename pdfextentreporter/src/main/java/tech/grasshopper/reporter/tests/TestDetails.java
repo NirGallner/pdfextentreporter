@@ -36,7 +36,7 @@ public class TestDetails extends Section {
 		for (Test test : allTests) {
 
 			TestBasicDetailsDisplay testBasicDetailsDisplay = TestBasicDetailsDisplay.builder().document(document)
-					.test(test).ylocation(yLocation).build();
+					.config(config).test(test).ylocation(yLocation).build();
 			testBasicDetailsDisplay.display();
 			createTestDestination(testBasicDetailsDisplay);
 			yLocation = testBasicDetailsDisplay.getYlocation();
@@ -51,14 +51,14 @@ public class TestDetails extends Section {
 
 			if (!test.getGeneratedLog().isEmpty()) {
 				TestGeneratedLogDisplay testGeneratedLogDisplay = TestGeneratedLogDisplay.builder().document(document)
-						.test(test).ylocation(yLocation).build();
+						.config(config).test(test).ylocation(yLocation).build();
 				testGeneratedLogDisplay.display();
 
 				yLocation = testGeneratedLogDisplay.getYlocation();
 			}
 
 			if (test.hasLog()) {
-				TestLogsDisplay testLogsDisplay = TestLogsDisplay.builder().document(document).test(test)
+				TestLogsDisplay testLogsDisplay = TestLogsDisplay.builder().document(document).config(config).test(test)
 						.ylocation(yLocation).build();
 				testLogsDisplay.display();
 

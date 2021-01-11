@@ -1,5 +1,6 @@
 package tech.grasshopper.reporter;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -33,6 +34,8 @@ public class Trial {
 		extent.attachReporter(spark);
 		ExtentPDFReporter pdf = new ExtentPDFReporter("target/Pdf/Pdf.pdf");
 		extent.attachReporter(pdf);
+		pdf.loadJSONConfig(new File("src/main/resources/spark-config.json"));
+		// pdf.loadXMLConfig(new File("src/main/resources/spark-config.xml"));
 
 		extent.setSystemInfo("SYS1", "system one");
 		extent.setSystemInfo("SYS2", "system two");
@@ -51,27 +54,6 @@ public class Trial {
 		extent.setSystemInfo("SYS9", "system nine");
 		extent.setSystemInfo("SYS10", "system ten");
 
-		/*
-		 * extent.setSystemInfo("SYS11", "system ten"); extent.setSystemInfo("SYS12",
-		 * "system ten"); extent.setSystemInfo("SYS13", "system ten");
-		 * extent.setSystemInfo("SYS14", "system ten"); extent.setSystemInfo("SYS16",
-		 * "system ten"); extent.setSystemInfo("SYS17", "system ten");
-		 * extent.setSystemInfo("SYS18", "system ten"); extent.setSystemInfo("SYS19",
-		 * "system ten"); extent.setSystemInfo("SYS20", "system ten");
-		 * extent.setSystemInfo("SYS21", "system ten"); extent.setSystemInfo("SYS22",
-		 * "system ten"); extent.setSystemInfo("SYS23", "system ten");
-		 * extent.setSystemInfo("SYS24", "system ten"); extent.setSystemInfo("SYS25",
-		 * "system ten"); extent.setSystemInfo("SYS26", "system ten");
-		 * extent.setSystemInfo("SYS27", "system ten"); extent.setSystemInfo("SYS28",
-		 * "system ten"); extent.setSystemInfo("SYS29", "system ten");
-		 * extent.setSystemInfo("SYS30", "system ten"); extent.setSystemInfo("SYS31",
-		 * "system ten"); extent.setSystemInfo("SYS32", "system ten");
-		 * extent.setSystemInfo("SYS33", "system ten"); extent.setSystemInfo("SYS34",
-		 * "system ten"); extent.setSystemInfo("SYS35", "system ten");
-		 * extent.setSystemInfo("SYS36", "system ten"); extent.setSystemInfo("SYS37",
-		 * "system ten");
-		 */
-
 		byte[] array = Files.readAllBytes(Paths.get("src/main/resources/image.png"));
 		String base64 = Base64.getEncoder().encodeToString(array);
 
@@ -79,7 +61,8 @@ public class Trial {
 				.addScreenCaptureFromPath("src/main/resources/image.png")
 				.addScreenCaptureFromPath("src/main/resources/logo.png").assignAuthor("Screen").assignAuthor("Veena")
 				.assignAuthor("Neeta").addScreenCaptureFromBase64String(base64)
-				.pass(MediaEntityBuilder.createScreenCaptureFromPath("src/main/resources/amur.png").build());
+				.warning(MediaEntityBuilder.createScreenCaptureFromPath("src/main/resources/amur.png").build())
+				.pass(MarkupHelper.createLabel("Label Text", ExtentColor.BLUE));
 
 		extent.createTest("Label").generateLog(Status.FAIL, MarkupHelper.createLabel("Label Text", ExtentColor.GREEN));
 

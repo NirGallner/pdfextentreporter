@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<extentreports>
+  <configuration>
+
+    <!-- report theme -->
+    <!-- STANDARD, DARK -->
+    <theme>DARK</theme>
+
+    <!-- document encoding -->
+    <!-- defaults to UTF-8 -->
+    <encoding>utf-16</encoding>
+
+    <!-- protocol for script and stylesheets -->
+    <!-- defaults to https -->
+    <!-- HTTP, HTTPS -->
+    <protocol>HTTP</protocol>
+
+    <!-- offline report -->
+    <timelineEnabled>false</timelineEnabled>
+
+  </configuration>
+</extentreports>

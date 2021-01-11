@@ -20,23 +20,23 @@ public class AttributeSummary extends Section {
 
 		createPage();
 
-		ContextAttributeSummary categories = ContextAttributeSummary.builder().document(document)
+		ContextAttributeSummary categories = ContextAttributeSummary.builder().config(config).document(document)
 				.type(AttributeType.CATEGORY).report(report).ylocation(destinationYLocation).build();
 		categories.display();
 		createAttributeDestination(categories);
 
-		ContextAttributeSummary authors = ContextAttributeSummary.builder().document(document)
+		ContextAttributeSummary authors = ContextAttributeSummary.builder().config(config).document(document)
 				.type(AttributeType.AUTHOR).report(report).ylocation(categories.getYlocation()).build();
 		authors.display();
 		createAttributeDestination(authors);
 
-		ContextAttributeSummary devices = ContextAttributeSummary.builder().document(document)
+		ContextAttributeSummary devices = ContextAttributeSummary.builder().config(config).document(document)
 				.type(AttributeType.DEVICE).report(report).ylocation(authors.getYlocation()).build();
 		devices.display();
 		createAttributeDestination(devices);
 
-		SystemAttributeSummary systems = SystemAttributeSummary.builder().document(document).type(AttributeType.SYSTEM)
-				.report(report).ylocation(devices.getYlocation()).build();
+		SystemAttributeSummary systems = SystemAttributeSummary.builder().config(config).document(document)
+				.type(AttributeType.SYSTEM).report(report).ylocation(devices.getYlocation()).build();
 		systems.display();
 		createAttributeDestination(systems);
 	}

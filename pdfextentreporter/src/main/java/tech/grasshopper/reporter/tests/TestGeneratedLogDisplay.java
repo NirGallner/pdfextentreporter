@@ -11,6 +11,7 @@ import org.vandeseer.easytable.structure.Table.TableBuilder;
 import org.vandeseer.easytable.structure.cell.AbstractCell;
 import org.vandeseer.easytable.structure.cell.TextCell;
 
+import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.model.Test;
 
 import lombok.Data;
@@ -29,14 +30,14 @@ public class TestGeneratedLogDisplay extends Display {
 	public static final float LOGS_HEADER_HEIGHT = 20f;
 	public static final float LOGS_ROW_HEIGHT = 20f;
 
-	private static final int LOGS_HEADER_FONT_SIZE = 13;
+	private static final int LOGS_HEADER_FONT_SIZE = 11;
 	private static final float PADDING = 5f;
-	private static final float LOGS_STATUS_WIDTH = 55f;
-	private static final float LOGS_DETAILS_WIDTH = 445f;
+	private static final float LOGS_STATUS_WIDTH = 50f;
+	private static final float LOGS_DETAILS_WIDTH = 450f;
 
 	private static final float BORDER_WIDTH = 1f;
 	private static final float GAP_HEIGHT = 10f;
-	private static final int LOGS_TABLE_CONTENT_FONT_SIZE = 11;
+	private static final int LOGS_TABLE_CONTENT_FONT_SIZE = 10;
 	private static final PDFont LOGS_TABLE_CONTENT_FONT = ReportFont.REGULAR_FONT;
 	private static final float LOGS_TABLE_CONTENT_MULTILINE_SPACING = 1f;
 
@@ -65,19 +66,21 @@ public class TestGeneratedLogDisplay extends Display {
 	}
 
 	private void createHeaderRow() {
-		tableBuilder.addRow(Row.builder().height(LOGS_HEADER_HEIGHT).font(ReportFont.BOLD_ITALIC_FONT)
+		tableBuilder.addRow(Row.builder().height(LOGS_HEADER_HEIGHT).font(ReportFont.ITALIC_FONT)
 				.fontSize(LOGS_HEADER_FONT_SIZE).add(TextCell.builder().text("Status").build())
-				.add(TextCell.builder().text("Details").build()).build());
+				.add(TextCell.builder().text("Generated Log Details").build()).build());
 	}
 
 	private void createLogRows() {
 		test.getGeneratedLog().forEach(l -> {
-			AbstractCell detailCell = TestMarkup.builder().log(l).width(LOGS_DETAILS_WIDTH - (2 * PADDING)).build()
+			AbstractCell detailCell = TestMarkup.builder().log(l).width(LOGS_DETAILS_WIDTH - (2 * PADDING))
+					.textColor(statusColor(l.getStatus())).lineSpacing(LOGS_TABLE_CONTENT_MULTILINE_SPACING).build()
 					.createMarkupCell();
 
 			Row row = Row.builder().font(LOGS_TABLE_CONTENT_FONT).fontSize(LOGS_TABLE_CONTENT_FONT_SIZE).wordBreak(true)
-					.padding(PADDING).add(TextCell.builder().text(l.getStatus().toString()).build()).add(detailCell)
-					.build();
+					.padding(PADDING).add(TextCell.builder().text(l.getStatus().toString())
+							.textColor(statusColor(l.getStatus())).build())
+					.add(detailCell).build();
 			tableBuilder.addRow(row);
 		});
 	}
@@ -88,5 +91,19 @@ public class TestGeneratedLogDisplay extends Display {
 		table.displayTable();
 
 		ylocation = table.getFinalY() - GAP_HEIGHT;
+	}
+
+	private Color statusColor(Status status) {
+		if (status == Status.PASS)
+			return config.getPassColor();
+		if (status == Status.FAIL)
+			return config.getFailColor();
+		if (status == Status.SKIP)
+			return config.getSkipColor();
+		if (status == Status.WARNING)
+			return config.getWarnColor();
+		if (status == Status.INFO)
+			return config.getInfoColor();
+		return Color.BLACK;
 	}
 }

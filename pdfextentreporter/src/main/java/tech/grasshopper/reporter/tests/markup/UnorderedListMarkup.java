@@ -30,7 +30,8 @@ public class UnorderedListMarkup extends MarkupDisplay {
 
 		for (Element e : elements) {
 			tableBuilder.addRow(Row.builder().add(TextCell.builder().text("*").build())
-					.add(TextCell.builder().text(e.text()).lineSpacing(MULTILINE_SPACING).build()).build());
+					.add(TextCell.builder().text(e.text()).textColor(textColor).lineSpacing(MULTILINE_SPACING).build())
+					.build());
 		}
 
 		return tableBuilder.build();

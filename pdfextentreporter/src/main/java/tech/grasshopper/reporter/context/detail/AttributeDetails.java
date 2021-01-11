@@ -37,13 +37,13 @@ public class AttributeDetails extends Section {
 
 		for (NamedAttributeContext<? extends NamedAttribute> attribute : attributes) {
 			AttributeTestStatusBasicDisplay attributeBasicDisplay = AttributeTestStatusBasicDisplay.builder()
-					.document(document).type(type).attribute(attribute).ylocation(yLocation).build();
+					.document(document).config(config).type(type).attribute(attribute).ylocation(yLocation).build();
 			attributeBasicDisplay.display();
 			createAttributeDestination(attributeBasicDisplay);
 			yLocation = attributeBasicDisplay.getYlocation();
 
 			AttributeTestStatusDetailsDisplay attributeDetailsDisplay = AttributeTestStatusDetailsDisplay.builder()
-					.document(document).attribute(attribute).ylocation(yLocation).build();
+					.document(document).config(config).attribute(attribute).ylocation(yLocation).build();
 			attributeDetailsDisplay.display();
 			yLocation = attributeDetailsDisplay.getYlocation();
 		}

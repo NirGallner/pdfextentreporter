@@ -2,8 +2,7 @@ package tech.grasshopper.reporter.tests;
 
 import java.awt.Color;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -13,16 +12,19 @@ import org.vandeseer.easytable.structure.Row;
 import org.vandeseer.easytable.structure.Table;
 import org.vandeseer.easytable.structure.Table.TableBuilder;
 import org.vandeseer.easytable.structure.cell.TextCell;
+import org.vandeseer.easytable.structure.cell.paragraph.ParagraphCell;
+import org.vandeseer.easytable.structure.cell.paragraph.ParagraphCell.Paragraph;
+import org.vandeseer.easytable.structure.cell.paragraph.ParagraphCell.Paragraph.ParagraphBuilder;
+import org.vandeseer.easytable.structure.cell.paragraph.StyledText;
 
-import com.aventstack.extentreports.model.Author;
-import com.aventstack.extentreports.model.Category;
-import com.aventstack.extentreports.model.Device;
+import com.aventstack.extentreports.model.NamedAttribute;
 import com.aventstack.extentreports.model.Test;
 
 import lombok.Builder.Default;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
+import tech.grasshopper.reporter.context.AttributeType;
 import tech.grasshopper.reporter.destination.Destination;
 import tech.grasshopper.reporter.destination.DestinationAware;
 import tech.grasshopper.reporter.font.ReportFont;
@@ -47,7 +49,6 @@ public class TestBasicDetailsDisplay extends Display implements DestinationAware
 	private static final float GAP_HEIGHT = 5f;
 
 	private static final float BORDER_WIDTH = 0;
-
 	private static final float MULTI_LINE_SPACING = 1f;
 
 	protected Test test;
@@ -78,14 +79,15 @@ public class TestBasicDetailsDisplay extends Display implements DestinationAware
 	}
 
 	private void createNameRow() {
-		tableBuilder.addRow(Row.builder().add(TextCell.builder().minHeight(NAME_HEIGHT).fontSize(NAME_FONT_SIZE)
-				.text(test.getName()).wordBreak(true).lineSpacing(MULTI_LINE_SPACING).textColor(Color.RED).build())
+		tableBuilder.addRow(Row.builder()
+				.add(TextCell.builder().minHeight(NAME_HEIGHT).fontSize(NAME_FONT_SIZE).text(test.getName())
+						.wordBreak(true).lineSpacing(MULTI_LINE_SPACING).textColor(config.getTestNameColor()).build())
 				.build());
 	}
 
 	private void createDurationRow() {
 		tableBuilder.addRow(Row.builder().add(TextCell.builder().minHeight(TIMES_HEIGHT).fontSize(TIMES_FONT_SIZE)
-				.text(testDuration()).textColor(Color.BLUE).build()).build());
+				.text(testDuration()).textColor(config.getTestTimesColor()).build()).build());
 	}
 
 	private String testDuration() {
@@ -100,21 +102,29 @@ public class TestBasicDetailsDisplay extends Display implements DestinationAware
 	}
 
 	private void createAttributesRow() {
-		String atts = "";
 
-		List<String> attributes = new ArrayList<>();
-		attributes.addAll(test.getAuthorSet().stream().map(Author::getName).collect(Collectors.toList()));
-		attributes.addAll(test.getCategorySet().stream().map(Category::getName).collect(Collectors.toList()));
-		attributes.addAll(test.getDeviceSet().stream().map(Device::getName).collect(Collectors.toList()));
+		if (test.getCategorySet().isEmpty() && test.getAuthorSet().isEmpty() && test.getDeviceSet().isEmpty())
+			return;
+
+		ParagraphBuilder paraBuilder = Paragraph.builder();
+		creaateAttributeText(test.getCategorySet(), AttributeType.CATEGORY, paraBuilder);
+		creaateAttributeText(test.getAuthorSet(), AttributeType.AUTHOR, paraBuilder);
+		creaateAttributeText(test.getDeviceSet(), AttributeType.DEVICE, paraBuilder);
+
+		tableBuilder.addRow(
+				Row.builder().fontSize(ATTRIBUTE_FONT_SIZE).add(ParagraphCell.builder().paragraph(paraBuilder.build())
+						.minHeight(ATTRIBUTE_HEIGHT).lineSpacing(MULTI_LINE_SPACING).build()).build());
+	}
+
+	private void creaateAttributeText(Set<? extends NamedAttribute> attributes, AttributeType type,
+			ParagraphBuilder paraBuilder) {
 
 		if (!attributes.isEmpty()) {
 			numberOfRowsToRepeat = 3;
-			atts = attributes.stream().collect(Collectors.joining(" / ", "/ ", " /"));
 
-			tableBuilder.addRow(Row.builder().fontSize(ATTRIBUTE_FONT_SIZE)
-					.add(TextCell.builder().text(atts).minHeight(ATTRIBUTE_HEIGHT).wordBreak(true)
-							.lineSpacing(MULTI_LINE_SPACING).textColor(Color.GRAY).build())
-					.build());
+			String atts = attributes.stream().map(NamedAttribute::getName)
+					.collect(Collectors.joining(" / ", "/ ", " /"));
+			paraBuilder.append(StyledText.builder().text(atts).color(attributeColor(type)).build());
 		}
 	}
 
@@ -137,5 +147,15 @@ public class TestBasicDetailsDisplay extends Display implements DestinationAware
 	@Override
 	public Destination createDestination() {
 		return Destination.builder().name(test.getName()).yCoord(destinationY).page(page).build();
+	}
+
+	private Color attributeColor(AttributeType type) {
+		if (type == AttributeType.CATEGORY)
+			return config.getCategoryTitleColor();
+		if (type == AttributeType.DEVICE)
+			return config.getDeviceTitleColor();
+		if (type == AttributeType.AUTHOR)
+			return config.getAuthorTitleColor();
+		return Color.RED;
 	}
 }

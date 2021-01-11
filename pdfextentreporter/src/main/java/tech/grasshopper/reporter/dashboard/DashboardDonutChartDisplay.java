@@ -26,7 +26,7 @@ import tech.grasshopper.reporter.structure.Display;
 public class DashboardDonutChartDisplay extends Display {
 
 	private PieChart chart;
-	
+
 	private static final int CHART_TITLE_X_PADDING = 10;
 	private static final int CHART_TITLE_Y_LOCATION = 390;
 	private static final int CHART_TITLE_FONT_SIZE = 16;
@@ -113,7 +113,8 @@ public class DashboardDonutChartDisplay extends Display {
 	}
 
 	private void updateChartStyler(PieStyler styler) {
-		styler.setSeriesColors(new Color[] { Color.GREEN, Color.RED, Color.ORANGE, Color.YELLOW, Color.BLUE });
+		styler.setSeriesColors(new Color[] { config.getPassColor(), config.getFailColor(), config.getSkipColor(),
+				config.getWarnColor(), config.getInfoColor() });
 		styler.setLegendVisible(false);
 		styler.setPlotContentSize(0.85);
 		styler.setPlotBorderVisible(true);
@@ -132,8 +133,8 @@ public class DashboardDonutChartDisplay extends Display {
 	private void updateChartData(Map<Status, Long> statusData) {
 		chart.addSeries(Status.PASS.toString(), statusData.getOrDefault(Status.PASS, 0L));
 		chart.addSeries(Status.FAIL.toString(), statusData.getOrDefault(Status.FAIL, 0L));
-		chart.addSeries(Status.SKIP.toString(), statusData.getOrDefault(Status.WARNING, 0L));
-		chart.addSeries(Status.WARNING.toString(), statusData.getOrDefault(Status.SKIP, 0L));
+		chart.addSeries(Status.SKIP.toString(), statusData.getOrDefault(Status.SKIP, 0L));
+		chart.addSeries(Status.WARNING.toString(), statusData.getOrDefault(Status.WARNING, 0L));
 		chart.addSeries(Status.INFO.toString(), statusData.getOrDefault(Status.INFO, 0L));
 	}
 }

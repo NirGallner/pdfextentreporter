@@ -21,8 +21,8 @@ public class JsonMarkup extends MarkupDisplay {
 	@Override
 	public AbstractCell displayDetails() {
 
-		return TextCell.builder().text(jsonText()).fontSize(LOG_FONT_SIZE).font(LOG_FONT).lineSpacing(MULTILINE_SPACING)
-				.build();
+		return TextCell.builder().text(jsonText()).textColor(textColor).fontSize(LOG_FONT_SIZE).font(LOG_FONT)
+				.lineSpacing(MULTILINE_SPACING).build();
 	}
 
 	private String jsonText() {
@@ -44,17 +44,4 @@ public class JsonMarkup extends MarkupDisplay {
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		return gson.toJson(JsonParser.parseString(jsonStringHolder.substring(startIndex, endIndex)));
 	}
-
-	/*
-	 * System.out.println(html); int jsonStartIndex = html.indexOf('{',
-	 * html.indexOf("JSONTree.create")); int jsonEndIndex = html.lastIndexOf('}');
-	 * 
-	 * System.out.println(jsonStartIndex + "---" + jsonEndIndex);
-	 * 
-	 * if (jsonStartIndex > 0 && jsonEndIndex > 0) { Gson gson = new
-	 * GsonBuilder().setPrettyPrinting().create(); String jStr =
-	 * html.substring(jsonStartIndex, jsonEndIndex); System.out.println("--" + jStr
-	 * + "--"); String output = gson.toJson(JsonParser.parseString(jStr));
-	 * System.out.println(output); }
-	 */
 }

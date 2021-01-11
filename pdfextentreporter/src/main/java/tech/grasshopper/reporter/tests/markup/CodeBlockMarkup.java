@@ -42,7 +42,8 @@ public class CodeBlockMarkup extends MarkupDisplay {
 
 		RowBuilder rowBuilder = Row.builder();
 		for (Element e : elements)
-			rowBuilder.add(TextCell.builder().text(e.text()).lineSpacing(MULTILINE_SPACING).build());
+			rowBuilder
+					.add(TextCell.builder().text(e.text()).textColor(textColor).lineSpacing(MULTILINE_SPACING).build());
 
 		tableBuilder.addRow(rowBuilder.build());
 

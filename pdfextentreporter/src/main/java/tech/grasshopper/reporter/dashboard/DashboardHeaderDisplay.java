@@ -1,9 +1,6 @@
 package tech.grasshopper.reporter.dashboard;
 
-import java.awt.Color;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 
 import org.apache.pdfbox.pdmodel.font.PDFont;
 
@@ -40,16 +37,16 @@ public class DashboardHeaderDisplay extends Display {
 	}
 
 	private void createReportTitleText() {
-		Text text = Text.builder().textColor(Color.BLACK).font(TITLE_FONT).fontSize(TITLE_FONT_SIZE)
-				.text(titleLengthOptimizer.optimizeText("Cucumber Report by Grasshopper")).xlocation(TITLE_X_LOCATION)
+		Text text = Text.builder().textColor(config.getReportNameColor()).font(TITLE_FONT).fontSize(TITLE_FONT_SIZE)
+				.text(titleLengthOptimizer.optimizeText(config.getReportName())).xlocation(TITLE_X_LOCATION)
 				.ylocation(Y_LOCATION).build();
 		TextComponent.builder().content(content).text(text).build().display();
 	}
 
 	private void createReportDateText() {
-		Text text = Text.builder().textColor(Color.BLUE).font(ReportFont.REGULAR_FONT).fontSize(DATE_FONT_SIZE)
-				.xlocation(DATE_X_LOCATION).ylocation(Y_LOCATION)
-				.text(LocalDateTime.now().format(DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM))).build();
+		Text text = Text.builder().textColor(config.getReportDateColor()).font(ReportFont.REGULAR_FONT)
+				.fontSize(DATE_FONT_SIZE).xlocation(DATE_X_LOCATION).ylocation(Y_LOCATION)
+				.text(LocalDateTime.now().format(config.getReportDateFormat())).build();
 		TextComponent.builder().content(content).text(text).build().display();
 	}
 }
