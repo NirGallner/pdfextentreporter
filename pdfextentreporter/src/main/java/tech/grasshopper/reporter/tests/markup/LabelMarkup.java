@@ -17,8 +17,8 @@ public class LabelMarkup extends MarkupDisplay {
 	@Override
 	public AbstractCell displayDetails() {
 
-		return TextCell.builder().text(element.text()).textColor(textColor()).fontSize(LOG_FONT_SIZE).font(LOG_FONT)
-				.lineSpacing(MULTILINE_SPACING).build();
+		return TextCell.builder().text(textSanitizer.sanitizeText(element.text())).textColor(textColor())
+				.fontSize(LOG_FONT_SIZE).font(LOG_FONT).lineSpacing(MULTILINE_SPACING).build();
 	}
 
 	private Color textColor() {

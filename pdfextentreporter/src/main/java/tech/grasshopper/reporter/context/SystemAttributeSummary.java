@@ -63,9 +63,9 @@ public class SystemAttributeSummary extends AttributeSummaryDisplay {
 		data.forEach((k, v) -> {
 			Row row = Row.builder().font(TABLE_CONTENT_FONT).fontSize(TABLE_CONTENT_FONT_SIZE).wordBreak(true)
 					.padding(TABLE_PADDING)
-					.add(TextCell.builder().text(k).textColor(config.getSystemNameColor())
+					.add(TextCell.builder().text(textSanitizer.sanitizeText(k)).textColor(config.getSystemNameColor())
 							.lineSpacing(MULTILINE_SPACING).build())
-					.add(TextCell.builder().text(v).textColor(config.getSystemValueColor())
+					.add(TextCell.builder().text(textSanitizer.sanitizeText(v)).textColor(config.getSystemValueColor())
 							.lineSpacing(MULTILINE_SPACING).build())
 					.build();
 

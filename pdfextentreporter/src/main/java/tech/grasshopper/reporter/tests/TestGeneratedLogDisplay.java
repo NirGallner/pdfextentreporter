@@ -11,7 +11,6 @@ import org.vandeseer.easytable.structure.Table.TableBuilder;
 import org.vandeseer.easytable.structure.cell.AbstractCell;
 import org.vandeseer.easytable.structure.cell.TextCell;
 
-import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.model.Test;
 
 import lombok.Data;
@@ -39,7 +38,6 @@ public class TestGeneratedLogDisplay extends Display {
 	private static final float GAP_HEIGHT = 10f;
 	private static final int LOGS_TABLE_CONTENT_FONT_SIZE = 10;
 	private static final PDFont LOGS_TABLE_CONTENT_FONT = ReportFont.REGULAR_FONT;
-	private static final float LOGS_TABLE_CONTENT_MULTILINE_SPACING = 1f;
 
 	protected Test test;
 
@@ -74,12 +72,11 @@ public class TestGeneratedLogDisplay extends Display {
 	private void createLogRows() {
 		test.getGeneratedLog().forEach(l -> {
 			AbstractCell detailCell = TestMarkup.builder().log(l).width(LOGS_DETAILS_WIDTH - (2 * PADDING))
-					.textColor(statusColor(l.getStatus())).lineSpacing(LOGS_TABLE_CONTENT_MULTILINE_SPACING).build()
-					.createMarkupCell();
+					.textColor(config.statusColor(l.getStatus())).build().createMarkupCell();
 
 			Row row = Row.builder().font(LOGS_TABLE_CONTENT_FONT).fontSize(LOGS_TABLE_CONTENT_FONT_SIZE).wordBreak(true)
 					.padding(PADDING).add(TextCell.builder().text(l.getStatus().toString())
-							.textColor(statusColor(l.getStatus())).build())
+							.textColor(config.statusColor(l.getStatus())).build())
 					.add(detailCell).build();
 			tableBuilder.addRow(row);
 		});
@@ -91,19 +88,5 @@ public class TestGeneratedLogDisplay extends Display {
 		table.displayTable();
 
 		ylocation = table.getFinalY() - GAP_HEIGHT;
-	}
-
-	private Color statusColor(Status status) {
-		if (status == Status.PASS)
-			return config.getPassColor();
-		if (status == Status.FAIL)
-			return config.getFailColor();
-		if (status == Status.SKIP)
-			return config.getSkipColor();
-		if (status == Status.WARNING)
-			return config.getWarnColor();
-		if (status == Status.INFO)
-			return config.getInfoColor();
-		return Color.BLACK;
 	}
 }

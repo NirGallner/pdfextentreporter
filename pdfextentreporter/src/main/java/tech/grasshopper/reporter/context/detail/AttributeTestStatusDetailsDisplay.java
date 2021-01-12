@@ -10,7 +10,6 @@ import org.vandeseer.easytable.structure.Table;
 import org.vandeseer.easytable.structure.Table.TableBuilder;
 import org.vandeseer.easytable.structure.cell.TextCell;
 
-import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.model.NamedAttribute;
 import com.aventstack.extentreports.model.context.NamedAttributeContext;
 
@@ -18,6 +17,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 import tech.grasshopper.reporter.font.ReportFont;
+import tech.grasshopper.reporter.optimizer.TextSanitizer;
 import tech.grasshopper.reporter.structure.Display;
 import tech.grasshopper.reporter.structure.TableCreator;
 import tech.grasshopper.reporter.util.DateUtil;
@@ -46,6 +46,8 @@ public class AttributeTestStatusDetailsDisplay extends Display {
 
 	protected TableBuilder tableBuilder;
 
+	protected final TextSanitizer textSanitizer = TextSanitizer.builder().font(TABLE_CONTENT_FONT).build();
+
 	@Override
 	public void display() {
 
@@ -73,12 +75,14 @@ public class AttributeTestStatusDetailsDisplay extends Display {
 		attribute.getTestList().forEach(t -> {
 			Row row = Row.builder().font(TABLE_CONTENT_FONT).fontSize(TABLE_CONTENT_FONT_SIZE).wordBreak(true)
 					.padding(TABLE_CONTENT_COLUMN_PADDING)
-					.add(TextCell.builder().text(t.getStatus().toString()).textColor(statusColor(t.getStatus()))
+					.add(TextCell.builder().text(t.getStatus().toString()).textColor(config.statusColor(t.getStatus()))
 							.build())
 					.add(TextCell.builder()
 							.text(DateUtil.formatTimeAMPM(DateUtil.convertToLocalDateTimeFromDate(t.getStartTime())))
-							.build())
-					.add(TextCell.builder().text(t.getName()).lineSpacing(MULTILINE_SPACING).build()).build();
+							.textColor(config.getTestTimeStampColor()).build())
+					.add(TextCell.builder().text(textSanitizer.sanitizeText(t.getName()))
+							.textColor(config.statusColor(t.getStatus())).lineSpacing(MULTILINE_SPACING).build())
+					.build();
 
 			tableBuilder.addRow(row);
 		});
@@ -90,19 +94,5 @@ public class AttributeTestStatusDetailsDisplay extends Display {
 		table.displayTable();
 
 		ylocation = table.getFinalY() - TABLE_GAP_HEIGHT;
-	}
-
-	private Color statusColor(Status status) {
-		if (status == Status.PASS)
-			return config.getPassColor();
-		if (status == Status.FAIL)
-			return config.getFailColor();
-		if (status == Status.SKIP)
-			return config.getSkipColor();
-		if (status == Status.WARNING)
-			return config.getWarnColor();
-		if (status == Status.INFO)
-			return config.getInfoColor();
-		return Color.BLACK;
 	}
 }

@@ -7,7 +7,6 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.vandeseer.easytable.structure.cell.AbstractCell;
-import org.vandeseer.easytable.structure.cell.TextCell;
 
 import com.aventstack.extentreports.model.Log;
 
@@ -22,8 +21,7 @@ public class TestMarkup {
 	private Log log;
 
 	private float width;
-	@Default
-	private float lineSpacing = 1f;
+
 	@Default
 	private Color textColor = Color.BLACK;
 
@@ -55,8 +53,7 @@ public class TestMarkup {
 		if (html.contains("JSONTree"))
 			return JsonMarkup.builder().html(html).textColor(textColor).build().displayDetails();
 
-		// TODO Fix this stuff
-		return TextCell.builder().text(html).lineSpacing(lineSpacing).textColor(textColor).build();
+		return DefaultMarkup.builder().log(log).textColor(textColor).build().displayDetails();
 	}
 
 	public static boolean isMarkup(String markup) {

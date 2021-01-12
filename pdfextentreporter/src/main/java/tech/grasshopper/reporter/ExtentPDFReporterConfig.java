@@ -4,10 +4,12 @@ import java.awt.Color;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
 
+import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.reporter.configuration.AbstractConfiguration;
 
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
+import tech.grasshopper.reporter.context.AttributeType;
 
 @Setter
 @SuperBuilder
@@ -30,20 +32,20 @@ public class ExtentPDFReporterConfig extends AbstractConfiguration {
 	private String warnColor;
 	private String infoColor;
 
-	private String categoryTitleColor;
+	private String categoryAttributeColor;
 	private String categoryNameColor;
 
-	private String authorTitleColor;
+	private String authorAttributeColor;
 	private String authorNameColor;
 
-	private String deviceTitleColor;
+	private String deviceAttributeColor;
 	private String deviceNameColor;
 
-	private String systemTitleColor;
+	private String systemAttributeColor;
 	private String systemNameColor;
 	private String systemValueColor;
 
-	private String exceptionTitleColor;
+	private String exceptionAttributeColor;
 
 	private String attributeTestStatusColor;
 
@@ -116,7 +118,7 @@ public class ExtentPDFReporterConfig extends AbstractConfiguration {
 	}
 
 	public Color getCategoryTitleColor() {
-		return createColor(categoryTitleColor, Defaults.categoryTitleColor);
+		return createColor(categoryAttributeColor, Defaults.categoryAttributeColor);
 	}
 
 	public Color getCategoryNameColor() {
@@ -124,7 +126,7 @@ public class ExtentPDFReporterConfig extends AbstractConfiguration {
 	}
 
 	public Color getAuthorTitleColor() {
-		return createColor(authorTitleColor, Defaults.authorTitleColor);
+		return createColor(authorAttributeColor, Defaults.authorAttributeColor);
 	}
 
 	public Color getAuthorNameColor() {
@@ -132,7 +134,7 @@ public class ExtentPDFReporterConfig extends AbstractConfiguration {
 	}
 
 	public Color getDeviceTitleColor() {
-		return createColor(deviceTitleColor, Defaults.deviceTitleColor);
+		return createColor(deviceAttributeColor, Defaults.deviceAttributeColor);
 	}
 
 	public Color getDeviceNameColor() {
@@ -140,7 +142,7 @@ public class ExtentPDFReporterConfig extends AbstractConfiguration {
 	}
 
 	public Color getSystemTitleColor() {
-		return createColor(systemTitleColor, Defaults.systemTitleColor);
+		return createColor(systemAttributeColor, Defaults.systemAttributeColor);
 	}
 
 	public Color getSystemNameColor() {
@@ -152,7 +154,7 @@ public class ExtentPDFReporterConfig extends AbstractConfiguration {
 	}
 
 	public Color getExceptionTitleColor() {
-		return createColor(exceptionTitleColor, Defaults.exceptionTitleColor);
+		return createColor(exceptionAttributeColor, Defaults.exceptionAttributeColor);
 	}
 
 	public Color getAttributeTestStatusColor() {
@@ -201,20 +203,60 @@ public class ExtentPDFReporterConfig extends AbstractConfiguration {
 		private static final Color skipColor = Color.ORANGE;
 		private static final Color warnColor = Color.YELLOW;
 		private static final Color infoColor = Color.BLUE;
-		private static final Color categoryTitleColor = Color.RED;
+		private static final Color categoryAttributeColor = Color.CYAN;
 		private static final Color categoryNameColor = Color.BLACK;
-		private static final Color authorTitleColor = Color.RED;
+		private static final Color authorAttributeColor = Color.MAGENTA;
 		private static final Color authorNameColor = Color.BLACK;
-		private static final Color deviceTitleColor = Color.RED;
+		private static final Color deviceAttributeColor = Color.DARK_GRAY;
 		private static final Color deviceNameColor = Color.BLACK;
-		private static final Color systemTitleColor = Color.RED;
+		private static final Color systemAttributeColor = Color.YELLOW;
 		private static final Color systemNameColor = Color.BLACK;
 		private static final Color systemValueColor = Color.BLACK;
-		private static final Color exceptionTitleColor = Color.RED;
+		private static final Color exceptionAttributeColor = Color.RED;
 		private static final Color attributeTestStatusColor = Color.BLUE;
 		private static final Color testNameColor = Color.RED;
 		private static final Color testTimesColor = Color.BLUE;
 		private static final Color testTimeStampColor = Color.BLACK;
 		private static final Color testExceptionColor = Color.RED;
+	}
+
+	public Color attributeHeaderColor(AttributeType type) {
+		if (type == AttributeType.CATEGORY)
+			return getCategoryTitleColor();
+		if (type == AttributeType.DEVICE)
+			return getDeviceTitleColor();
+		if (type == AttributeType.AUTHOR)
+			return getAuthorTitleColor();
+		if (type == AttributeType.EXCEPTION)
+			return getExceptionTitleColor();
+		if (type == AttributeType.SYSTEM)
+			return getSystemTitleColor();
+		return Color.RED;
+	}
+
+	public Color attributeNameColor(AttributeType type) {
+		if (type == AttributeType.CATEGORY)
+			return getCategoryNameColor();
+		if (type == AttributeType.DEVICE)
+			return getDeviceNameColor();
+		if (type == AttributeType.AUTHOR)
+			return getAuthorNameColor();
+		if (type == AttributeType.SYSTEM)
+			return getSystemNameColor();
+		return Color.BLACK;
+	}
+
+	public Color statusColor(Status status) {
+		if (status == Status.PASS)
+			return getPassColor();
+		if (status == Status.FAIL)
+			return getFailColor();
+		if (status == Status.SKIP)
+			return getSkipColor();
+		if (status == Status.WARNING)
+			return getWarnColor();
+		if (status == Status.INFO)
+			return getInfoColor();
+		return Color.BLACK;
 	}
 }

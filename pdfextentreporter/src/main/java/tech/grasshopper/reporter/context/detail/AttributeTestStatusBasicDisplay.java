@@ -1,14 +1,17 @@
 package tech.grasshopper.reporter.context.detail;
 
-import java.awt.Color;
-
 import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.vandeseer.easytable.settings.HorizontalAlignment;
 import org.vandeseer.easytable.settings.VerticalAlignment;
 import org.vandeseer.easytable.structure.Row;
 import org.vandeseer.easytable.structure.Table;
 import org.vandeseer.easytable.structure.Table.TableBuilder;
 import org.vandeseer.easytable.structure.cell.TextCell;
+import org.vandeseer.easytable.structure.cell.paragraph.ParagraphCell;
+import org.vandeseer.easytable.structure.cell.paragraph.ParagraphCell.Paragraph;
+import org.vandeseer.easytable.structure.cell.paragraph.ParagraphCell.Paragraph.ParagraphBuilder;
+import org.vandeseer.easytable.structure.cell.paragraph.StyledText;
 
 import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.model.NamedAttribute;
@@ -21,6 +24,7 @@ import tech.grasshopper.reporter.context.AttributeType;
 import tech.grasshopper.reporter.destination.Destination;
 import tech.grasshopper.reporter.destination.DestinationAware;
 import tech.grasshopper.reporter.font.ReportFont;
+import tech.grasshopper.reporter.optimizer.TextSanitizer;
 import tech.grasshopper.reporter.structure.Display;
 import tech.grasshopper.reporter.structure.TableCreator;
 
@@ -29,6 +33,7 @@ import tech.grasshopper.reporter.structure.TableCreator;
 @EqualsAndHashCode(callSuper = false)
 public class AttributeTestStatusBasicDisplay extends Display implements DestinationAware {
 
+	private static final PDFont NAME_FONT = ReportFont.BOLD_ITALIC_FONT;
 	private static final int NAME_FONT_SIZE = 15;
 	private static final int STATUS_FONT_SIZE = 12;
 
@@ -47,6 +52,8 @@ public class AttributeTestStatusBasicDisplay extends Display implements Destinat
 
 	private int destinationY;
 
+	protected final TextSanitizer textSanitizer = TextSanitizer.builder().font(NAME_FONT).build();
+
 	@Override
 	public void display() {
 
@@ -62,27 +69,26 @@ public class AttributeTestStatusBasicDisplay extends Display implements Destinat
 	}
 
 	private void createNameRow() {
-		tableBuilder.addRow(Row.builder()
-				.add(TextCell.builder().minHeight(NAME_HEIGHT).fontSize(NAME_FONT_SIZE)
-						.font(ReportFont.BOLD_ITALIC_FONT)
-						.text(type.toString().toLowerCase() + "- " + attribute.getAttr().getName()).wordBreak(true)
-						.lineSpacing(MULTILINE_SPACING).textColor(nameColor()).build())
+		tableBuilder.addRow(Row.builder().add(TextCell.builder().minHeight(NAME_HEIGHT).fontSize(NAME_FONT_SIZE)
+				.font(NAME_FONT)
+				.text(type.toString().toLowerCase() + "- " + textSanitizer.sanitizeText(attribute.getAttr().getName()))
+				.wordBreak(true).lineSpacing(MULTILINE_SPACING).textColor(config.attributeHeaderColor(type)).build())
 				.build());
 	}
 
 	private void createStatusRow() {
-		String statusText = "";
+		ParagraphBuilder paraBuilder = Paragraph.builder();
 		for (Status status : Status.values()) {
-			if (attribute.getStatusDist().getOrDefault(status, 0) > 0)
-				statusText = statusText + "/ " + attribute.getStatusDist().get(status) + " " + status + " ";
+			if (attribute.getStatusDist().getOrDefault(status, 0) > 0) {
+				paraBuilder.append(
+						StyledText.builder().text("/ " + attribute.getStatusDist().get(status) + " " + status + " /")
+								.color(config.statusColor(status)).build());
+			}
 		}
-		if (!statusText.isEmpty())
-			statusText = statusText + "/";
-		;
 
 		tableBuilder
 				.addRow(Row.builder().height(STATUS_HEIGHT).fontSize(STATUS_FONT_SIZE).font(ReportFont.BOLD_ITALIC_FONT)
-						.add(TextCell.builder().text(statusText).textColor(config.getAttributeTestStatusColor()).build()).build());
+						.add(ParagraphCell.builder().paragraph(paraBuilder.build()).build()).build());
 	}
 
 	protected void drawDetailsTable() {
@@ -104,17 +110,5 @@ public class AttributeTestStatusBasicDisplay extends Display implements Destinat
 	public Destination createDestination() {
 		return Destination.builder().name(type.toString().toLowerCase() + "- " + attribute.getAttr().getName())
 				.yCoord(destinationY).page(page).build();
-	}
-
-	private Color nameColor() {
-		if (type == AttributeType.CATEGORY)
-			return config.getCategoryTitleColor();
-		if (type == AttributeType.AUTHOR)
-			return config.getAuthorTitleColor();
-		if (type == AttributeType.DEVICE)
-			return config.getDeviceTitleColor();
-		if (type == AttributeType.EXCEPTION)
-			return config.getExceptionTitleColor();
-		return Color.RED;
 	}
 }

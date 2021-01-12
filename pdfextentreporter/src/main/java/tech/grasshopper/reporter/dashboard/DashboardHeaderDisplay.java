@@ -11,6 +11,7 @@ import tech.grasshopper.reporter.component.text.Text;
 import tech.grasshopper.reporter.component.text.TextComponent;
 import tech.grasshopper.reporter.font.ReportFont;
 import tech.grasshopper.reporter.optimizer.TextLengthOptimizer;
+import tech.grasshopper.reporter.optimizer.TextSanitizer;
 import tech.grasshopper.reporter.structure.Display;
 
 @Data
@@ -30,6 +31,8 @@ public class DashboardHeaderDisplay extends Display {
 	private final TextLengthOptimizer titleLengthOptimizer = TextLengthOptimizer.builder().font(TITLE_FONT)
 			.fontsize(TITLE_FONT_SIZE).spaceWidth(DATE_X_LOCATION - TITLE_X_LOCATION - 20).build();
 
+	private final TextSanitizer textSanitizer = TextSanitizer.builder().font(TITLE_FONT).build();
+
 	@Override
 	public void display() {
 		createReportTitleText();
@@ -38,8 +41,8 @@ public class DashboardHeaderDisplay extends Display {
 
 	private void createReportTitleText() {
 		Text text = Text.builder().textColor(config.getReportNameColor()).font(TITLE_FONT).fontSize(TITLE_FONT_SIZE)
-				.text(titleLengthOptimizer.optimizeText(config.getReportName())).xlocation(TITLE_X_LOCATION)
-				.ylocation(Y_LOCATION).build();
+				.text(titleLengthOptimizer.optimizeText(textSanitizer.sanitizeText(config.getReportName())))
+				.xlocation(TITLE_X_LOCATION).ylocation(Y_LOCATION).build();
 		TextComponent.builder().content(content).text(text).build().display();
 	}
 

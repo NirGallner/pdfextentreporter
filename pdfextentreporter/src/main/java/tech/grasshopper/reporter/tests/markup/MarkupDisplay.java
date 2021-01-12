@@ -11,6 +11,7 @@ import lombok.Builder.Default;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 import tech.grasshopper.reporter.font.ReportFont;
+import tech.grasshopper.reporter.optimizer.TextSanitizer;
 
 @Data
 @SuperBuilder
@@ -27,6 +28,8 @@ public abstract class MarkupDisplay {
 
 	@Default
 	protected Color textColor = Color.BLACK;
+	
+	protected final TextSanitizer textSanitizer = TextSanitizer.builder().font(LOG_FONT).build();
 
 	public abstract AbstractCell displayDetails();
 }

@@ -14,7 +14,7 @@ import lombok.Builder;
 import lombok.Builder.Default;
 import lombok.Data;
 import tech.grasshopper.reporter.font.ReportFont;
-import tech.grasshopper.reporter.optimizer.StackTraceSanitizer;
+import tech.grasshopper.reporter.optimizer.TextSanitizer;
 
 @Data
 @Builder
@@ -34,7 +34,7 @@ public class TestStackTrace {
 
 	public TextCell createStackTraceCell() {
 
-		StackTraceSanitizer sanitizer = StackTraceSanitizer.builder().font(font).build();
+		TextSanitizer sanitizer = TextSanitizer.builder().font(font).replaceBy("").build();
 		String stackTrace = log.getException().getStackTrace();
 		String stackText = "";
 

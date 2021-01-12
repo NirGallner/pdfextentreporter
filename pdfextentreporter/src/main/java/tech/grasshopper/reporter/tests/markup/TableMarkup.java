@@ -45,8 +45,8 @@ public class TableMarkup extends MarkupDisplay {
 		rows.forEach(row -> {
 			RowBuilder rowBuilder = Row.builder();
 			row.select("td").forEach(v -> {
-				rowBuilder.add(
-						TextCell.builder().text(v.text()).textColor(textColor).lineSpacing(MULTILINE_SPACING).build());
+				rowBuilder.add(TextCell.builder().text(textSanitizer.sanitizeText(v.text())).textColor(textColor)
+						.lineSpacing(MULTILINE_SPACING).build());
 			});
 			tableBuilder.addRow(rowBuilder.build());
 		});

@@ -1,11 +1,11 @@
 package tech.grasshopper.reporter.tests;
 
-import java.awt.Color;
 import java.time.LocalDateTime;
 import java.util.Set;
 import java.util.stream.Collectors;
 
 import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.vandeseer.easytable.settings.HorizontalAlignment;
 import org.vandeseer.easytable.settings.VerticalAlignment;
 import org.vandeseer.easytable.structure.Row;
@@ -28,6 +28,7 @@ import tech.grasshopper.reporter.context.AttributeType;
 import tech.grasshopper.reporter.destination.Destination;
 import tech.grasshopper.reporter.destination.DestinationAware;
 import tech.grasshopper.reporter.font.ReportFont;
+import tech.grasshopper.reporter.optimizer.TextSanitizer;
 import tech.grasshopper.reporter.structure.Display;
 import tech.grasshopper.reporter.structure.TableCreator;
 import tech.grasshopper.reporter.util.DateUtil;
@@ -36,6 +37,8 @@ import tech.grasshopper.reporter.util.DateUtil;
 @SuperBuilder
 @EqualsAndHashCode(callSuper = false)
 public class TestBasicDetailsDisplay extends Display implements DestinationAware {
+
+	private static final PDFont CONTENT_FONT = ReportFont.BOLD_ITALIC_FONT;
 
 	private static final int NAME_FONT_SIZE = 15;
 	private static final int TIMES_FONT_SIZE = 12;
@@ -60,6 +63,8 @@ public class TestBasicDetailsDisplay extends Display implements DestinationAware
 
 	private int destinationY;
 
+	protected final TextSanitizer textSanitizer = TextSanitizer.builder().font(CONTENT_FONT).build();
+
 	@Override
 	public void display() {
 
@@ -80,8 +85,9 @@ public class TestBasicDetailsDisplay extends Display implements DestinationAware
 
 	private void createNameRow() {
 		tableBuilder.addRow(Row.builder()
-				.add(TextCell.builder().minHeight(NAME_HEIGHT).fontSize(NAME_FONT_SIZE).text(test.getName())
-						.wordBreak(true).lineSpacing(MULTI_LINE_SPACING).textColor(config.getTestNameColor()).build())
+				.add(TextCell.builder().minHeight(NAME_HEIGHT).fontSize(NAME_FONT_SIZE)
+						.text(textSanitizer.sanitizeText(test.getName())).wordBreak(true)
+						.lineSpacing(MULTI_LINE_SPACING).textColor(config.getTestNameColor()).build())
 				.build());
 	}
 
@@ -102,7 +108,6 @@ public class TestBasicDetailsDisplay extends Display implements DestinationAware
 	}
 
 	private void createAttributesRow() {
-
 		if (test.getCategorySet().isEmpty() && test.getAuthorSet().isEmpty() && test.getDeviceSet().isEmpty())
 			return;
 
@@ -118,13 +123,11 @@ public class TestBasicDetailsDisplay extends Display implements DestinationAware
 
 	private void creaateAttributeText(Set<? extends NamedAttribute> attributes, AttributeType type,
 			ParagraphBuilder paraBuilder) {
-
 		if (!attributes.isEmpty()) {
 			numberOfRowsToRepeat = 3;
-
-			String atts = attributes.stream().map(NamedAttribute::getName)
+			String atts = attributes.stream().map(a -> textSanitizer.sanitizeText(a.getName()))
 					.collect(Collectors.joining(" / ", "/ ", " /"));
-			paraBuilder.append(StyledText.builder().text(atts).color(attributeColor(type)).build());
+			paraBuilder.append(StyledText.builder().text(atts).color(config.attributeHeaderColor(type)).build());
 		}
 	}
 
@@ -147,15 +150,5 @@ public class TestBasicDetailsDisplay extends Display implements DestinationAware
 	@Override
 	public Destination createDestination() {
 		return Destination.builder().name(test.getName()).yCoord(destinationY).page(page).build();
-	}
-
-	private Color attributeColor(AttributeType type) {
-		if (type == AttributeType.CATEGORY)
-			return config.getCategoryTitleColor();
-		if (type == AttributeType.DEVICE)
-			return config.getDeviceTitleColor();
-		if (type == AttributeType.AUTHOR)
-			return config.getAuthorTitleColor();
-		return Color.RED;
 	}
 }

@@ -21,6 +21,7 @@ import tech.grasshopper.reporter.destination.Destination;
 import tech.grasshopper.reporter.destination.DestinationAware;
 import tech.grasshopper.reporter.exception.PdfReportException;
 import tech.grasshopper.reporter.font.ReportFont;
+import tech.grasshopper.reporter.optimizer.TextSanitizer;
 import tech.grasshopper.reporter.structure.Display;
 import tech.grasshopper.reporter.structure.TableCreator;
 
@@ -65,6 +66,9 @@ public abstract class AttributeSummaryDisplay extends Display implements Destina
 		}
 		throw new PdfReportException("Unsupported context attribute type.");
 	}
+	
+	protected final TextSanitizer textSanitizer = TextSanitizer.builder().font(TABLE_CONTENT_FONT).build();
+
 
 	private Map<String, Map<Status, Integer>> convertContextRowData(
 			Set<? extends NamedAttributeContext<? extends NamedAttribute>> attributes) {
