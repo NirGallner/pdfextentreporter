@@ -9,13 +9,15 @@ import lombok.Builder.Default;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
+import tech.grasshopper.reporter.header.PageHeader;
+import tech.grasshopper.reporter.header.PageHeaderAware;
 import tech.grasshopper.reporter.structure.Display;
 import tech.grasshopper.reporter.structure.Section;
 
 @Data
 @SuperBuilder
 @EqualsAndHashCode(callSuper = false)
-public class TestDetails extends Section {
+public class TestDetails extends Section implements PageHeaderAware {
 
 	public static final int LEVEL_X_INDENT = 20;
 
@@ -25,6 +27,7 @@ public class TestDetails extends Section {
 	@Override
 	public void createSection() {
 
+		pageHeaderDetails();
 		createPage();
 
 		List<Test> allTests = new ArrayList<>();
@@ -76,5 +79,10 @@ public class TestDetails extends Section {
 
 	private void createTestDestination(TestBasicDetailsDisplay testDisplay) {
 		destinations.addTestDestination(testDisplay.createDestination());
+	}
+
+	@Override
+	public String getSectionTitle() {
+		return PageHeader.TEST_DETAILS_SECTION;
 	}
 }

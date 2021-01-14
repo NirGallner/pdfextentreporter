@@ -60,4 +60,9 @@ public class Dashboard extends Section implements DestinationAware {
 		destinations.setDashboardDestination(destination);
 		return destination;
 	}
+
+	@Override
+	public String getSectionTitle() {
+		return "";
+	}
 }

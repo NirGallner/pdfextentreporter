@@ -15,6 +15,7 @@ import tech.grasshopper.reporter.context.detail.AttributeDetails;
 import tech.grasshopper.reporter.dashboard.Dashboard;
 import tech.grasshopper.reporter.destination.Destination.DestinationStore;
 import tech.grasshopper.reporter.font.ReportFont;
+import tech.grasshopper.reporter.header.PageHeader;
 import tech.grasshopper.reporter.tests.TestDetails;
 
 public class ReportGenerator {
@@ -24,6 +25,7 @@ public class ReportGenerator {
 	private File reportFile;
 	private PDDocument document;
 	private DestinationStore destinations;
+	private PageHeader pageHeader;
 
 	public ReportGenerator(Report report, ExtentPDFReporterConfig config, File file) {
 		this.report = report;
@@ -31,6 +33,7 @@ public class ReportGenerator {
 		this.reportFile = file;
 		this.document = new PDDocument();
 		this.destinations = new DestinationStore();
+		this.pageHeader = new PageHeader();
 
 		loadFontFamily();
 		createReportDirectory();
@@ -41,19 +44,19 @@ public class ReportGenerator {
 		Dashboard.builder().document(document).report(report).config(config).destinations(destinations).build()
 				.createSection();
 
-		AttributeSummary.builder().document(document).report(report).config(config).destinations(destinations).build()
-				.createSection();
+		AttributeSummary.builder().document(document).report(report).config(config).destinations(destinations)
+				.pageHeader(pageHeader).build().createSection();
 
-		TestDetails.builder().document(document).report(report).config(config).destinations(destinations).build()
-				.createSection();
+		TestDetails.builder().document(document).report(report).config(config).destinations(destinations)
+				.pageHeader(pageHeader).build().createSection();
 
-		AttributeDetails.builder().document(document).report(report).config(config).destinations(destinations).build()
-				.createSection();
+		AttributeDetails.builder().document(document).report(report).config(config).destinations(destinations)
+				.pageHeader(pageHeader).build().createSection();
 
-		Bookmark bookmark = Bookmark.builder()/* .reportConfig(reportConfig) */.build();
-		PDDocumentOutline outline = bookmark.createDocumentOutline(destinations);
+		pageHeader.processHeader(document);
 
-		// Annotation.updateDestination(reportData);
+		Bookmark bookmark = Bookmark.builder().destinationStore(destinations).build();
+		PDDocumentOutline outline = bookmark.createDocumentOutline();
 
 		document.getDocumentCatalog().setDocumentOutline(outline);
 		document.getDocumentCatalog().setPageMode(PageMode.USE_OUTLINES);

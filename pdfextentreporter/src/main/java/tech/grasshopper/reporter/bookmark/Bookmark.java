@@ -11,33 +11,52 @@ import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDDocume
 import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDOutlineItem;
 
 import lombok.Builder;
+import lombok.Data;
 import tech.grasshopper.reporter.context.AttributeType;
 import tech.grasshopper.reporter.destination.Destination;
 import tech.grasshopper.reporter.destination.Destination.DestinationStore;
 
+@Data
 @Builder
 public class Bookmark {
-
-	// private ReportConfig reportConfig;
 
 	public final static String SUMMARY_BOOKMARK_TEXT = "SUMMARY";
 	public final static String DASHBOARD_BOOKMARK_TEXT = "DASHBOARD";
 	public final static String ATTRIBUTES_BOOKMARK_TEXT = "ATTRIBUTES";
 	public final static String TESTS_BOOKMARK_TEXT = "TESTS";
 
-	public PDDocumentOutline createDocumentOutline(DestinationStore destinationStore/* , ReportData reportData */) {
+	private final PDDocumentOutline outline = new PDDocumentOutline();
 
-		PDDocumentOutline outline = new PDDocumentOutline();
+	private DestinationStore destinationStore;
 
-		PDOutlineItem summaryOutline = new PDOutlineItem();
-		summaryOutline.setTitle(SUMMARY_BOOKMARK_TEXT);
+	public PDDocumentOutline createDocumentOutline() {
+
+		PDOutlineItem summaryOutline = createSummaryOutline();
+		createDashboardOutline(summaryOutline);
+		createAttributeSummaryOutline(summaryOutline);
+
+		createTestsOutline();
+
+		createAttributeDetailsOutline();
+
+		return outline;
+	}
+
+	private PDOutlineItem createSummaryOutline() {
+		PDOutlineItem summaryOutline = createOutlineItem(destinationStore.getDashboardDestination(),
+				SUMMARY_BOOKMARK_TEXT);
 		summaryOutline.setBold(true);
 		outline.addLast(summaryOutline);
+		return summaryOutline;
+	}
 
+	private void createDashboardOutline(PDOutlineItem summaryOutline) {
 		PDOutlineItem dashboardOutline = createOutlineItem(destinationStore.getDashboardDestination(),
 				destinationStore.getDashboardDestination().getName());
 		summaryOutline.addLast(dashboardOutline);
+	}
 
+	private void createAttributeSummaryOutline(PDOutlineItem summaryOutline) {
 		if (!destinationStore.getAttributeSummaryDestinations().isEmpty()) {
 			PDOutlineItem attributeOutline = createOutlineItem(
 					destinationStore.getAttributeSummaryDestinations().get(0), ATTRIBUTES_BOOKMARK_TEXT);
@@ -49,10 +68,14 @@ public class Bookmark {
 				attributeOutline.addLast(attTypeOutline);
 			}
 		}
+	}
 
+	private void createTestsOutline() {
 		if (!destinationStore.getTestDestinations().isEmpty())
 			outline.addLast(createChapterOutlineItems(destinationStore.getTestDestinations(), TESTS_BOOKMARK_TEXT));
+	}
 
+	private void createAttributeDetailsOutline() {
 		if (!destinationStore.getAttributeDetailDestinations().isEmpty()) {
 
 			PDOutlineItem attributeOutline = createOutlineItem(destinationStore.getAttributeDetailDestinations().get(0),
@@ -77,7 +100,6 @@ public class Bookmark {
 				});
 			});
 		}
-		return outline;
 	}
 
 	private PDOutlineItem createOutlineItem(Destination destination, String title) {

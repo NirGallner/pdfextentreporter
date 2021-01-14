@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.experimental.SuperBuilder;
 import tech.grasshopper.reporter.ExtentPDFReporterConfig;
 import tech.grasshopper.reporter.destination.Destination.DestinationStore;
+import tech.grasshopper.reporter.header.PageHeader;
 
 @Data
 @SuperBuilder
@@ -20,6 +21,8 @@ public abstract class Section {
 	protected ExtentPDFReporterConfig config;
 
 	protected Report report;
+	
+	protected PageHeader pageHeader;
 
 	public abstract void createSection();
 
@@ -27,4 +30,10 @@ public abstract class Section {
 		PageCreator pageCreator = PageCreator.builder().document(document).build();
 		pageCreator.createPotraitPage();
 	}
+	
+	public void pageHeaderDetails() {
+		pageHeader.addSectionPageData(getSectionTitle(), document.getNumberOfPages());		
+	}
+	
+	public abstract String getSectionTitle();
 }

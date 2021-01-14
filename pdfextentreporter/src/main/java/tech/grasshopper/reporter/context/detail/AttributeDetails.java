@@ -10,13 +10,15 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 import tech.grasshopper.reporter.context.AttributeType;
+import tech.grasshopper.reporter.header.PageHeader;
+import tech.grasshopper.reporter.header.PageHeaderAware;
 import tech.grasshopper.reporter.structure.Display;
 import tech.grasshopper.reporter.structure.Section;
 
 @Data
 @SuperBuilder
 @EqualsAndHashCode(callSuper = false)
-public class AttributeDetails extends Section {
+public class AttributeDetails extends Section implements PageHeaderAware {
 
 	@Default
 	private float yLocation = Display.CONTENT_START_Y;
@@ -24,6 +26,7 @@ public class AttributeDetails extends Section {
 	@Override
 	public void createSection() {
 
+		pageHeaderDetails();
 		createPage();
 
 		processDisplay(report.getCategoryCtx().getSet(), AttributeType.CATEGORY);
@@ -51,5 +54,10 @@ public class AttributeDetails extends Section {
 
 	private void createAttributeDestination(AttributeTestStatusBasicDisplay attributeBasicDisplay) {
 		destinations.addAttributeDetailDestination(attributeBasicDisplay.createDestination());
+	}
+
+	@Override
+	public String getSectionTitle() {
+		return PageHeader.ATTRIBUTE_DETAILS_SECTION;
 	}
 }
