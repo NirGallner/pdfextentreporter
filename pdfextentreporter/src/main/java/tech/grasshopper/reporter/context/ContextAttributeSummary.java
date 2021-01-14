@@ -39,6 +39,9 @@ public class ContextAttributeSummary extends AttributeSummaryDisplay {
 
 		data = contextAttributeData();
 
+		if (data.isEmpty())
+			return;
+
 		createTableBuilder();
 		createTitleRow();
 		createHeaderRow();

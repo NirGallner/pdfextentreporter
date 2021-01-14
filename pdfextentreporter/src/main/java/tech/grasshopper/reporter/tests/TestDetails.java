@@ -27,6 +27,9 @@ public class TestDetails extends Section implements PageHeaderAware {
 	@Override
 	public void createSection() {
 
+		if (report.getTestList().isEmpty())
+			return;
+
 		pageHeaderDetails();
 		createPage();
 
@@ -85,4 +88,5 @@ public class TestDetails extends Section implements PageHeaderAware {
 	public String getSectionTitle() {
 		return PageHeader.TEST_DETAILS_SECTION;
 	}
+
 }

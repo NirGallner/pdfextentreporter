@@ -32,6 +32,9 @@ public class SystemAttributeSummary extends AttributeSummaryDisplay {
 
 		data = systemAttributeData();
 
+		if (data.isEmpty())
+			return;
+
 		createTableBuilder();
 		createTitleRow();
 		createHeaderRow();

@@ -20,6 +20,9 @@ public class AttributeSummary extends Section implements PageHeaderAware {
 	@Override
 	public void createSection() {
 
+		if (!checkDataValidity())
+			return;
+
 		pageHeaderDetails();
 		createPage();
 
@@ -51,5 +54,12 @@ public class AttributeSummary extends Section implements PageHeaderAware {
 	@Override
 	public String getSectionTitle() {
 		return PageHeader.ATTRIBUTE_SUMMARY_SECTION;
+	}
+
+	private boolean checkDataValidity() {
+		if (report.getCategoryCtx().hasItems() || report.getAuthorCtx().hasItems() || report.getDeviceCtx().hasItems()
+				|| !report.getSystemEnvInfo().isEmpty())
+			return true;
+		return false;
 	}
 }

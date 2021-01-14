@@ -32,6 +32,10 @@ public class PageHeader {
 	}
 
 	public void processHeader(PDDocument document) {
+
+		if (sectionPageNumberMap.isEmpty())
+			return;
+
 		String sectionName = "";
 		int startPageNum = -1;
 
@@ -52,7 +56,7 @@ public class PageHeader {
 	private void createTitleAndNumber(PDDocument document, int startPageNum, int endPageNum, String sectionName) {
 		for (int i = startPageNum; i < endPageNum; i++) {
 			PDPage page = document.getPage(i);
-			
+
 			try (final PDPageContentStream content = new PDPageContentStream(document, page, AppendMode.APPEND, true)) {
 				Text pageTitle = Text.builder().textColor(Color.LIGHT_GRAY).xlocation(60).font(ReportFont.ITALIC_FONT)
 						.ylocation(page.getMediaBox().getHeight() - 40).text(sectionName).build();

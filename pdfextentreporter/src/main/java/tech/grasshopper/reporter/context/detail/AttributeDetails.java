@@ -26,6 +26,9 @@ public class AttributeDetails extends Section implements PageHeaderAware {
 	@Override
 	public void createSection() {
 
+		if (!checkDataValidity())
+			return;
+
 		pageHeaderDetails();
 		createPage();
 
@@ -59,5 +62,12 @@ public class AttributeDetails extends Section implements PageHeaderAware {
 	@Override
 	public String getSectionTitle() {
 		return PageHeader.ATTRIBUTE_DETAILS_SECTION;
+	}
+
+	private boolean checkDataValidity() {
+		if (report.getCategoryCtx().hasItems() || report.getAuthorCtx().hasItems() || report.getDeviceCtx().hasItems()
+				|| report.getExceptionInfoCtx().hasItems())
+			return true;
+		return false;
 	}
 }
