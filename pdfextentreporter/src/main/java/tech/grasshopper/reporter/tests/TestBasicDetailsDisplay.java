@@ -36,7 +36,7 @@ import tech.grasshopper.reporter.util.DateUtil;
 @Data
 @SuperBuilder
 @EqualsAndHashCode(callSuper = false)
-public class TestBasicDetailsDisplay extends Display implements DestinationAware {
+public class TestBasicDetailsDisplay extends Display implements TestIndent, DestinationAware {
 
 	private static final PDFont CONTENT_FONT = ReportFont.BOLD_ITALIC_FONT;
 
@@ -68,7 +68,7 @@ public class TestBasicDetailsDisplay extends Display implements DestinationAware
 	@Override
 	public void display() {
 
-		xlocation += test.getLevel() * TestDetails.LEVEL_X_INDENT;
+		xlocation += calculateIndent(test.getLevel(), config.getTestMaxIndentLevel()) * TestDetails.LEVEL_X_INDENT;
 
 		createTableBuilder();
 		createNameRow();

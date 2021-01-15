@@ -48,8 +48,8 @@ public class TestDetails extends Section implements PageHeaderAware {
 			yLocation = testBasicDetailsDisplay.getYlocation();
 
 			if (test.hasScreenCapture()) {
-				TestMediaDisplay testMediaDisplay = TestMediaDisplay.builder().document(document).test(test)
-						.ylocation(yLocation).build();
+				TestMediaDisplay testMediaDisplay = TestMediaDisplay.builder().document(document).config(config)
+						.test(test).ylocation(yLocation).build();
 				testMediaDisplay.display();
 
 				yLocation = testMediaDisplay.getYlocation();

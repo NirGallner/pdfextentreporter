@@ -24,7 +24,7 @@ import tech.grasshopper.reporter.tests.markup.TestMarkup;
 @Data
 @SuperBuilder
 @EqualsAndHashCode(callSuper = false)
-public class TestGeneratedLogDisplay extends Display {
+public class TestGeneratedLogDisplay extends Display implements TestIndent {
 
 	public static final float LOGS_HEADER_HEIGHT = 20f;
 	public static final float LOGS_ROW_HEIGHT = 20f;
@@ -46,7 +46,8 @@ public class TestGeneratedLogDisplay extends Display {
 	@Override
 	public void display() {
 		if (!test.getGeneratedLog().isEmpty()) {
-			xlocation += test.getLevel() * TestDetails.LEVEL_X_INDENT;
+
+			xlocation += calculateIndent(test.getLevel(), config.getTestMaxIndentLevel()) * TestDetails.LEVEL_X_INDENT;
 
 			createTableBuilder();
 			createHeaderRow();

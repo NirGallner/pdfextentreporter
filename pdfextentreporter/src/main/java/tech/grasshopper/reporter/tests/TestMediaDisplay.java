@@ -24,7 +24,7 @@ import tech.grasshopper.reporter.structure.TableCreator;
 @Data
 @SuperBuilder
 @EqualsAndHashCode(callSuper = false)
-public class TestMediaDisplay extends Display {
+public class TestMediaDisplay extends Display implements TestIndent {
 
 	private static final float MEDIA_WIDTH = 70f;
 	private static final float MEDIA_HEIGHT = 70f;
@@ -41,8 +41,8 @@ public class TestMediaDisplay extends Display {
 	@Override
 	public void display() {
 		if (test.hasScreenCapture()) {
-
-			xlocation += test.getLevel() * TestDetails.LEVEL_X_INDENT;
+			
+			xlocation += calculateIndent(test.getLevel(), config.getTestMaxIndentLevel()) * TestDetails.LEVEL_X_INDENT;
 
 			createTableBuilder();
 			createMediaRow();

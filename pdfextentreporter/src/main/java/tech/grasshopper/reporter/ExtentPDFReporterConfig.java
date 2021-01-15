@@ -58,6 +58,8 @@ public class ExtentPDFReporterConfig extends AbstractConfiguration {
 	private int maxTableColumnCount;
 	private int maxTableRowCount;
 
+	private int testMaxIndentLevel;
+
 	public String getReportName() {
 		if (name == null || name.isEmpty())
 			name = Defaults.name;
@@ -208,6 +210,12 @@ public class ExtentPDFReporterConfig extends AbstractConfiguration {
 		return maxTableRowCount;
 	}
 
+	public int getTestMaxIndentLevel() {
+		if (testMaxIndentLevel == 0)
+			testMaxIndentLevel = Defaults.testMaxIndentLevel;
+		return testMaxIndentLevel;
+	}
+
 	private static class Defaults {
 
 		private static final String name = "PDF Extent Report";
@@ -243,6 +251,7 @@ public class ExtentPDFReporterConfig extends AbstractConfiguration {
 		private static final int maxCodeBlockCount = 3;
 		private static final int maxTableColumnCount = 3;
 		private static final int maxTableRowCount = 4;
+		private static final int testMaxIndentLevel = 3;
 	}
 
 	public Color attributeHeaderColor(AttributeType type) {
