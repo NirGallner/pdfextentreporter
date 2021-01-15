@@ -54,6 +54,10 @@ public class ExtentPDFReporterConfig extends AbstractConfiguration {
 	private String testTimeStampColor;
 	private String testExceptionColor;
 
+	private int maxCodeBlockCount;
+	private int maxTableColumnCount;
+	private int maxTableRowCount;
+
 	public String getReportName() {
 		if (name == null || name.isEmpty())
 			name = Defaults.name;
@@ -186,6 +190,24 @@ public class ExtentPDFReporterConfig extends AbstractConfiguration {
 		}
 	}
 
+	public int getMaxCodeBlockCount() {
+		if (maxCodeBlockCount == 0)
+			maxCodeBlockCount = Defaults.maxCodeBlockCount;
+		return maxCodeBlockCount;
+	}
+
+	public int getMaxTableColumnCount() {
+		if (maxTableColumnCount == 0)
+			maxTableColumnCount = Defaults.maxTableColumnCount;
+		return maxTableColumnCount;
+	}
+
+	public int getMaxTableRowCount() {
+		if (maxTableRowCount == 0)
+			maxTableRowCount = Defaults.maxTableRowCount;
+		return maxTableRowCount;
+	}
+
 	private static class Defaults {
 
 		private static final String name = "PDF Extent Report";
@@ -218,6 +240,9 @@ public class ExtentPDFReporterConfig extends AbstractConfiguration {
 		private static final Color testTimesColor = Color.BLUE;
 		private static final Color testTimeStampColor = Color.BLACK;
 		private static final Color testExceptionColor = Color.RED;
+		private static final int maxCodeBlockCount = 3;
+		private static final int maxTableColumnCount = 3;
+		private static final int maxTableRowCount = 4;
 	}
 
 	public Color attributeHeaderColor(AttributeType type) {

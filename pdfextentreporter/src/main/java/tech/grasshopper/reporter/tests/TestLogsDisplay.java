@@ -103,8 +103,8 @@ public class TestLogsDisplay extends Display {
 						.build().createStackTraceCell();
 			} else if (TestMarkup.isMarkup(l.getDetails())) {
 
-				detailCell = TestMarkup.builder().log(l).width(LOGS_DETAILS_WIDTH - (2 * PADDING))
-						.textColor(config.statusColor(l.getStatus())).build().createMarkupCell();
+				detailCell = TestMarkup.builder().log(l).width(LOGS_DETAILS_WIDTH - (2 * PADDING)).config(config)
+						.build().createMarkupCell();
 			}
 
 			Row row = Row.builder().font(LOGS_TABLE_CONTENT_FONT).fontSize(LOGS_TABLE_CONTENT_FONT_SIZE).wordBreak(true)

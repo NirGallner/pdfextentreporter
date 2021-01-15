@@ -1,7 +1,5 @@
 package tech.grasshopper.reporter.tests.markup;
 
-import java.awt.Color;
-
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -11,8 +9,8 @@ import org.vandeseer.easytable.structure.cell.AbstractCell;
 import com.aventstack.extentreports.model.Log;
 
 import lombok.Builder;
-import lombok.Builder.Default;
 import lombok.Data;
+import tech.grasshopper.reporter.ExtentPDFReporterConfig;
 
 @Data
 @Builder
@@ -22,8 +20,7 @@ public class TestMarkup {
 
 	private float width;
 
-	@Default
-	private Color textColor = Color.BLACK;
+	private ExtentPDFReporterConfig config;
 
 	public AbstractCell createMarkupCell() {
 		String html = log.getDetails();
@@ -35,25 +32,30 @@ public class TestMarkup {
 
 		element = doc.selectFirst("body > table[class*=\"markup-table table\"]");
 		if (element != null)
-			return TableMarkup.builder().element(element).textColor(textColor).width(width).build().displayDetails();
+			return TableMarkup.builder().element(element).textColor(config.statusColor(log.getStatus()))
+					.maxTableColumnCount(config.getMaxTableColumnCount()).maxTableRowCount(config.getMaxTableRowCount())
+					.width(width).build().displayDetails();
 
 		Elements elements = doc.select("body > ol > li");
 		if (elements.size() > 0)
-			return OrderedListMarkup.builder().elements(elements).textColor(textColor).build().displayDetails();
+			return OrderedListMarkup.builder().elements(elements).textColor(config.statusColor(log.getStatus())).build()
+					.displayDetails();
 
 		elements = doc.select("body > ul > li");
 		if (elements.size() > 0)
-			return UnorderedListMarkup.builder().elements(elements).textColor(textColor).build().displayDetails();
+			return UnorderedListMarkup.builder().elements(elements).textColor(config.statusColor(log.getStatus()))
+					.build().displayDetails();
 
 		elements = doc.select("body textarea[class*=\"code-block\"]");
 		if (elements.size() > 0)
-			return CodeBlockMarkup.builder().elements(elements).textColor(textColor).width(width).build()
-					.displayDetails();
+			return CodeBlockMarkup.builder().elements(elements).textColor(config.statusColor(log.getStatus()))
+					.maxCodeBlockCount(config.getMaxCodeBlockCount()).width(width).build().displayDetails();
 
 		if (html.contains("JSONTree"))
-			return JsonMarkup.builder().html(html).textColor(textColor).build().displayDetails();
+			return JsonMarkup.builder().html(html).textColor(config.statusColor(log.getStatus())).build()
+					.displayDetails();
 
-		return DefaultMarkup.builder().log(log).textColor(textColor).build().displayDetails();
+		return DefaultMarkup.builder().log(log).textColor(config.statusColor(log.getStatus())).build().displayDetails();
 	}
 
 	public static boolean isMarkup(String markup) {

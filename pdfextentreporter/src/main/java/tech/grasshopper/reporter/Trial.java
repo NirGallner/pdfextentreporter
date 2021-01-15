@@ -20,11 +20,12 @@ public class Trial {
 
 	private static final String CODE1 = "{\n    \"theme\": \"standard\",\n    \"encoding\": \"utf-8\n}";
 	private static final String CODE2 = "{\n    \"protocol\": \"HTTPS\",\n    \"timelineEnabled\": false\n}";
+	private static final String CODE5 = "{\n    \"protocol\": \"HTTPS\"\n}";
 	private static final String CODE3 = "{ name: { first: \"John\", last: \"Jane\" }, age: 31, city: \"New York\" }";
 	// private static final String CODE3 = "{ name: \"John\", age: 31, city: \"New
 	// York\" }";
-	private static final String CODE4 = "<food>\r\n" + "    <name>Belgian Waffles</name>\r\n"
-			+ "    <price>$5.95</price>\r\n    <calories>650</calories>\r\n" + "</food>";
+	private static final String CODE4 = "<food>\n" + "    <name>Belgian Waffles</name>\n"
+			+ "    <price>$5.95</price>\n    <calories>650</calories>\n" + "</food>";
 
 	public static void main(String[] args) throws IOException {
 
@@ -34,7 +35,7 @@ public class Trial {
 		extent.attachReporter(spark);
 		ExtentPDFReporter pdf = new ExtentPDFReporter("target/Pdf/Pdf.pdf");
 		extent.attachReporter(pdf);
-		// pdf.loadJSONConfig(new File("src/main/resources/spark-config.json"));
+		pdf.loadJSONConfig(new File("src/main/resources/spark-config.json"));
 		// pdf.loadXMLConfig(new File("src/main/resources/spark-config.xml"));
 
 		extent.setSystemInfo("SYS1", "system one");
@@ -59,24 +60,33 @@ public class Trial {
 
 		extent.createTest("ScreenCapture").generateLog(Status.FAIL, "Hello There")
 				.addScreenCaptureFromPath("src/main/resources/image.png")
+				// .addScreenCaptureFromPath("src/main/resources/image.png")
+				.addScreenCaptureFromPath("src/main/resources/amur.png")
+				.addScreenCaptureFromPath("src/main/resources/image.png")
 				.addScreenCaptureFromPath("src/main/resources/logo.png").assignAuthor("Screen").assignAuthor("Veena")
 				.assignAuthor("Neeta").addScreenCaptureFromBase64String(base64)
+				// .addScreenCaptureFromPath("src/main/resources/logo.png")
 				.warning(MediaEntityBuilder.createScreenCaptureFromPath("src/main/resources/amur.png").build())
 				.pass(MarkupHelper.createLabel("Label Text", ExtentColor.BLUE));
 
 		extent.createTest("Label").generateLog(Status.FAIL, MarkupHelper.createLabel("Label Text", ExtentColor.GREEN));
 
-		extent.createTest("CodeBlock").pass("not").generateLog(Status.PASS, MarkupHelper.createCodeBlock(CODE1, CODE2))
+		extent.createTest("CodeBlock").pass("not")
+				.generateLog(Status.PASS, MarkupHelper.createCodeBlock(CODE1, CODE2, CODE5, CODE2))
 				.generateLog(Status.PASS, MarkupHelper.createCodeBlock(CODE4, CodeLanguage.XML))
 				.generateLog(Status.PASS, MarkupHelper.createCodeBlock(CODE3, CodeLanguage.JSON));
 
-		String[][] data = { { "hot", "damn", "coco cola coco cola coco cola coco cola coco cola" },
-				{ "roast roast roat", "ten", "pepsi" } };
+		String[][] data1 = { { "1", "2", "coco cola coco cola coco cola coco cola coco cola", "4" },
+				{ "roast roast roat", "ten", "pepsi", "4" }, { "roast roast roat", "ten", "pepsi", "4" },
+				{ "roast roast roat", "ten", "pepsi", "4" }, { "roast roast roat", "ten", "pepsi", "4" } };
 
-		extent.createTest("Table").pass("not").generateLog(Status.PASS, MarkupHelper.createTable(data))
+		extent.createTest("Table").pass("not").generateLog(Status.PASS, MarkupHelper.createTable(data1))
 				.generateLog(Status.WARNING, MarkupHelper.createLabel("Label Text", ExtentColor.RED));
 
-		extent.createTest("ToTable").generateLog(Status.PASS, MarkupHelper.toTable(data));
+		String[][] data2 = { { "1", "2", "coco cola coco cola coco cola coco cola coco cola", "4" },
+				{ "roast roast roat", "ten", "pepsi", "4" } };
+
+		extent.createTest("ToTable").generateLog(Status.PASS, MarkupHelper.toTable(data2));
 
 		Map<String, String> ullidata = new HashMap<>();
 		ullidata.put("1", "One");
@@ -98,7 +108,7 @@ public class Trial {
 				.assignCategory("long name");
 
 		extent.createTest("LogLevels").info("info").pass("pass").warning("warn").skip("skip").fail("fail")
-				.assignDevice("TheDevice").assignDevice("Mac");
+				.warning(MarkupHelper.createTable(data1)).assignDevice("TheDevice").assignDevice("Mac");
 
 		extent.createTest("ParentWithChild").info("hello").assignCategory("My  Tag").assignAuthor("TheAuthor")
 				.assignAuthor("Mounish").assignDevice("Windows").assignDevice("TheDevice").info("hello").info("morning")

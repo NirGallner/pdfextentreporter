@@ -72,7 +72,7 @@ public class TestGeneratedLogDisplay extends Display {
 	private void createLogRows() {
 		test.getGeneratedLog().forEach(l -> {
 			AbstractCell detailCell = TestMarkup.builder().log(l).width(LOGS_DETAILS_WIDTH - (2 * PADDING))
-					.textColor(config.statusColor(l.getStatus())).build().createMarkupCell();
+					.config(config).build().createMarkupCell();
 
 			Row row = Row.builder().font(LOGS_TABLE_CONTENT_FONT).fontSize(LOGS_TABLE_CONTENT_FONT_SIZE).wordBreak(true)
 					.padding(PADDING).add(TextCell.builder().text(l.getStatus().toString())
