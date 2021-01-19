@@ -41,9 +41,8 @@ public class CodeBlockMarkup extends MarkupDisplay {
 		for (Element e : elements) {
 			if (i > count)
 				break;
-			tableBuilder.addRow(Row.builder()
-					.add(TextCell.builder().text(e.text()).textColor(textColor).lineSpacing(MULTILINE_SPACING).build())
-					.build());
+			tableBuilder.addRow(Row.builder().add(TextCell.builder().text(textSanitizer.sanitizeText(e.text()))
+					.textColor(textColor).lineSpacing(MULTILINE_SPACING).build()).build());
 			i++;
 		}
 

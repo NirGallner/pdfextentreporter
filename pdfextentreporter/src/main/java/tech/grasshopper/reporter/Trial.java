@@ -35,8 +35,8 @@ public class Trial {
 		extent.attachReporter(spark);
 		ExtentPDFReporter pdf = new ExtentPDFReporter("target/Pdf/Pdf.pdf");
 		extent.attachReporter(pdf);
-		pdf.loadJSONConfig(new File("src/main/resources/spark-config.json"));
-		// pdf.loadXMLConfig(new File("src/main/resources/spark-config.xml"));
+		//pdf.loadJSONConfig(new File("src/main/resources/spark-config.json"));
+		 pdf.loadXMLConfig(new File("src/main/resources/spark-config.xml"));
 
 		extent.setSystemInfo("SYS1", "system one");
 		extent.setSystemInfo("SYS2", "system two");
@@ -44,9 +44,9 @@ public class Trial {
 		extent.setSystemInfo("SYS4", "system four");
 		extent.setSystemInfo("SYS5", "system five");
 		extent.setSystemInfo(
-				"SYSLONGLONGLONGLONGLONGLONGLONGSYSSYSLONG LONGLONGLONGLONGLONGLONGSYS SYSLONGLONG SYSLONGLONGLONGLONGLONGLONGLONGSYSSYSLONG"
+				"\tSYSLONGLONGLONGLONGLONGLONGLONGSYSSYSLONG LONGLONGLONGLONGLONGLONGSYS SYSLONGLONG SYSLONGLONGLONGLONGLONGLONGLONGSYSSYSLONG"
 						+ System.getProperty("line.separator")
-						+ "LONGLONGLONGLONGLONGSYS SYSLONGLONGLONGLONGLONGLONGLONGSYSSYSLONG",
+						+ "LONGLONG LONGLONG LONGSYS SYS LONG LONG LONG LONGLONGLONGLONGSYSSYSLONG",
 				"system  LONG LONG" + System.getProperty("line.separator")
 						+ "LONG LONG LONG LONGSYS LONG LONG LONG LONG LONG LONG LONG");
 		extent.setSystemInfo("SYS6", "system six");

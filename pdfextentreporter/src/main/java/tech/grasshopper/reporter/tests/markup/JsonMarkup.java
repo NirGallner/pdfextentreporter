@@ -21,8 +21,8 @@ public class JsonMarkup extends MarkupDisplay {
 	@Override
 	public AbstractCell displayDetails() {
 
-		return TextCell.builder().text(jsonText()).textColor(textColor).fontSize(LOG_FONT_SIZE).font(LOG_FONT)
-				.lineSpacing(MULTILINE_SPACING).build();
+		return TextCell.builder().text(textSanitizer.sanitizeText(jsonText())).textColor(textColor)
+				.fontSize(LOG_FONT_SIZE).font(LOG_FONT).lineSpacing(MULTILINE_SPACING).build();
 	}
 
 	private String jsonText() {

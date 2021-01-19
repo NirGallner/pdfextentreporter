@@ -24,6 +24,14 @@ public class TextSanitizer {
 			char[] chars = text.toCharArray();
 			for (Character character : chars) {
 				try {
+					//Remove tab character completely
+					if (character.equals('\t')) {
+						continue;
+					//Do not sanitize this! Figure why it is getting replaced.
+					} else if (character.equals('\r') || character.equals('\n')) {
+						strBuf.append(character);
+						continue;
+					}
 					font.encode(character.toString());
 					strBuf.append(character);
 				} catch (Exception ex) {
