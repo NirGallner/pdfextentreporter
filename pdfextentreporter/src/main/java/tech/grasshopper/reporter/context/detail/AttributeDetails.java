@@ -49,7 +49,8 @@ public class AttributeDetails extends Section implements PageHeaderAware {
 			yLocation = attributeBasicDisplay.getYlocation();
 
 			AttributeTestStatusDetailsDisplay attributeDetailsDisplay = AttributeTestStatusDetailsDisplay.builder()
-					.document(document).config(config).attribute(attribute).ylocation(yLocation).build();
+					.document(document).config(config).attribute(attribute).annotations(annotations)
+					.ylocation(yLocation).build();
 			attributeDetailsDisplay.display();
 			yLocation = attributeDetailsDisplay.getYlocation();
 		}

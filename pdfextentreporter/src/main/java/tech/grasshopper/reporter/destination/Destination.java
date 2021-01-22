@@ -15,6 +15,7 @@ import lombok.Data;
 public class Destination {
 
 	private String name;
+	private int id;
 	private PDPage page;
 	@Default
 	private int xCoord = 0;
@@ -40,11 +41,11 @@ public class Destination {
 		public void addAttributeSummaryDestination(Destination destination) {
 			attributeSummaryDestinations.add(destination);
 		}
-		
+
 		public void addTestDestination(Destination destination) {
 			testDestinations.add(destination);
 		}
-		
+
 		public void addAttributeDetailDestination(Destination destination) {
 			attributeDetailDestinations.add(destination);
 		}

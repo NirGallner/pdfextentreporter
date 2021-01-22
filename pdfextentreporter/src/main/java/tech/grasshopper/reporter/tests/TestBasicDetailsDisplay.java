@@ -149,6 +149,6 @@ public class TestBasicDetailsDisplay extends Display implements TestIndent, Dest
 
 	@Override
 	public Destination createDestination() {
-		return Destination.builder().name(test.getName()).yCoord(destinationY).page(page).build();
+		return Destination.builder().id(test.getId()).name(test.getName()).yCoord(destinationY).page(page).build();
 	}
 }

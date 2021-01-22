@@ -9,6 +9,8 @@ import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDDocume
 
 import com.aventstack.extentreports.model.Report;
 
+import tech.grasshopper.reporter.annotation.Annotation.AnnotationStore;
+import tech.grasshopper.reporter.annotation.AnnotationProcessor;
 import tech.grasshopper.reporter.bookmark.Bookmark;
 import tech.grasshopper.reporter.context.AttributeSummary;
 import tech.grasshopper.reporter.context.detail.AttributeDetails;
@@ -25,6 +27,7 @@ public class ReportGenerator {
 	private File reportFile;
 	private PDDocument document;
 	private DestinationStore destinations;
+	private AnnotationStore annotations;
 	private PageHeader pageHeader;
 
 	public ReportGenerator(Report report, ExtentPDFReporterConfig config, File file) {
@@ -33,6 +36,7 @@ public class ReportGenerator {
 		this.reportFile = file;
 		this.document = new PDDocument();
 		this.destinations = new DestinationStore();
+		this.annotations = new AnnotationStore();
 		this.pageHeader = new PageHeader();
 
 		loadFontFamily();
@@ -51,8 +55,10 @@ public class ReportGenerator {
 				.pageHeader(pageHeader).build().createSection();
 
 		AttributeDetails.builder().document(document).report(report).config(config).destinations(destinations)
-				.pageHeader(pageHeader).build().createSection();
+				.annotations(annotations).pageHeader(pageHeader).build().createSection();
 
+		AnnotationProcessor.processTestNameAnnotation(annotations.getTestNameAnnotation(),
+				destinations.getTestDestinations());
 		pageHeader.processHeader(document);
 
 		Bookmark bookmark = Bookmark.builder().destinationStore(destinations).build();

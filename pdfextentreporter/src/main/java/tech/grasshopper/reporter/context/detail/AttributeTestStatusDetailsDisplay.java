@@ -16,6 +16,9 @@ import com.aventstack.extentreports.model.context.NamedAttributeContext;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
+import tech.grasshopper.reporter.annotation.Annotation;
+import tech.grasshopper.reporter.annotation.Annotation.AnnotationStore;
+import tech.grasshopper.reporter.annotation.cell.TextLinkCell;
 import tech.grasshopper.reporter.font.ReportFont;
 import tech.grasshopper.reporter.optimizer.TextSanitizer;
 import tech.grasshopper.reporter.structure.Display;
@@ -46,6 +49,8 @@ public class AttributeTestStatusDetailsDisplay extends Display {
 
 	protected TableBuilder tableBuilder;
 
+	protected AnnotationStore annotations;
+
 	protected final TextSanitizer textSanitizer = TextSanitizer.builder().font(TABLE_CONTENT_FONT).build();
 
 	@Override
@@ -73,6 +78,9 @@ public class AttributeTestStatusDetailsDisplay extends Display {
 
 	private void createTestDataRows() {
 		attribute.getTestList().forEach(t -> {
+			Annotation annotation = Annotation.builder().id(t.getId()).build();
+			annotations.addTestNameAnnotation(annotation);
+
 			Row row = Row.builder().font(TABLE_CONTENT_FONT).fontSize(TABLE_CONTENT_FONT_SIZE).wordBreak(true)
 					.padding(TABLE_CONTENT_COLUMN_PADDING)
 					.add(TextCell.builder().text(t.getStatus().toString()).textColor(config.statusColor(t.getStatus()))
@@ -80,7 +88,7 @@ public class AttributeTestStatusDetailsDisplay extends Display {
 					.add(TextCell.builder()
 							.text(DateUtil.formatTimeAMPM(DateUtil.convertToLocalDateTimeFromDate(t.getStartTime())))
 							.textColor(config.getTestTimeStampColor()).build())
-					.add(TextCell.builder().text(textSanitizer.sanitizeText(t.getName()))
+					.add(TextLinkCell.builder().annotation(annotation).text(textSanitizer.sanitizeText(t.getName()))
 							.textColor(config.statusColor(t.getStatus())).lineSpacing(MULTILINE_SPACING).build())
 					.build();
 
