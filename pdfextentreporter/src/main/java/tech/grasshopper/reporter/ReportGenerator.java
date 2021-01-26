@@ -12,6 +12,7 @@ import com.aventstack.extentreports.model.Report;
 import tech.grasshopper.reporter.annotation.Annotation.AnnotationStore;
 import tech.grasshopper.reporter.annotation.AnnotationProcessor;
 import tech.grasshopper.reporter.bookmark.Bookmark;
+import tech.grasshopper.reporter.config.ExtentPDFReporterConfig;
 import tech.grasshopper.reporter.context.AttributeSummary;
 import tech.grasshopper.reporter.context.detail.AttributeDetails;
 import tech.grasshopper.reporter.dashboard.Dashboard;

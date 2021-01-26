@@ -10,7 +10,7 @@ import com.aventstack.extentreports.model.Log;
 
 import lombok.Builder;
 import lombok.Data;
-import tech.grasshopper.reporter.ExtentPDFReporterConfig;
+import tech.grasshopper.reporter.config.ExtentPDFReporterConfig;
 
 @Data
 @Builder

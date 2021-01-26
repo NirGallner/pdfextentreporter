@@ -1,4 +1,4 @@
-package tech.grasshopper.reporter;
+package tech.grasshopper.reporter.config;
 
 import java.awt.Color;
 import java.time.format.DateTimeFormatter;

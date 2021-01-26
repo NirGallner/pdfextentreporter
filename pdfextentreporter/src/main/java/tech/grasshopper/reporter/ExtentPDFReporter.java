@@ -15,6 +15,7 @@ import com.aventstack.extentreports.reporter.ReporterConfigurable;
 
 import io.reactivex.rxjava3.core.Observer;
 import io.reactivex.rxjava3.disposables.Disposable;
+import tech.grasshopper.reporter.config.ExtentPDFReporterConfig;
 
 public class ExtentPDFReporter extends AbstractFileReporter
 		implements ReportObserver<ReportEntity>, ReporterConfigurable {

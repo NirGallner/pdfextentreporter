@@ -112,16 +112,16 @@ public class TestBasicDetailsDisplay extends Display implements TestIndent, Dest
 			return;
 
 		ParagraphBuilder paraBuilder = Paragraph.builder();
-		creaateAttributeText(test.getCategorySet(), AttributeType.CATEGORY, paraBuilder);
-		creaateAttributeText(test.getAuthorSet(), AttributeType.AUTHOR, paraBuilder);
-		creaateAttributeText(test.getDeviceSet(), AttributeType.DEVICE, paraBuilder);
+		createAttributeText(test.getCategorySet(), AttributeType.CATEGORY, paraBuilder);
+		createAttributeText(test.getAuthorSet(), AttributeType.AUTHOR, paraBuilder);
+		createAttributeText(test.getDeviceSet(), AttributeType.DEVICE, paraBuilder);
 
 		tableBuilder.addRow(
 				Row.builder().fontSize(ATTRIBUTE_FONT_SIZE).add(ParagraphCell.builder().paragraph(paraBuilder.build())
 						.minHeight(ATTRIBUTE_HEIGHT).lineSpacing(MULTI_LINE_SPACING).build()).build());
 	}
 
-	private void creaateAttributeText(Set<? extends NamedAttribute> attributes, AttributeType type,
+	private void createAttributeText(Set<? extends NamedAttribute> attributes, AttributeType type,
 			ParagraphBuilder paraBuilder) {
 		if (!attributes.isEmpty()) {
 			numberOfRowsToRepeat = 3;

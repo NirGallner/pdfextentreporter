@@ -36,7 +36,7 @@ public class Trial {
 		ExtentPDFReporter pdf = new ExtentPDFReporter("target/Pdf/Pdf.pdf");
 		extent.attachReporter(pdf);
 		//pdf.loadJSONConfig(new File("src/main/resources/spark-config.json"));
-		 pdf.loadXMLConfig(new File("src/main/resources/spark-config.xml"));
+		 //pdf.loadXMLConfig(new File("src/main/resources/spark-config.xml"));
 
 		extent.setSystemInfo("SYS1", "system one");
 		extent.setSystemInfo("SYS2", "system two");
