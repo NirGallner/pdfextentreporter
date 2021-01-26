@@ -7,6 +7,7 @@ import java.time.format.FormatStyle;
 import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.reporter.configuration.AbstractConfiguration;
 
+import lombok.Builder.Default;
 import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import tech.grasshopper.reporter.context.AttributeType;
@@ -15,6 +16,13 @@ import tech.grasshopper.reporter.context.AttributeType;
 @SuperBuilder
 public class ExtentPDFReporterConfig extends AbstractConfiguration {
 
+	@Default
+	private boolean displayAttributeSummary = true;
+	@Default
+	private boolean displayAttributeDetails = true;
+	@Default
+	private boolean displayTestDetails = true;
+	
 	private String name;
 	private String nameColor;
 	private String dateFormat;
@@ -59,7 +67,20 @@ public class ExtentPDFReporterConfig extends AbstractConfiguration {
 	private int maxTableRowCount;
 
 	private int testMaxIndentLevel;
+	
 
+	public boolean isDisplayAttributeSummary() {
+		return displayAttributeSummary;
+	}
+	
+	public boolean isDisplayAttributeDetails() {
+		return displayAttributeDetails;
+	}
+	
+	public boolean isDisplayTestDetails() {
+		return displayTestDetails;
+	}
+	
 	public String getReportName() {
 		if (name == null || name.isEmpty())
 			name = Defaults.name;

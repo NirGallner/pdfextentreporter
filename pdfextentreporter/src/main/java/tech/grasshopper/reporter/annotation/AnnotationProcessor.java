@@ -1,7 +1,6 @@
 package tech.grasshopper.reporter.annotation;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -11,9 +10,12 @@ import org.apache.pdfbox.pdmodel.interactive.action.PDActionGoTo;
 import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationLink;
 
 import lombok.Builder;
-import lombok.Builder.Default;
 import lombok.Data;
+import lombok.NonNull;
+import tech.grasshopper.reporter.annotation.Annotation.AnnotationStore;
+import tech.grasshopper.reporter.config.ExtentPDFReporterConfig;
 import tech.grasshopper.reporter.destination.Destination;
+import tech.grasshopper.reporter.destination.Destination.DestinationStore;
 
 @Data
 @Builder
@@ -21,24 +23,34 @@ public class AnnotationProcessor {
 
 	private static final Logger logger = Logger.getLogger(AnnotationProcessor.class.getName());
 
-	@Default
-	private List<Annotation> annotations = new ArrayList<>();
+	@NonNull
+	private AnnotationStore annotations;
 
-	@Default
-	private List<Destination> destinations = new ArrayList<>();
+	@NonNull
+	private DestinationStore destinations;
 
-	public void processTestNameAnnotation() {
-		destinations.forEach(d -> {
-			List<Annotation> matchedAnnotations = annotations.stream().filter(a -> a.getId() == d.getId())
-					.collect(Collectors.toList());
+	protected ExtentPDFReporterConfig config;
+
+	public void processAnnotations() {
+		if (config.isDisplayAttributeSummary() && config.isDisplayAttributeDetails())
+			processAttributeNameAnnotation();
+
+		if (config.isDisplayAttributeDetails() && config.isDisplayTestDetails())
+			processTestNameAnnotation();
+	}
+
+	private void processTestNameAnnotation() {
+		destinations.getTestDestinations().forEach(d -> {
+			List<Annotation> matchedAnnotations = annotations.getTestNameAnnotation().stream()
+					.filter(a -> a.getId() == d.getId()).collect(Collectors.toList());
 			processMatchedAnnotations(matchedAnnotations, d);
 		});
 	}
 
-	public void processAttributeNameAnnotation() {
-		destinations.forEach(d -> {
-			List<Annotation> matchedAnnotations = annotations.stream().filter(a -> a.getTitle().equals(d.getName()))
-					.collect(Collectors.toList());
+	private void processAttributeNameAnnotation() {
+		destinations.getAttributeDetailDestinations().forEach(d -> {
+			List<Annotation> matchedAnnotations = annotations.getAttributeNameAnnotation().stream()
+					.filter(a -> a.getTitle().equals(d.getName())).collect(Collectors.toList());
 			processMatchedAnnotations(matchedAnnotations, d);
 		});
 	}

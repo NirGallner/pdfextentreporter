@@ -8,6 +8,7 @@ import org.vandeseer.easytable.settings.HorizontalAlignment;
 import org.vandeseer.easytable.settings.VerticalAlignment;
 import org.vandeseer.easytable.structure.Row;
 import org.vandeseer.easytable.structure.Table;
+import org.vandeseer.easytable.structure.cell.AbstractCell;
 import org.vandeseer.easytable.structure.cell.TextCell;
 
 import com.aventstack.extentreports.Status;
@@ -92,10 +93,7 @@ public class ContextAttributeSummary extends AttributeSummaryDisplay {
 					/ (v.values().stream().mapToInt(Integer::intValue).sum());
 
 			Row row = Row.builder().font(TABLE_CONTENT_FONT).fontSize(TABLE_CONTENT_FONT_SIZE).wordBreak(true)
-					.padding(TABLE_PADDING)
-					.add(TextLinkCell.builder().annotation(annotation).text(textSanitizer.sanitizeText(k))
-							.lineSpacing(MULTILINE_SPACING).textColor(config.attributeNameColor(type))
-							.horizontalAlignment(HorizontalAlignment.LEFT).build())
+					.padding(TABLE_PADDING).add(createAttributeNameCell(textSanitizer.sanitizeText(k), annotation))
 					.add(TextCell.builder().text(String.valueOf(v.getOrDefault(Status.PASS, 0)))
 							.textColor(config.getPassColor()).build())
 					.add(TextCell.builder().text(String.valueOf(v.getOrDefault(Status.FAIL, 0)))
@@ -111,5 +109,14 @@ public class ContextAttributeSummary extends AttributeSummaryDisplay {
 
 			tableBuilder.addRow(row);
 		});
+	}
+
+	private AbstractCell createAttributeNameCell(String title, Annotation annotation) {
+		if (config.isDisplayAttributeDetails()) {
+			return TextLinkCell.builder().annotation(annotation).text(title).lineSpacing(MULTILINE_SPACING)
+					.textColor(config.attributeNameColor(type)).horizontalAlignment(HorizontalAlignment.LEFT).build();
+		}
+		return TextCell.builder().text(title).lineSpacing(MULTILINE_SPACING).textColor(config.attributeNameColor(type))
+				.horizontalAlignment(HorizontalAlignment.LEFT).build();
 	}
 }

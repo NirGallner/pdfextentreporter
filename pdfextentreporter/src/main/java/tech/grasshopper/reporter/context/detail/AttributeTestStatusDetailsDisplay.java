@@ -8,6 +8,7 @@ import org.vandeseer.easytable.settings.VerticalAlignment;
 import org.vandeseer.easytable.structure.Row;
 import org.vandeseer.easytable.structure.Table;
 import org.vandeseer.easytable.structure.Table.TableBuilder;
+import org.vandeseer.easytable.structure.cell.AbstractCell;
 import org.vandeseer.easytable.structure.cell.TextCell;
 
 import com.aventstack.extentreports.model.NamedAttribute;
@@ -88,8 +89,8 @@ public class AttributeTestStatusDetailsDisplay extends Display {
 					.add(TextCell.builder()
 							.text(DateUtil.formatTimeAMPM(DateUtil.convertToLocalDateTimeFromDate(t.getStartTime())))
 							.textColor(config.getTestTimeStampColor()).build())
-					.add(TextLinkCell.builder().annotation(annotation).text(textSanitizer.sanitizeText(t.getName()))
-							.textColor(config.statusColor(t.getStatus())).lineSpacing(MULTILINE_SPACING).build())
+					.add(createTestNameCell(textSanitizer.sanitizeText(t.getName()), config.statusColor(t.getStatus()),
+							annotation))
 					.build();
 
 			tableBuilder.addRow(row);
@@ -102,5 +103,13 @@ public class AttributeTestStatusDetailsDisplay extends Display {
 		table.displayTable();
 
 		ylocation = table.getFinalY() - TABLE_GAP_HEIGHT;
+	}
+
+	private AbstractCell createTestNameCell(String title, Color statusColor, Annotation annotation) {
+		if (config.isDisplayTestDetails()) {
+			return TextLinkCell.builder().annotation(annotation).text(title).textColor(statusColor)
+					.lineSpacing(MULTILINE_SPACING).build();
+		}
+		return TextCell.builder().text(title).textColor(statusColor).lineSpacing(MULTILINE_SPACING).build();
 	}
 }

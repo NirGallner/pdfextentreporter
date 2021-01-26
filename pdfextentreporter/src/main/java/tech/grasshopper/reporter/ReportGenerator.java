@@ -49,19 +49,20 @@ public class ReportGenerator {
 		Dashboard.builder().document(document).report(report).config(config).destinations(destinations).build()
 				.createSection();
 
-		AttributeSummary.builder().document(document).report(report).config(config).destinations(destinations)
-				.annotations(annotations).pageHeader(pageHeader).build().createSection();
+		if (config.isDisplayAttributeSummary())
+			AttributeSummary.builder().document(document).report(report).config(config).destinations(destinations)
+					.annotations(annotations).pageHeader(pageHeader).build().createSection();
 
-		TestDetails.builder().document(document).report(report).config(config).destinations(destinations)
-				.pageHeader(pageHeader).build().createSection();
+		if (config.isDisplayTestDetails())
+			TestDetails.builder().document(document).report(report).config(config).destinations(destinations)
+					.pageHeader(pageHeader).build().createSection();
 
-		AttributeDetails.builder().document(document).report(report).config(config).destinations(destinations)
-				.annotations(annotations).pageHeader(pageHeader).build().createSection();
+		if (config.isDisplayAttributeDetails())
+			AttributeDetails.builder().document(document).report(report).config(config).destinations(destinations)
+					.annotations(annotations).pageHeader(pageHeader).build().createSection();
 
-		AnnotationProcessor.builder().annotations(annotations.getTestNameAnnotation())
-				.destinations(destinations.getTestDestinations()).build().processTestNameAnnotation();
-		AnnotationProcessor.builder().annotations(annotations.getAttributeNameAnnotation())
-				.destinations(destinations.getAttributeDetailDestinations()).build().processAttributeNameAnnotation();
+		AnnotationProcessor.builder().annotations(annotations).destinations(destinations).config(config).build()
+				.processAnnotations();
 
 		Bookmark bookmark = Bookmark.builder().destinationStore(destinations).build();
 		PDDocumentOutline outline = bookmark.createDocumentOutline();
