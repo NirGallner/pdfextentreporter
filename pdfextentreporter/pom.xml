@@ -16,7 +16,7 @@
 		<lombok.version>1.18.16</lombok.version>
 		<pdfbox.version>2.0.22</pdfbox.version>
 		<xchart.version>3.7.0</xchart.version>
-		<easytable.version>0.8.1</easytable.version>
+		<easytable.version>0.8.2-SNAPSHOT</easytable.version>
 		<pdfbox2-layout.version>1.0.0</pdfbox2-layout.version>
 		<snakeyaml.version>1.27</snakeyaml.version>
 		<extent.version>5.0.5</extent.version>

@@ -29,8 +29,6 @@ public class Annotation {
 		PDAnnotationLink link = new PDAnnotationLink();
 
 		PDBorderStyleDictionary borderULine = new PDBorderStyleDictionary();
-		//borderULine.setStyle(PDBorderStyleDictionary.STYLE_UNDERLINE);
-		//borderULine.setWidth(1f);
 		link.setBorderStyle(borderULine);
 
 		link.setRectangle(position);
@@ -42,9 +40,15 @@ public class Annotation {
 	public static class AnnotationStore {
 
 		private List<Annotation> testNameAnnotation = new ArrayList<>();
+		
+		private List<Annotation> attributeNameAnnotation = new ArrayList<>();
 
 		public void addTestNameAnnotation(Annotation annotation) {
 			testNameAnnotation.add(annotation);
+		}
+		
+		public void addAttributeNameAnnotation(Annotation annotation) {
+			attributeNameAnnotation.add(annotation);
 		}
 	}
 }

@@ -16,6 +16,9 @@ import lombok.Builder.Default;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
+import tech.grasshopper.reporter.annotation.Annotation;
+import tech.grasshopper.reporter.annotation.Annotation.AnnotationStore;
+import tech.grasshopper.reporter.annotation.cell.TextLinkCell;
 import tech.grasshopper.reporter.font.ReportFont;
 
 @Data
@@ -33,6 +36,8 @@ public class ContextAttributeSummary extends AttributeSummaryDisplay {
 
 	@Default
 	private Map<String, Map<Status, Integer>> data = new LinkedHashMap<>();
+
+	protected AnnotationStore annotations;
 
 	@Override
 	public void display() {
@@ -80,13 +85,17 @@ public class ContextAttributeSummary extends AttributeSummaryDisplay {
 
 	private void createDataRows() {
 		data.forEach((k, v) -> {
+			Annotation annotation = Annotation.builder().title(type.toString().toLowerCase() + "- " + k).build();
+			annotations.addAttributeNameAnnotation(annotation);
+
 			int passpercent = (v.getOrDefault(Status.PASS, 0) * 100)
 					/ (v.values().stream().mapToInt(Integer::intValue).sum());
+
 			Row row = Row.builder().font(TABLE_CONTENT_FONT).fontSize(TABLE_CONTENT_FONT_SIZE).wordBreak(true)
 					.padding(TABLE_PADDING)
-					.add(TextCell.builder().text(textSanitizer.sanitizeText(k)).lineSpacing(MULTILINE_SPACING)
-							.textColor(config.attributeNameColor(type)).horizontalAlignment(HorizontalAlignment.LEFT)
-							.build())
+					.add(TextLinkCell.builder().annotation(annotation).text(textSanitizer.sanitizeText(k))
+							.lineSpacing(MULTILINE_SPACING).textColor(config.attributeNameColor(type))
+							.horizontalAlignment(HorizontalAlignment.LEFT).build())
 					.add(TextCell.builder().text(String.valueOf(v.getOrDefault(Status.PASS, 0)))
 							.textColor(config.getPassColor()).build())
 					.add(TextCell.builder().text(String.valueOf(v.getOrDefault(Status.FAIL, 0)))

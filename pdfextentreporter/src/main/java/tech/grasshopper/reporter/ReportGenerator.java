@@ -49,7 +49,7 @@ public class ReportGenerator {
 				.createSection();
 
 		AttributeSummary.builder().document(document).report(report).config(config).destinations(destinations)
-				.pageHeader(pageHeader).build().createSection();
+				.annotations(annotations).pageHeader(pageHeader).build().createSection();
 
 		TestDetails.builder().document(document).report(report).config(config).destinations(destinations)
 				.pageHeader(pageHeader).build().createSection();
@@ -57,9 +57,10 @@ public class ReportGenerator {
 		AttributeDetails.builder().document(document).report(report).config(config).destinations(destinations)
 				.annotations(annotations).pageHeader(pageHeader).build().createSection();
 
-		AnnotationProcessor.processTestNameAnnotation(annotations.getTestNameAnnotation(),
-				destinations.getTestDestinations());
-		pageHeader.processHeader(document);
+		AnnotationProcessor.builder().annotations(annotations.getTestNameAnnotation())
+				.destinations(destinations.getTestDestinations()).build().processTestNameAnnotation();
+		AnnotationProcessor.builder().annotations(annotations.getAttributeNameAnnotation())
+				.destinations(destinations.getAttributeDetailDestinations()).build().processAttributeNameAnnotation();
 
 		Bookmark bookmark = Bookmark.builder().destinationStore(destinations).build();
 		PDDocumentOutline outline = bookmark.createDocumentOutline();

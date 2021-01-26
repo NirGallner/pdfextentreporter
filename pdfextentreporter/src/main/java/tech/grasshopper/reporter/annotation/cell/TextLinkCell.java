@@ -20,7 +20,6 @@ public class TextLinkCell extends AbstractTextCell {
 
 	@Override
 	protected Drawer createDefaultDrawer() {
-		// TODO Auto-generated method stub
 		return new TextLinkCellDrawer<TextLinkCell>(this, annotation);		
 	}
 
