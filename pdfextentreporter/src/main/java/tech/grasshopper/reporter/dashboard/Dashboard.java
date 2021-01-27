@@ -1,7 +1,11 @@
 package tech.grasshopper.reporter.dashboard;
 
-import lombok.Data;
+import org.apache.pdfbox.pdmodel.PDPage;
+import org.apache.pdfbox.pdmodel.PDPageContentStream;
+import org.apache.pdfbox.pdmodel.PDPageContentStream.AppendMode;
+
 import lombok.EqualsAndHashCode;
+import lombok.SneakyThrows;
 import lombok.experimental.SuperBuilder;
 import tech.grasshopper.reporter.bookmark.Bookmark;
 import tech.grasshopper.reporter.destination.Destination;
@@ -9,54 +13,41 @@ import tech.grasshopper.reporter.destination.DestinationAware;
 import tech.grasshopper.reporter.structure.PageCreator;
 import tech.grasshopper.reporter.structure.Section;
 
-@Data
 @SuperBuilder
 @EqualsAndHashCode(callSuper = false)
 public class Dashboard extends Section implements DestinationAware {
 
-	private PageCreator pageCreator;
+	private PDPage page;
 
 	@Override
+	@SneakyThrows
 	public void createSection() {
+
 		createPage();
-		displayReportHeader();
-		displayTestStatistics();
-		displayTestChart();
+
+		try (final PDPageContentStream content = new PDPageContentStream(document, page, AppendMode.APPEND, true)) {
+
+			DashboardHeaderDisplay.builder().config(config).content(content).build().display();
+
+			DashboardStatisticsDisplay.builder().config(config).content(content).report(report).build().display();
+
+			DashboardDonutChartDisplay.builder().document(document).config(config).content(content).report(report)
+					.build().display();
+			DashboardChartLegendDisplay.builder().config(config).content(content).report(report).build().display();
+		}
 
 		createDestination();
-
-		closeContentStream();
 	}
 
+	@Override
 	protected void createPage() {
-		pageCreator = PageCreator.builder().document(document).build();
-		pageCreator.createLandscapePageAndContentStream();
-	}
-
-	private void displayReportHeader() {
-		DashboardHeaderDisplay.builder().config(config).content(pageCreator.getContent()).build().display();
-	}
-
-	private void displayTestStatistics() {
-		DashboardStatisticsDisplay.builder().config(config).content(pageCreator.getContent()).report(report).build()
-				.display();
-	}
-
-	private void displayTestChart() {
-		DashboardDonutChartDisplay.builder().document(document).config(config).content(pageCreator.getContent())
-				.report(report).build().display();
-		DashboardChartLegendDisplay.builder().config(config).content(pageCreator.getContent()).report(report).build()
-				.display();
-	}
-
-	private void closeContentStream() {
-		pageCreator.closeContentStream();
+		page = PageCreator.createLandscapePageAndAddToDocument(document);
 	}
 
 	@Override
 	public Destination createDestination() {
-		Destination destination = Destination.builder().name(Bookmark.DASHBOARD_BOOKMARK_TEXT).yCoord(500)
-				.page(pageCreator.getPage()).build();
+		Destination destination = Destination.builder().name(Bookmark.DASHBOARD_BOOKMARK_TEXT).yCoord(500).page(page)
+				.build();
 		destinations.setDashboardDestination(destination);
 		return destination;
 	}

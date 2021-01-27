@@ -33,8 +33,7 @@ public abstract class Section {
 	public abstract void createSection();
 
 	protected void createPage() {
-		PageCreator pageCreator = PageCreator.builder().document(document).build();
-		pageCreator.createPotraitPage();
+		PageCreator.createPotraitPageAndAddToDocument(document);
 	}
 
 	public void pageHeaderDetails() {
