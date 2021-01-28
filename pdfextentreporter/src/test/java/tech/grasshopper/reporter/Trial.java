@@ -35,8 +35,8 @@ public class Trial {
 		extent.attachReporter(spark);
 		ExtentPDFReporter pdf = new ExtentPDFReporter("target/Pdf/Pdf.pdf");
 		extent.attachReporter(pdf);
-		pdf.loadJSONConfig(new File("src/main/resources/spark-config.json"));
-		// pdf.loadXMLConfig(new File("src/main/resources/spark-config.xml"));
+		pdf.loadJSONConfig(new File("src/test/resources/spark-config.json"));
+		// pdf.loadXMLConfig(new File("src/test/resources/spark-config.xml"));
 
 		extent.setSystemInfo("SYS1", "system one");
 		extent.setSystemInfo("SYS2", "system two");
@@ -55,18 +55,18 @@ public class Trial {
 		extent.setSystemInfo("SYS9", "system nine");
 		extent.setSystemInfo("SYS10", "system ten");
 
-		byte[] array = Files.readAllBytes(Paths.get("src/main/resources/image.png"));
+		byte[] array = Files.readAllBytes(Paths.get("src/test/resources/image.png"));
 		String base64 = Base64.getEncoder().encodeToString(array);
 
 		extent.createTest("ScreenCapture").generateLog(Status.FAIL, "Hello There")
-				.addScreenCaptureFromPath("src/main/resources/image.png")
-				// .addScreenCaptureFromPath("src/main/resources/image.png")
-				.addScreenCaptureFromPath("src/main/resources/amur.png")
-				.addScreenCaptureFromPath("src/main/resources/image.png")
-				.addScreenCaptureFromPath("src/main/resources/logo.png").assignAuthor("Screen").assignAuthor("Veena")
+				.addScreenCaptureFromPath("src/test/resources/image.png")
+				// .addScreenCaptureFromPath("src/test/resources/image.png")
+				.addScreenCaptureFromPath("src/test/resources/amur.png")
+				.addScreenCaptureFromPath("src/test/resources/image.png")
+				.addScreenCaptureFromPath("src/test/resources/logo.png").assignAuthor("Screen").assignAuthor("Veena")
 				.assignAuthor("Neeta").addScreenCaptureFromBase64String(base64)
-				// .addScreenCaptureFromPath("src/main/resources/logo.png")
-				.warning(MediaEntityBuilder.createScreenCaptureFromPath("src/main/resources/amur.png").build())
+				// .addScreenCaptureFromPath("src/test/resources/logo.png")
+				.warning(MediaEntityBuilder.createScreenCaptureFromPath("src/test/resources/amur.png").build())
 				.pass(MarkupHelper.createLabel("Label Text", ExtentColor.BLUE));
 
 		extent.createTest("Label").generateLog(Status.FAIL, MarkupHelper.createLabel("Label Text", ExtentColor.GREEN));
@@ -113,7 +113,7 @@ public class Trial {
 		extent.createTest("ParentWithChild").info("hello").assignCategory("My  Tag").assignAuthor("TheAuthor")
 				.assignAuthor("Mounish").assignDevice("Windows").assignDevice("TheDevice").info("hello").info("morning")
 				.pass("night").pass("evening").warning("hello").info("bye").info("hello").info("morning")
-				.createNode("Child").addScreenCaptureFromPath("src/main/resources/logo.png").pass("evening")
+				.createNode("Child").addScreenCaptureFromPath("src/test/resources/logo.png").pass("evening")
 				.warning("hello").info("bye").assignAuthor("Barbie").createNode("Grand Child")
 				.pass("This test is created as a toggle as part of a child test of 'ParentWithChild'")
 				.createNode("Great Grand Child").pass("This test is created as a toggle as part of a child");
