@@ -12,6 +12,7 @@ import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDOutlin
 
 import lombok.Builder;
 import lombok.Data;
+import tech.grasshopper.reporter.config.ExtentPDFReporterConfig;
 import tech.grasshopper.reporter.context.AttributeType;
 import tech.grasshopper.reporter.destination.Destination;
 import tech.grasshopper.reporter.destination.Destination.DestinationStore;
@@ -29,15 +30,21 @@ public class Bookmark {
 
 	private DestinationStore destinationStore;
 
+	private ExtentPDFReporterConfig config;
+
 	public PDDocumentOutline createDocumentOutline() {
 
 		PDOutlineItem summaryOutline = createSummaryOutline();
 		createDashboardOutline(summaryOutline);
-		createAttributeSummaryOutline(summaryOutline);
 
-		createTestsOutline();
+		if (config.isDisplayAttributeSummary())
+			createAttributeSummaryOutline(summaryOutline);
 
-		createAttributeDetailsOutline();
+		if (config.isDisplayTestDetails())
+			createTestsOutline();
+
+		if (config.isDisplayAttributeDetails())
+			createAttributeDetailsOutline();
 
 		return outline;
 	}
@@ -54,6 +61,7 @@ public class Bookmark {
 		PDOutlineItem dashboardOutline = createOutlineItem(destinationStore.getDashboardDestination(),
 				destinationStore.getDashboardDestination().getName());
 		summaryOutline.addLast(dashboardOutline);
+		summaryOutline.openNode();
 	}
 
 	private void createAttributeSummaryOutline(PDOutlineItem summaryOutline) {
@@ -67,6 +75,7 @@ public class Bookmark {
 						AttributeType.valueOf(destination.getName()).toString());
 				attributeOutline.addLast(attTypeOutline);
 			}
+			attributeOutline.openNode();
 		}
 	}
 
