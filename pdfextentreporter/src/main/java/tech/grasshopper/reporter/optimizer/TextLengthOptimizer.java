@@ -25,7 +25,7 @@ public class TextLengthOptimizer {
 		}
 		return width;
 	}
-	
+
 	public int optimizedTextWidth(String text) {
 		int width = 0;
 		try {
@@ -52,7 +52,7 @@ public class TextLengthOptimizer {
 		else
 			text = text.substring(0, text.length() - 3);
 
-		while (!doesTextFitInSpace(text + "..."))
+		while (!doesTextFitInSpace((new StringBuffer(text).append("...")).toString()))
 			text = text.substring(0, text.length() - 1);
 
 		return text + "...";

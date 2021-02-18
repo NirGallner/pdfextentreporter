@@ -1,6 +1,5 @@
 package tech.grasshopper.reporter.structure;
 
-import java.io.IOException;
 import java.util.function.Supplier;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -13,6 +12,7 @@ import lombok.Builder;
 import lombok.Builder.Default;
 import lombok.Data;
 import lombok.Getter;
+import lombok.SneakyThrows;
 
 @Data
 @Builder
@@ -44,16 +44,15 @@ public class TableCreator {
 	@Default
 	private Supplier<PDPage> pageSupplier = PageCreator.potraitPageSupplier();
 
+	@SneakyThrows
 	public void displayTable() {
 
+		System.out.println("table creator");
 		TableDrawer tableDrawer = RepeatedHeaderTableDrawer.builder().table(tableBuilder.build()).startX(startX)
 				.startY(startY).endY(endY).numberOfRowsToRepeat(repeatRows).build();
-		try {
-			tableDrawer.draw(() -> document, pageSupplier, offsetNewPageY);
-			finalY = tableDrawer.getFinalY();
-			tableStartPage = tableDrawer.getTableStartPage();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+
+		tableDrawer.draw(() -> document, pageSupplier, offsetNewPageY);
+		finalY = tableDrawer.getFinalY();
+		tableStartPage = tableDrawer.getTableStartPage();
 	}
 }

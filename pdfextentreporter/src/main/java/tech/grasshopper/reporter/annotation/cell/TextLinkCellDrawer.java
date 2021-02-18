@@ -94,5 +94,7 @@ public class TextLinkCellDrawer<T extends TextLinkCell> extends TextCellDrawer<T
 		annotation.setWidth(cell.getWidth());
 		annotation.setHeight(cell.getHeight());
 		annotation.setPage(drawingContext.getPage());
+
+		System.out.println(drawingContext.getPage());
 	}
 }
