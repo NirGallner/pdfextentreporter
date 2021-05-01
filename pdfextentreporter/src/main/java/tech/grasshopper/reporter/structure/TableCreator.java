@@ -28,6 +28,9 @@ public class TableCreator {
 	@Default
 	private int repeatRows = 1;
 
+	@Default
+	protected boolean splitRow = false;
+
 	private float startX;
 
 	private float startY;
@@ -47,9 +50,8 @@ public class TableCreator {
 	@SneakyThrows
 	public void displayTable() {
 
-		System.out.println("table creator");
 		TableDrawer tableDrawer = RepeatedHeaderTableDrawer.builder().table(tableBuilder.build()).startX(startX)
-				.startY(startY).endY(endY).numberOfRowsToRepeat(repeatRows).build();
+				.startY(startY).endY(endY).numberOfRowsToRepeat(repeatRows).splitRow(splitRow).build();
 
 		tableDrawer.draw(() -> document, pageSupplier, offsetNewPageY);
 		finalY = tableDrawer.getFinalY();
