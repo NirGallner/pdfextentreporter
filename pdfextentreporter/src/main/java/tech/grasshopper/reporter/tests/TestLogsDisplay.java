@@ -16,6 +16,7 @@ import com.aventstack.extentreports.model.Test;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
+import tech.grasshopper.pdf.structure.cell.TextLabelCell;
 import tech.grasshopper.reporter.font.ReportFont;
 import tech.grasshopper.reporter.optimizer.TextSanitizer;
 import tech.grasshopper.reporter.structure.Display;
@@ -110,8 +111,8 @@ public class TestLogsDisplay extends Display implements TestIndent {
 
 			Row row = Row.builder().font(LOGS_TABLE_CONTENT_FONT).fontSize(LOGS_TABLE_CONTENT_FONT_SIZE).wordBreak(true)
 					.padding(PADDING)
-					.add(TextCell.builder().text(l.getStatus().toString()).textColor(config.statusColor(l.getStatus()))
-							.build())
+					.add(TextLabelCell.builder().text(l.getStatus().toString())
+							.labelColor(config.statusColor(l.getStatus())).build())
 					.add(TextCell.builder()
 							.text(DateUtil.formatTimeAMPM(DateUtil.convertToLocalDateTimeFromDate(l.getTimestamp())))
 							.textColor(config.getTestTimeStampColor()).build())
@@ -123,7 +124,7 @@ public class TestLogsDisplay extends Display implements TestIndent {
 
 	private void drawTable() {
 		TableCreator table = TableCreator.builder().tableBuilder(tableBuilder).document(document).startX(xlocation)
-				.startY(ylocation).repeatRows(1).build();
+				.startY(ylocation).repeatRows(1).splitRow(true).build();
 		table.displayTable();
 
 		ylocation = table.getFinalY() - GAP_HEIGHT;
