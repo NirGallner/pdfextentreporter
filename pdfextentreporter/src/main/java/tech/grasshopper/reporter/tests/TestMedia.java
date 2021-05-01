@@ -23,12 +23,16 @@ public class TestMedia {
 	private float height;
 	private float padding;
 
+	private static PDImageXObject imageNotFound = null;
+
 	public ImageCell createImageCell() {
 
 		PDImageXObject image = null;
-		PDImageXObject imageNotFound = null;
+
 		try {
-			imageNotFound = PDImageXObject.createFromFile("src/main/resources/not-found-image.png", document);
+			if (imageNotFound == null)
+				imageNotFound = PDImageXObject.createFromFile("src/main/resources/not-found-image.png", document);
+
 			if (MediaService.isBase64(media))
 				image = imageNotFound;
 			else
