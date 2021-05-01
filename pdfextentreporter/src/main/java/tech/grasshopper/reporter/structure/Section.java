@@ -7,7 +7,7 @@ import com.aventstack.extentreports.model.Report;
 import lombok.Data;
 import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
-import tech.grasshopper.reporter.annotation.Annotation.AnnotationStore;
+import tech.grasshopper.reporter.annotation.AnnotationStore;
 import tech.grasshopper.reporter.config.ExtentPDFReporterConfig;
 import tech.grasshopper.reporter.destination.Destination.DestinationStore;
 import tech.grasshopper.reporter.header.PageHeader;

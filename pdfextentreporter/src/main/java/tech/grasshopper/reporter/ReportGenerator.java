@@ -9,8 +9,8 @@ import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDDocume
 
 import com.aventstack.extentreports.model.Report;
 
-import tech.grasshopper.reporter.annotation.Annotation.AnnotationStore;
 import tech.grasshopper.reporter.annotation.AnnotationProcessor;
+import tech.grasshopper.reporter.annotation.AnnotationStore;
 import tech.grasshopper.reporter.bookmark.Bookmark;
 import tech.grasshopper.reporter.config.ExtentPDFReporterConfig;
 import tech.grasshopper.reporter.context.AttributeSummary;

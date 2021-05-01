@@ -12,7 +12,7 @@ import org.apache.pdfbox.pdmodel.interactive.annotation.PDAnnotationLink;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NonNull;
-import tech.grasshopper.reporter.annotation.Annotation.AnnotationStore;
+import tech.grasshopper.pdf.annotation.Annotation;
 import tech.grasshopper.reporter.config.ExtentPDFReporterConfig;
 import tech.grasshopper.reporter.destination.Destination;
 import tech.grasshopper.reporter.destination.Destination.DestinationStore;
