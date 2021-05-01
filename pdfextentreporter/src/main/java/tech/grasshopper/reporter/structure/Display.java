@@ -15,9 +15,9 @@ import tech.grasshopper.reporter.config.ExtentPDFReporterConfig;
 @SuperBuilder
 public abstract class Display {
 
-	public static final float CONTENT_START_Y = 775f;
-	public static final float CONTENT_END_Y = 50f;
-	public static final float CONTENT_MARGIN_TOP_Y = 67f;
+	public static final float CONTENT_START_Y = 790f;
+	public static final float CONTENT_END_Y = 40f;
+	public static final float CONTENT_MARGIN_TOP_Y = 50f;
 
 	protected PDPageContentStream content;
 
