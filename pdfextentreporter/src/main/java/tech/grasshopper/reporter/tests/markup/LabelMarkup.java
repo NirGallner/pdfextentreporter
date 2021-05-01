@@ -3,11 +3,11 @@ package tech.grasshopper.reporter.tests.markup;
 import java.awt.Color;
 
 import org.vandeseer.easytable.structure.cell.AbstractCell;
-import org.vandeseer.easytable.structure.cell.TextCell;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
+import tech.grasshopper.pdf.structure.cell.TextLabelCell;
 
 @Data
 @SuperBuilder
@@ -17,7 +17,7 @@ public class LabelMarkup extends MarkupDisplay {
 	@Override
 	public AbstractCell displayDetails() {
 
-		return TextCell.builder().text(textSanitizer.sanitizeText(element.text())).textColor(textColor())
+		return TextLabelCell.builder().text(textSanitizer.sanitizeText(element.text())).labelColor(textColor())
 				.fontSize(LOG_FONT_SIZE).font(LOG_FONT).lineSpacing(MULTILINE_SPACING).build();
 	}
 
