@@ -10,7 +10,7 @@ import org.vandeseer.easytable.structure.cell.TextCell;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
-import tech.grasshopper.reporter.tablecell.TableWithinTableCell;
+import tech.grasshopper.pdf.structure.cell.TableWithinTableCell;
 
 @Data
 @SuperBuilder

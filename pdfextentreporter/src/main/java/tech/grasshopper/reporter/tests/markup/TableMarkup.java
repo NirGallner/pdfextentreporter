@@ -15,8 +15,8 @@ import org.vandeseer.easytable.structure.cell.TextCell;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
+import tech.grasshopper.pdf.structure.cell.TableWithinTableCell;
 import tech.grasshopper.reporter.font.ReportFont;
-import tech.grasshopper.reporter.tablecell.TableWithinTableCell;
 
 @Data
 @SuperBuilder

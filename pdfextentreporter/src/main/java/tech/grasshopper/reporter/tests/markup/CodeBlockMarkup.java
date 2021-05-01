@@ -12,8 +12,8 @@ import org.vandeseer.easytable.structure.cell.TextCell;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
+import tech.grasshopper.pdf.structure.cell.TableWithinTableCell;
 import tech.grasshopper.reporter.font.ReportFont;
-import tech.grasshopper.reporter.tablecell.TableWithinTableCell;
 
 @Data
 @SuperBuilder
@@ -26,7 +26,6 @@ public class CodeBlockMarkup extends MarkupDisplay {
 
 	@Override
 	public AbstractCell displayDetails() {
-
 		return TableWithinTableCell.builder().table(codeTable()).build();
 	}
 
@@ -52,7 +51,7 @@ public class CodeBlockMarkup extends MarkupDisplay {
 							.add(TextCell.builder().text("Only first " + maxCodeBlockCount
 									+ " code blocks are shown. Change this from the 'maxCodeBlockCount' setting.")
 									.minHeight(15f).font(ReportFont.REGULAR_FONT).fontSize(10).textColor(Color.RED)
-									.wordBreak(true).lineSpacing(MULTILINE_SPACING).build())
+									.lineSpacing(MULTILINE_SPACING).build())
 							.build());
 		}
 

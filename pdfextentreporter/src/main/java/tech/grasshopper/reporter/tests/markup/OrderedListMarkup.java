@@ -10,7 +10,7 @@ import org.vandeseer.easytable.structure.cell.TextCell;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
-import tech.grasshopper.reporter.tablecell.TableWithinTableCell;
+import tech.grasshopper.pdf.structure.cell.TableWithinTableCell;
 
 @Data
 @SuperBuilder
@@ -31,7 +31,8 @@ public class OrderedListMarkup extends MarkupDisplay {
 		int sno = 1;
 		for (Element e : elements) {
 			tableBuilder.addRow(Row.builder().add(TextCell.builder().text(String.valueOf(sno)).build())
-					.add(TextCell.builder().text(textSanitizer.sanitizeText(e.text())).textColor(textColor).lineSpacing(MULTILINE_SPACING).build())
+					.add(TextCell.builder().text(textSanitizer.sanitizeText(e.text())).textColor(textColor)
+							.lineSpacing(MULTILINE_SPACING).build())
 					.build());
 			sno++;
 		}
