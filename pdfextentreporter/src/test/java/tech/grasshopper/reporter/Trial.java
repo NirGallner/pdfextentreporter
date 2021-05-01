@@ -33,24 +33,26 @@ public class Trial {
 		// extent.setAnalysisStrategy(AnalysisStrategy.TEST);
 		ExtentSparkReporter spark = new ExtentSparkReporter("target/Spark/Spark.html");
 		extent.attachReporter(spark);
+		spark.loadXMLConfig("src/test/resources/extent-config.xml");
 		ExtentPDFReporter pdf = new ExtentPDFReporter("target/Pdf/Pdf.pdf");
 		extent.attachReporter(pdf);
-		pdf.loadJSONConfig(new File("src/test/resources/spark-config.json"));
-		// pdf.loadXMLConfig(new File("src/test/resources/spark-config.xml"));
+		pdf.loadJSONConfig(new File("src/test/resources/pdf-config.json"));
+		// pdf.loadXMLConfig(new File("src/test/resources/pdf-config.xml"));
 
 		extent.setSystemInfo("SYS1", "system one");
 		extent.setSystemInfo("SYS2", "system two");
 		extent.setSystemInfo("SYS3", "system three");
 		extent.setSystemInfo("SYS4", "system four");
 		extent.setSystemInfo("SYS5", "system five");
+		extent.setSystemInfo("SYS6", "system six");
+		extent.setSystemInfo("SYS7", "system seven");
 		extent.setSystemInfo(
 				"\tSYSLONGLONGLONGLONGLONGLONGLONGSYSSYSLONG LONGLONGLONGLONGLONGLONGSYS SYSLONGLONG SYSLONGLONGLONGLONGLONGLONGLONGSYSSYSLONG"
 						+ System.getProperty("line.separator")
 						+ "LONGLONG LONGLONG LONGSYS SYS LONG LONG LONG LONGLONGLONGLONGSYSSYSLONG",
 				"system  LONG LONG" + System.getProperty("line.separator")
 						+ "LONG LONG LONG LONGSYS LONG LONG LONG LONG LONG LONG LONG");
-		extent.setSystemInfo("SYS6", "system six");
-		extent.setSystemInfo("SYS7", "system seven");
+
 		extent.setSystemInfo("SYS8", "system eight");
 		extent.setSystemInfo("SYS9", "system nine");
 		extent.setSystemInfo("SYS10", "system ten");
@@ -59,22 +61,29 @@ public class Trial {
 		String base64 = Base64.getEncoder().encodeToString(array);
 
 		extent.createTest("ScreenCapture").generateLog(Status.FAIL, "Hello There")
+				.addScreenCaptureFromPath("src/test/resources/image.png") //
 				.addScreenCaptureFromPath("src/test/resources/image.png")
-				// .addScreenCaptureFromPath("src/test/resources/image.png")
 				.addScreenCaptureFromPath("src/test/resources/amur.png")
 				.addScreenCaptureFromPath("src/test/resources/image.png")
 				.addScreenCaptureFromPath("src/test/resources/logo.png").assignAuthor("Screen").assignAuthor("Veena")
-				.assignAuthor("Neeta").addScreenCaptureFromBase64String(base64)
-				// .addScreenCaptureFromPath("src/test/resources/logo.png")
+				.assignAuthor("Neeta").addScreenCaptureFromBase64String(base64) //
+				.addScreenCaptureFromPath("src/test/resources/logo.png")
 				.warning(MediaEntityBuilder.createScreenCaptureFromPath("src/test/resources/amur.png").build())
 				.pass(MarkupHelper.createLabel("Label Text", ExtentColor.BLUE));
 
-		extent.createTest("Label").generateLog(Status.FAIL, MarkupHelper.createLabel("Label Text", ExtentColor.GREEN));
+		extent.createTest("Label").generateLog(Status.FAIL, MarkupHelper.createLabel(
+				"Label Text Label Text Label Text Label Text Label Text Label Text Label Text Label TextLabelTextLabelText",
+				ExtentColor.GREEN));
+
+		extent.createTest("Label White Black").generateLog(Status.FAIL, MarkupHelper.createLabel(
+				"Label Text Label Text Label Text Label Text Label Text Label Text Label Text Label TextLabelTextLabelText",
+				ExtentColor.BLACK));
 
 		extent.createTest("CodeBlock").pass("not")
 				.generateLog(Status.PASS, MarkupHelper.createCodeBlock(CODE1, CODE2, CODE5, CODE2))
-				.generateLog(Status.PASS, MarkupHelper.createCodeBlock(CODE4, CodeLanguage.XML))
-				.generateLog(Status.PASS, MarkupHelper.createCodeBlock(CODE3, CodeLanguage.JSON));
+
+				.generateLog(Status.PASS, MarkupHelper.createCodeBlock(CODE3, CodeLanguage.JSON))
+				.generateLog(Status.PASS, MarkupHelper.createCodeBlock(CODE4, CodeLanguage.XML));
 
 		String[][] data1 = { { "1", "2", "coco cola coco cola coco cola coco cola coco cola", "4" },
 				{ "roast roast roat", "ten", "pepsi", "4" }, { "roast roast roat", "ten", "pepsi", "4" },
