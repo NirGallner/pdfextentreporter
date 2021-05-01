@@ -17,9 +17,10 @@ import com.aventstack.extentreports.model.context.NamedAttributeContext;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
-import tech.grasshopper.reporter.annotation.Annotation;
-import tech.grasshopper.reporter.annotation.Annotation.AnnotationStore;
-import tech.grasshopper.reporter.annotation.cell.TextLinkCell;
+import tech.grasshopper.pdf.annotation.Annotation;
+import tech.grasshopper.pdf.structure.cell.TextLabelCell;
+import tech.grasshopper.pdf.structure.cell.TextLinkCell;
+import tech.grasshopper.reporter.annotation.AnnotationStore;
 import tech.grasshopper.reporter.font.ReportFont;
 import tech.grasshopper.reporter.optimizer.TextSanitizer;
 import tech.grasshopper.reporter.structure.Display;
@@ -84,8 +85,8 @@ public class AttributeTestStatusDetailsDisplay extends Display {
 
 			Row row = Row.builder().font(TABLE_CONTENT_FONT).fontSize(TABLE_CONTENT_FONT_SIZE).wordBreak(true)
 					.padding(TABLE_CONTENT_COLUMN_PADDING)
-					.add(TextCell.builder().text(t.getStatus().toString()).textColor(config.statusColor(t.getStatus()))
-							.build())
+					.add(TextLabelCell.builder().text(t.getStatus().toString())
+							.labelColor(config.statusColor(t.getStatus())).build())
 					.add(TextCell.builder()
 							.text(DateUtil.formatTimeAMPM(DateUtil.convertToLocalDateTimeFromDate(t.getStartTime())))
 							.textColor(config.getTestTimeStampColor()).build())

@@ -51,6 +51,8 @@ public abstract class AttributeSummaryDisplay extends Display implements Destina
 
 	private int destinationY;
 
+	protected boolean splitRow;
+
 	protected Map<String, Map<Status, Integer>> contextAttributeData() {
 
 		// Move to separate subclasses!!
@@ -66,9 +68,8 @@ public abstract class AttributeSummaryDisplay extends Display implements Destina
 		}
 		throw new PdfReportException("Unsupported context attribute type.");
 	}
-	
-	protected final TextSanitizer textSanitizer = TextSanitizer.builder().font(TABLE_CONTENT_FONT).build();
 
+	protected final TextSanitizer textSanitizer = TextSanitizer.builder().font(TABLE_CONTENT_FONT).build();
 
 	private Map<String, Map<Status, Integer>> convertContextRowData(
 			Set<? extends NamedAttributeContext<? extends NamedAttribute>> attributes) {
@@ -101,7 +102,7 @@ public abstract class AttributeSummaryDisplay extends Display implements Destina
 		destinationY = (int) ylocation;
 
 		TableCreator table = TableCreator.builder().tableBuilder(tableBuilder).document(document).startX(xlocation)
-				.startY(ylocation).repeatRows(2).build();
+				.startY(ylocation).repeatRows(2).splitRow(splitRow).build();
 		table.displayTable();
 
 		ylocation = table.getFinalY() - GAP_HEIGHT;

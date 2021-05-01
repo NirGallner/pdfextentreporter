@@ -17,9 +17,9 @@ import lombok.Builder.Default;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
-import tech.grasshopper.reporter.annotation.Annotation;
-import tech.grasshopper.reporter.annotation.Annotation.AnnotationStore;
-import tech.grasshopper.reporter.annotation.cell.TextLinkCell;
+import tech.grasshopper.pdf.annotation.Annotation;
+import tech.grasshopper.pdf.structure.cell.TextLinkCell;
+import tech.grasshopper.reporter.annotation.AnnotationStore;
 import tech.grasshopper.reporter.font.ReportFont;
 
 @Data
@@ -118,5 +118,10 @@ public class ContextAttributeSummary extends AttributeSummaryDisplay {
 		}
 		return TextCell.builder().text(title).lineSpacing(MULTILINE_SPACING).textColor(config.attributeNameColor(type))
 				.horizontalAlignment(HorizontalAlignment.LEFT).build();
+	}
+
+	protected void drawTable() {
+		splitRow = false;
+		super.drawTable();
 	}
 }

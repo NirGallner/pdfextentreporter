@@ -75,4 +75,9 @@ public class SystemAttributeSummary extends AttributeSummaryDisplay {
 			tableBuilder.addRow(row);
 		});
 	}
+	
+	protected void drawTable() {
+		splitRow = true;
+		super.drawTable();
+	}
 }
