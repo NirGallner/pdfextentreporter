@@ -2,6 +2,7 @@
 	"displayAttributeSummary": true,
 	"displayAttributeDetails": true,
 	"displayTestDetails": true,
+	"displayExpandedMedia": true,
 	"name": "Extent Report PDF",
 	"nameColor": "964B00",
 	"startTimesColor": "33A532",

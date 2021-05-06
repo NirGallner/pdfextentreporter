@@ -22,7 +22,9 @@ public class ExtentPDFReporterConfig extends AbstractConfiguration {
 	private boolean displayAttributeDetails = true;
 	@Default
 	private boolean displayTestDetails = true;
-	
+	@Default
+	private boolean displayExpandedMedia = true;
+
 	private String name;
 	private String nameColor;
 	private String dateFormat;
@@ -67,20 +69,23 @@ public class ExtentPDFReporterConfig extends AbstractConfiguration {
 	private int maxTableRowCount;
 
 	private int testMaxIndentLevel;
-	
 
 	public boolean isDisplayAttributeSummary() {
 		return displayAttributeSummary;
 	}
-	
+
 	public boolean isDisplayAttributeDetails() {
 		return displayAttributeDetails;
 	}
-	
+
 	public boolean isDisplayTestDetails() {
 		return displayTestDetails;
 	}
-	
+
+	public boolean isDisplayExpandedMedia() {
+		return displayExpandedMedia;
+	}
+
 	public String getReportName() {
 		if (name == null || name.isEmpty())
 			name = Defaults.name;

@@ -24,6 +24,7 @@ public class PageHeader {
 	public static final String ATTRIBUTE_SUMMARY_SECTION = "ATTRIBUTE SUMMARY";
 	public static final String TEST_DETAILS_SECTION = "TEST DETAILS";
 	public static final String ATTRIBUTE_DETAILS_SECTION = "ATTRIBUTE DETAILS";
+	public static final String EXPANDED_MEDIA_SECTION = "EXPANDED MEDIA";
 
 	private final Map<String, Integer> sectionPageNumberMap = new LinkedHashMap<>();
 

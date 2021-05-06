@@ -25,6 +25,7 @@ public class Bookmark {
 	public final static String DASHBOARD_BOOKMARK_TEXT = "DASHBOARD";
 	public final static String ATTRIBUTES_BOOKMARK_TEXT = "ATTRIBUTES";
 	public final static String TESTS_BOOKMARK_TEXT = "TESTS";
+	public final static String MEDIAS_BOOKMARK_TEXT = "MEDIAS";
 
 	private final PDDocumentOutline outline = new PDDocumentOutline();
 
@@ -45,6 +46,9 @@ public class Bookmark {
 
 		if (config.isDisplayAttributeDetails())
 			createAttributeDetailsOutline();
+
+		if (config.isDisplayExpandedMedia())
+			createExpandedMediaOutline();
 
 		return outline;
 	}
@@ -79,9 +83,10 @@ public class Bookmark {
 		}
 	}
 
-	private void createTestsOutline() {
-		if (!destinationStore.getTestDestinations().isEmpty())
-			outline.addLast(createChapterOutlineItems(destinationStore.getTestDestinations(), TESTS_BOOKMARK_TEXT));
+	private void createExpandedMediaOutline() {
+		if (!destinationStore.getTestMediaDestinations().isEmpty())
+			outline.addLast(
+					createChapterOutlineItems(destinationStore.getTestMediaDestinations(), MEDIAS_BOOKMARK_TEXT));
 	}
 
 	private void createAttributeDetailsOutline() {
@@ -109,6 +114,11 @@ public class Bookmark {
 				});
 			});
 		}
+	}
+
+	private void createTestsOutline() {
+		if (!destinationStore.getTestDestinations().isEmpty())
+			outline.addLast(createChapterOutlineItems(destinationStore.getTestDestinations(), TESTS_BOOKMARK_TEXT));
 	}
 
 	private PDOutlineItem createOutlineItem(Destination destination, String title) {

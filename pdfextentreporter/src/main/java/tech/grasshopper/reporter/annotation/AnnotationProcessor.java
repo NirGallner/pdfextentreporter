@@ -37,11 +37,22 @@ public class AnnotationProcessor {
 
 		if (config.isDisplayAttributeDetails() && config.isDisplayTestDetails())
 			processTestNameAnnotation();
+
+		if (config.isDisplayTestDetails() && config.isDisplayExpandedMedia())
+			processTestMediaAnnotation();
 	}
 
 	private void processTestNameAnnotation() {
 		destinations.getTestDestinations().forEach(d -> {
 			List<Annotation> matchedAnnotations = annotations.getTestNameAnnotation().stream()
+					.filter(a -> a.getId() == d.getId()).collect(Collectors.toList());
+			processMatchedAnnotations(matchedAnnotations, d);
+		});
+	}
+
+	private void processTestMediaAnnotation() {
+		destinations.getTestMediaDestinations().forEach(d -> {
+			List<Annotation> matchedAnnotations = annotations.getTestMediaAnnotation().stream()
 					.filter(a -> a.getId() == d.getId()).collect(Collectors.toList());
 			processMatchedAnnotations(matchedAnnotations, d);
 		});

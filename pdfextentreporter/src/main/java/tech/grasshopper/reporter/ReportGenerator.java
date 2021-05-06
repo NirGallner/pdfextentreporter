@@ -17,6 +17,7 @@ import tech.grasshopper.reporter.context.AttributeSummary;
 import tech.grasshopper.reporter.context.detail.AttributeDetails;
 import tech.grasshopper.reporter.dashboard.Dashboard;
 import tech.grasshopper.reporter.destination.Destination.DestinationStore;
+import tech.grasshopper.reporter.expanded.MediaSummary;
 import tech.grasshopper.reporter.font.ReportFont;
 import tech.grasshopper.reporter.header.PageHeader;
 import tech.grasshopper.reporter.tests.TestDetails;
@@ -55,10 +56,14 @@ public class ReportGenerator {
 
 		if (config.isDisplayTestDetails())
 			TestDetails.builder().document(document).report(report).config(config).destinations(destinations)
-					.pageHeader(pageHeader).build().createSection();
+					.annotations(annotations).pageHeader(pageHeader).build().createSection();
 
 		if (config.isDisplayAttributeDetails())
 			AttributeDetails.builder().document(document).report(report).config(config).destinations(destinations)
+					.annotations(annotations).pageHeader(pageHeader).build().createSection();
+
+		if (config.isDisplayExpandedMedia())
+			MediaSummary.builder().document(document).report(report).config(config).destinations(destinations)
 					.annotations(annotations).pageHeader(pageHeader).build().createSection();
 
 		AnnotationProcessor.builder().annotations(annotations).destinations(destinations).config(config).build()

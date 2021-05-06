@@ -49,7 +49,7 @@ public class TestDetails extends Section implements PageHeaderAware {
 
 			if (test.hasScreenCapture()) {
 				TestMediaDisplay testMediaDisplay = TestMediaDisplay.builder().document(document).config(config)
-						.test(test).ylocation(yLocation).build();
+						.test(test).annotations(annotations).ylocation(yLocation).build();
 				testMediaDisplay.display();
 
 				yLocation = testMediaDisplay.getYlocation();
@@ -65,7 +65,7 @@ public class TestDetails extends Section implements PageHeaderAware {
 
 			if (test.hasLog()) {
 				TestLogsDisplay testLogsDisplay = TestLogsDisplay.builder().document(document).config(config).test(test)
-						.ylocation(yLocation).build();
+						.annotations(annotations).ylocation(yLocation).build();
 				testLogsDisplay.display();
 
 				yLocation = testLogsDisplay.getYlocation();

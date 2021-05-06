@@ -13,11 +13,17 @@ public class AnnotationStore {
 
 	private List<Annotation> attributeNameAnnotation = new ArrayList<>();
 
+	private List<Annotation> testMediaAnnotation = new ArrayList<>();
+
 	public void addTestNameAnnotation(Annotation annotation) {
 		testNameAnnotation.add(annotation);
 	}
 
 	public void addAttributeNameAnnotation(Annotation annotation) {
 		attributeNameAnnotation.add(annotation);
+	}
+
+	public void addTestMediaAnnotation(Annotation annotation) {
+		testMediaAnnotation.add(annotation);
 	}
 }

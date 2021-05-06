@@ -1,4 +1,4 @@
-package tech.grasshopper.reporter.tests;
+package tech.grasshopper.reporter.expanded;
 
 import java.io.IOException;
 
@@ -14,13 +14,11 @@ import lombok.Data;
 
 @Data
 @Builder
-public class TestMedia {
+public class ExpandedMedia {
 
 	private Media media;
 	private PDDocument document;
 
-	private float width;
-	private float height;
 	private float padding;
 
 	private static PDImageXObject imageNotFound = null;
@@ -42,6 +40,7 @@ public class TestMedia {
 			// Todo write logger
 			image = imageNotFound;
 		}
-		return ImageCell.builder().image(image).width(width).padding(padding).maxHeight(height).build();
+		return ImageCell.builder().image(image).width(image.getWidth()).padding(padding).maxHeight(image.getHeight())
+				.build();
 	}
 }

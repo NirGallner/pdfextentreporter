@@ -17,6 +17,9 @@ import com.aventstack.extentreports.model.Test;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
+import tech.grasshopper.pdf.annotation.Annotation;
+import tech.grasshopper.pdf.structure.cell.TextLinkCell;
+import tech.grasshopper.reporter.annotation.AnnotationStore;
 import tech.grasshopper.reporter.font.ReportFont;
 import tech.grasshopper.reporter.structure.Display;
 import tech.grasshopper.reporter.structure.TableCreator;
@@ -37,11 +40,13 @@ public class TestMediaDisplay extends Display implements TestIndent {
 	protected Test test;
 
 	private TableBuilder tableBuilder;
+	
+	private AnnotationStore annotations;
 
 	@Override
 	public void display() {
 		if (test.hasScreenCapture()) {
-			
+
 			xlocation += calculateIndent(test.getLevel(), config.getTestMaxIndentLevel()) * TestDetails.LEVEL_X_INDENT;
 
 			createTableBuilder();
@@ -59,9 +64,22 @@ public class TestMediaDisplay extends Display implements TestIndent {
 		boolean maxMedia = false;
 		RowBuilder rowBuilder = Row.builder();
 		List<Media> medias = test.getMedia();
-		if (medias.size() > 6) {
-			medias = medias.subList(0, 6);
+		int mediaCount = 6 - calculateIndent(test.getLevel(), config.getTestMaxIndentLevel());
+		float plusWidth = 15f;
+
+		if (medias.size() > mediaCount) {
+			medias = medias.subList(0, mediaCount);
 			maxMedia = true;
+		}
+
+		if (config.isDisplayExpandedMedia()) {
+			tableBuilder.addColumnsOfWidth(plusWidth);
+			Annotation annotation = Annotation.builder().id(test.getId()).build();
+			annotations.addTestMediaAnnotation(annotation);
+			
+			rowBuilder.add(TextLinkCell.builder().text("+").annotation(annotation).font(ReportFont.REGULAR_FONT)
+					.fontSize(15).textColor(Color.RED).showLine(false).padding(2f).borderWidth(0f)
+					.verticalAlignment(VerticalAlignment.TOP).build());
 		}
 
 		for (Media media : medias) {
@@ -72,9 +90,9 @@ public class TestMediaDisplay extends Display implements TestIndent {
 
 		if (maxMedia) {
 			tableBuilder.addColumnsOfWidth(MEDIA_MAX_MSG_WIDTH);
-			rowBuilder.add(
-					TextCell.builder().text("Only first 6 medias are shown.").font(ReportFont.REGULAR_FONT).fontSize(10)
-							.textColor(Color.RED).verticalAlignment(VerticalAlignment.TOP).wordBreak(true).build());
+			rowBuilder.add(TextCell.builder().text("Only first " + mediaCount + " medias are shown.")
+					.font(ReportFont.REGULAR_FONT).fontSize(10).textColor(Color.RED)
+					.verticalAlignment(VerticalAlignment.TOP).wordBreak(true).build());
 		}
 		tableBuilder.addRow(rowBuilder.build());
 	}

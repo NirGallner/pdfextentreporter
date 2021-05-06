@@ -11,12 +11,17 @@ import org.vandeseer.easytable.structure.Table.TableBuilder;
 import org.vandeseer.easytable.structure.cell.AbstractCell;
 import org.vandeseer.easytable.structure.cell.TextCell;
 
+import com.aventstack.extentreports.model.Log;
 import com.aventstack.extentreports.model.Test;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
+import tech.grasshopper.pdf.annotation.Annotation;
+import tech.grasshopper.pdf.structure.cell.TableWithinTableCell;
 import tech.grasshopper.pdf.structure.cell.TextLabelCell;
+import tech.grasshopper.pdf.structure.cell.TextLinkCell;
+import tech.grasshopper.reporter.annotation.AnnotationStore;
 import tech.grasshopper.reporter.font.ReportFont;
 import tech.grasshopper.reporter.optimizer.TextSanitizer;
 import tech.grasshopper.reporter.structure.Display;
@@ -40,6 +45,7 @@ public class TestLogsDisplay extends Display implements TestIndent {
 	private static final float LOGS_TIMESTAMP_WIDTH = 70f;
 	private static final float LOGS_DETAILS_WIDTH = 380f;
 	private static final float LOGS_DETAILS_HEIGHT = 15f;
+	private static final float LOGS_MEDIA_PLUS_WIDTH = 15f;
 
 	private static final float BORDER_WIDTH = 1f;
 	private static final int LOGS_TABLE_CONTENT_FONT_SIZE = 10;
@@ -55,6 +61,8 @@ public class TestLogsDisplay extends Display implements TestIndent {
 	private TableBuilder tableBuilder;
 
 	protected final TextSanitizer textSanitizer = TextSanitizer.builder().font(LOGS_TABLE_CONTENT_FONT).build();
+
+	private AnnotationStore annotations;
 
 	@Override
 	public void display() {
@@ -94,8 +102,7 @@ public class TestLogsDisplay extends Display implements TestIndent {
 
 			if (l.hasMedia()) {
 
-				detailCell = TestMedia.builder().media(l.getMedia()).document(document).width(LOGS_MEDIA_WIDTH)
-						.height(LOGS_MEDIA_HEIGHT).padding(PADDING).build().createImageCell();
+				detailCell = createMediaCell(l);
 			} else if (l.hasException()) {
 
 				detailCell = TestStackTrace.builder().log(l).font(LOGS_STACK_TRACE_TABLE_CONTENT_FONT)
@@ -120,6 +127,30 @@ public class TestLogsDisplay extends Display implements TestIndent {
 
 			tableBuilder.addRow(row);
 		});
+	}
+
+	private AbstractCell createMediaCell(Log log) {
+		if (config.isDisplayExpandedMedia()) {
+			TableBuilder tableBuilder = Table.builder()
+					.addColumnsOfWidth(LOGS_MEDIA_PLUS_WIDTH, LOGS_DETAILS_WIDTH - LOGS_MEDIA_PLUS_WIDTH).padding(0f);
+
+			Annotation annotation = Annotation.builder().id(test.getId()).build();
+			annotations.addTestMediaAnnotation(annotation);
+
+			tableBuilder.addRow(Row.builder()
+					.add(TextLinkCell.builder().text("+").annotation(annotation).font(ReportFont.REGULAR_FONT)
+							.fontSize(15).textColor(Color.RED).showLine(false).verticalAlignment(VerticalAlignment.TOP)
+							.horizontalAlignment(HorizontalAlignment.CENTER).build())
+					.add(TestMedia.builder().media(log.getMedia()).document(document)
+							.width(LOGS_DETAILS_WIDTH - LOGS_MEDIA_PLUS_WIDTH).height(LOGS_MEDIA_HEIGHT).build()
+							.createImageCell())
+					.build());
+
+			return TableWithinTableCell.builder().table(tableBuilder.build())
+					.width(LOGS_DETAILS_WIDTH - LOGS_MEDIA_PLUS_WIDTH).build();
+		} else
+			return TestMedia.builder().media(log.getMedia()).document(document).width(LOGS_MEDIA_WIDTH)
+					.height(LOGS_MEDIA_HEIGHT).padding(PADDING).build().createImageCell();
 	}
 
 	private void drawTable() {
