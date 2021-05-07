@@ -47,8 +47,13 @@ public class TableMarkup extends MarkupDisplay {
 		float[] columnWidths = new float[cols];
 		Arrays.fill(columnWidths, colWidth);
 
-		boolean maxRows = rows.size() > maxTableRowCount ? true : false;
-		int rowCnt = rows.size() > maxTableRowCount ? maxTableRowCount : rows.size();
+		boolean maxRows = false;
+		int rowCnt = rows.size();
+
+		if (maxTableRowCount > 0) {
+			maxRows = rows.size() > maxTableRowCount ? true : false;
+			rowCnt = rows.size() > maxTableRowCount ? maxTableRowCount : rows.size();
+		}
 
 		TableBuilder tableBuilder = Table.builder().addColumnsOfWidth(columnWidths).fontSize(LOG_FONT_SIZE)
 				.font(LOG_FONT).borderWidth(BORDER_WIDTH).borderColor(Color.LIGHT_GRAY).wordBreak(true);
@@ -71,12 +76,32 @@ public class TableMarkup extends MarkupDisplay {
 			i++;
 		}
 
+		String tableCounts = "";
+		String tableSettings = "";
+
+		if (maxCols) {
+			tableCounts = maxTableColumnCount + " columns";
+			tableSettings = "'maxTableColumnCount'";
+		}
+
+		if (maxRows) {
+			if (maxCols) {
+				tableCounts = maxTableColumnCount + " columns and " + maxTableRowCount + " rows";
+				tableSettings = "'maxTableColumnCount' and 'maxTableRowCount'";
+			} else {
+				tableCounts = maxTableRowCount + " rows";
+				tableSettings = "'maxTableRowCount' ";
+			}
+		}
+
 		if (maxCols || maxRows) {
-			tableBuilder.addRow(Row.builder().add(TextCell.builder().colSpan(cols).text("Only first "
-					+ maxTableColumnCount + " columns and " + maxTableRowCount
-					+ " rows are shown. Change this from the 'maxTableColumnCount' and maxTableRowCount'' settings.")
-					.minHeight(15f).font(ReportFont.REGULAR_FONT).fontSize(10).textColor(Color.RED).wordBreak(true)
-					.lineSpacing(MULTILINE_SPACING).build()).build());
+			tableBuilder.addRow(Row.builder()
+					.add(TextCell.builder().colSpan(cols)
+							.text("Only first " + tableCounts + " are shown. Change this from the " + tableSettings
+									+ " settings.")
+							.minHeight(15f).font(ReportFont.REGULAR_FONT).fontSize(10).textColor(Color.RED)
+							.wordBreak(true).lineSpacing(MULTILINE_SPACING).build())
+					.build());
 		}
 
 		return tableBuilder.build();

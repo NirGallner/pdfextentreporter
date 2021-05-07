@@ -30,8 +30,13 @@ public class CodeBlockMarkup extends MarkupDisplay {
 	}
 
 	private Table codeTable() {
-		boolean maxCodes = elements.size() > maxCodeBlockCount ? true : false;
-		int count = elements.size() > maxCodeBlockCount ? maxCodeBlockCount : elements.size();
+		boolean maxCodes = false;
+		int count = elements.size();
+
+		if (maxCodeBlockCount > 0) {
+			maxCodes = elements.size() > maxCodeBlockCount ? true : false;
+			count = elements.size() > maxCodeBlockCount ? maxCodeBlockCount : elements.size();
+		}
 
 		TableBuilder tableBuilder = Table.builder().addColumnsOfWidth(width).fontSize(LOG_FONT_SIZE).font(LOG_FONT)
 				.borderWidth(BORDER_WIDTH).borderColor(Color.LIGHT_GRAY).wordBreak(true).padding(5f);

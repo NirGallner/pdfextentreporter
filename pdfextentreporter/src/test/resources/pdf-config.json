@@ -26,6 +26,5 @@
 	"testNameColor": "d62d20",
 	"testTimesColor": "ffa700",
 	"testTimeStampColor": "08080",
-	"testExceptionColor": "990000",
-	"maxCodeBlockCount": 2
+	"testExceptionColor": "990000"
 }

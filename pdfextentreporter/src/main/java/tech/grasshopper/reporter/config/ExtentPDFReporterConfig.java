@@ -219,8 +219,6 @@ public class ExtentPDFReporterConfig extends AbstractConfiguration {
 	}
 
 	public int getMaxCodeBlockCount() {
-		if (maxCodeBlockCount == 0)
-			maxCodeBlockCount = Defaults.maxCodeBlockCount;
 		return maxCodeBlockCount;
 	}
 
@@ -231,8 +229,6 @@ public class ExtentPDFReporterConfig extends AbstractConfiguration {
 	}
 
 	public int getMaxTableRowCount() {
-		if (maxTableRowCount == 0)
-			maxTableRowCount = Defaults.maxTableRowCount;
 		return maxTableRowCount;
 	}
 
@@ -274,10 +270,8 @@ public class ExtentPDFReporterConfig extends AbstractConfiguration {
 		private static final Color testTimesColor = Color.BLUE;
 		private static final Color testTimeStampColor = Color.BLACK;
 		private static final Color testExceptionColor = Color.RED;
-		private static final int maxCodeBlockCount = 3;
 		private static final int maxTableColumnCount = 3;
-		private static final int maxTableRowCount = 4;
-		private static final int testMaxIndentLevel = 3;
+		private static final int testMaxIndentLevel = 2;
 	}
 
 	public Color attributeHeaderColor(AttributeType type) {
