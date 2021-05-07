@@ -61,12 +61,12 @@ public class Trial {
 		String base64 = Base64.getEncoder().encodeToString(array);
 
 		extent.createTest("ScreenCapture").generateLog(Status.FAIL, "Hello There")
-				.addScreenCaptureFromPath("src/test/resources/image.png") //
+				.addScreenCaptureFromPath("src/test/resources/image.png")
 				.addScreenCaptureFromPath("src/test/resources/image.png")
 				.addScreenCaptureFromPath("src/test/resources/amur.png")
 				.addScreenCaptureFromPath("src/test/resources/image.png")
 				.addScreenCaptureFromPath("src/test/resources/logo.png").assignAuthor("Screen").assignAuthor("Veena")
-				.assignAuthor("Neeta").addScreenCaptureFromBase64String(base64) //
+				.assignAuthor("Neeta").addScreenCaptureFromBase64String(base64)
 				.addScreenCaptureFromPath("src/test/resources/logo.png")
 				.warning(MediaEntityBuilder.createScreenCaptureFromPath("src/test/resources/amur.png").build())
 				.pass(MarkupHelper.createLabel("Label Text", ExtentColor.BLUE));
@@ -81,7 +81,6 @@ public class Trial {
 
 		extent.createTest("CodeBlock").pass("not")
 				.generateLog(Status.PASS, MarkupHelper.createCodeBlock(CODE1, CODE2, CODE5, CODE2))
-
 				.generateLog(Status.PASS, MarkupHelper.createCodeBlock(CODE3, CodeLanguage.JSON))
 				.generateLog(Status.PASS, MarkupHelper.createCodeBlock(CODE4, CodeLanguage.XML));
 
@@ -122,8 +121,13 @@ public class Trial {
 		extent.createTest("ParentWithChild").info("hello").assignCategory("My  Tag").assignAuthor("TheAuthor")
 				.assignAuthor("Mounish").assignDevice("Windows").assignDevice("TheDevice").info("hello").info("morning")
 				.pass("night").pass("evening").warning("hello").info("bye").info("hello").info("morning")
-				.createNode("Child").addScreenCaptureFromPath("src/test/resources/logo.png").pass("evening")
-				.warning("hello").info("bye").assignAuthor("Barbie").createNode("Grand Child")
+				.createNode("Child").addScreenCaptureFromPath("src/test/resources/logo.png")
+				.addScreenCaptureFromPath("src/test/resources/logo.png")
+				.addScreenCaptureFromPath("src/test/resources/logo.png")
+				.addScreenCaptureFromPath("src/test/resources/logo.png")
+				.addScreenCaptureFromPath("src/test/resources/logo.png")
+				.addScreenCaptureFromPath("src/test/resources/logo.png").pass("evening").warning("hello").info("bye")
+				.assignAuthor("Barbie").createNode("Grand Child")
 				.pass("This test is created as a toggle as part of a child test of 'ParentWithChild'")
 				.createNode("Great Grand Child").pass("This test is created as a toggle as part of a child");
 
