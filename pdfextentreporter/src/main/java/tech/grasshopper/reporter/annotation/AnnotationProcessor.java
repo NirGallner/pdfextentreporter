@@ -39,7 +39,7 @@ public class AnnotationProcessor {
 			processTestNameAnnotation();
 
 		if (config.isDisplayTestDetails() && config.isDisplayExpandedMedia())
-			processTestMediaAnnotation();
+			processExpandedMediaAnnotation();
 	}
 
 	private void processTestNameAnnotation() {
@@ -50,18 +50,24 @@ public class AnnotationProcessor {
 		});
 	}
 
-	private void processTestMediaAnnotation() {
+	private void processAttributeNameAnnotation() {
+		destinations.getAttributeDetailDestinations().forEach(d -> {
+			List<Annotation> matchedAnnotations = annotations.getAttributeNameAnnotation().stream()
+					.filter(a -> a.getTitle().equals(d.getName())).collect(Collectors.toList());
+			processMatchedAnnotations(matchedAnnotations, d);
+		});
+	}
+
+	private void processExpandedMediaAnnotation() {
 		destinations.getTestMediaDestinations().forEach(d -> {
 			List<Annotation> matchedAnnotations = annotations.getTestMediaAnnotation().stream()
 					.filter(a -> a.getId() == d.getId()).collect(Collectors.toList());
 			processMatchedAnnotations(matchedAnnotations, d);
 		});
-	}
 
-	private void processAttributeNameAnnotation() {
-		destinations.getAttributeDetailDestinations().forEach(d -> {
-			List<Annotation> matchedAnnotations = annotations.getAttributeNameAnnotation().stream()
-					.filter(a -> a.getTitle().equals(d.getName())).collect(Collectors.toList());
+		destinations.getTestDestinations().forEach(d -> {
+			List<Annotation> matchedAnnotations = annotations.getTestNameMediaAnnotation().stream()
+					.filter(a -> a.getId() == d.getId()).collect(Collectors.toList());
 			processMatchedAnnotations(matchedAnnotations, d);
 		});
 	}

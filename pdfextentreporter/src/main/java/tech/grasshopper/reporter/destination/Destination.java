@@ -34,9 +34,13 @@ public class Destination {
 	public static class DestinationStore {
 
 		private Destination dashboardDestination;
+
 		private List<Destination> attributeSummaryDestinations = new ArrayList<>();
+
 		private List<Destination> testDestinations = new ArrayList<>();
+
 		private List<Destination> attributeDetailDestinations = new ArrayList<>();
+
 		private List<Destination> testMediaDestinations = new ArrayList<>();
 
 		public void addAttributeSummaryDestination(Destination destination) {

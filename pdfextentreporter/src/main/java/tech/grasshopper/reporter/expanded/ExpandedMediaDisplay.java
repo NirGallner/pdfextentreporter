@@ -11,7 +11,6 @@ import org.vandeseer.easytable.settings.VerticalAlignment;
 import org.vandeseer.easytable.structure.Row;
 import org.vandeseer.easytable.structure.Table;
 import org.vandeseer.easytable.structure.Table.TableBuilder;
-import org.vandeseer.easytable.structure.cell.TextCell;
 
 import com.aventstack.extentreports.model.Log;
 import com.aventstack.extentreports.model.Media;
@@ -20,6 +19,9 @@ import com.aventstack.extentreports.model.Test;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
+import tech.grasshopper.pdf.annotation.Annotation;
+import tech.grasshopper.pdf.structure.cell.TextLinkCell;
+import tech.grasshopper.reporter.annotation.AnnotationStore;
 import tech.grasshopper.reporter.destination.Destination;
 import tech.grasshopper.reporter.destination.DestinationAware;
 import tech.grasshopper.reporter.font.ReportFont;
@@ -52,6 +54,8 @@ public class ExpandedMediaDisplay extends Display implements DestinationAware {
 
 	protected final TextSanitizer textSanitizer = TextSanitizer.builder().font(CONTENT_FONT).build();
 
+	private AnnotationStore annotations;
+
 	@Override
 	public Destination createDestination() {
 		return Destination.builder().id(test.getId()).name(textSanitizer.sanitizeText(test.getName()))
@@ -65,10 +69,13 @@ public class ExpandedMediaDisplay extends Display implements DestinationAware {
 				.font(ReportFont.BOLD_ITALIC_FONT).horizontalAlignment(HorizontalAlignment.LEFT)
 				.verticalAlignment(VerticalAlignment.MIDDLE);
 
+		Annotation annotation = Annotation.builder().id(test.getId()).build();
+		annotations.addTestNameMediaAnnotation(annotation);
+
 		tableBuilder.addRow(Row.builder()
-				.add(TextCell.builder().minHeight(NAME_HEIGHT).fontSize(NAME_FONT_SIZE)
-						.text(textSanitizer.sanitizeText(test.getName())).lineSpacing(MULTI_LINE_SPACING)
-						.textColor(config.getTestNameColor()).build())
+				.add(TextLinkCell.builder().annotation(annotation).showLine(false).minHeight(NAME_HEIGHT)
+						.fontSize(NAME_FONT_SIZE).text(textSanitizer.sanitizeText(test.getName()))
+						.lineSpacing(MULTI_LINE_SPACING).textColor(config.getTestNameColor()).build())
 				.build());
 
 		List<Media> medias = new ArrayList<>();
@@ -89,8 +96,8 @@ public class ExpandedMediaDisplay extends Display implements DestinationAware {
 		PDPage initialPage = document.getPage(document.getNumberOfPages() - 1);
 		destinationY = (int) ylocation;
 
-		TableCreator table = TableCreator.builder().tableBuilder(tableBuilder).document(document).startX(xlocation)
-				.startY(ylocation).build();
+		TableCreator table = TableCreator.builder().tableBuilder(tableBuilder).document(document).repeatRows(0)
+				.startX(xlocation).startY(ylocation).build();
 		table.displayTable();
 
 		ylocation = table.getFinalY() - GAP_HEIGHT;

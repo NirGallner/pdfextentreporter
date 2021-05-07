@@ -15,6 +15,8 @@ public class AnnotationStore {
 
 	private List<Annotation> testMediaAnnotation = new ArrayList<>();
 
+	private List<Annotation> testNameMediaAnnotation = new ArrayList<>();
+
 	public void addTestNameAnnotation(Annotation annotation) {
 		testNameAnnotation.add(annotation);
 	}
@@ -25,5 +27,9 @@ public class AnnotationStore {
 
 	public void addTestMediaAnnotation(Annotation annotation) {
 		testMediaAnnotation.add(annotation);
+	}
+
+	public void addTestNameMediaAnnotation(Annotation annotation) {
+		testNameMediaAnnotation.add(annotation);
 	}
 }
