@@ -60,6 +60,8 @@ public class TableMarkup extends MarkupDisplay {
 
 		int i = 1;
 		for (Element row : rows) {
+			if (row.children().isEmpty())
+				continue;
 			if (i > rowCnt)
 				break;
 			RowBuilder rowBuilder = Row.builder();
