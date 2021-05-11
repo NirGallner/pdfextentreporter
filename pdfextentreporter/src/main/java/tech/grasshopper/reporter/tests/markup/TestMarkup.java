@@ -27,33 +27,40 @@ public class TestMarkup {
 		Document doc = Jsoup.parseBodyFragment(html);
 
 		Element element = doc.selectFirst("body > span[class*=\"badge\"]");
-		if (element != null)
+		if (element != null) {
 			return LabelMarkup.builder().element(element).build().displayDetails();
+		}
 
 		element = doc.selectFirst("body > table[class*=\"markup-table table\"]");
-		if (element != null)
+		if (element != null) {
 			return TableMarkup.builder().element(element).textColor(config.statusColor(log.getStatus()))
 					.maxTableColumnCount(config.getMaxTableColumnCount()).maxTableRowCount(config.getMaxTableRowCount())
 					.width(width).build().displayDetails();
+		}
 
 		Elements elements = doc.select("body > ol > li");
-		if (elements.size() > 0)
+		if (elements.size() > 0) {
+
 			return OrderedListMarkup.builder().elements(elements).textColor(config.statusColor(log.getStatus())).build()
 					.displayDetails();
+		}
 
 		elements = doc.select("body > ul > li");
-		if (elements.size() > 0)
+		if (elements.size() > 0) {
 			return UnorderedListMarkup.builder().elements(elements).textColor(config.statusColor(log.getStatus()))
 					.build().displayDetails();
+		}
 
 		elements = doc.select("body textarea[class*=\"code-block\"]");
-		if (elements.size() > 0)
+		if (elements.size() > 0) {
 			return CodeBlockMarkup.builder().elements(elements).textColor(config.statusColor(log.getStatus()))
 					.maxCodeBlockCount(config.getMaxCodeBlockCount()).width(width).build().displayDetails();
+		}
 
-		if (html.contains("JSONTree"))
+		if (html.contains("JSONTree")) {
 			return JsonMarkup.builder().html(html).textColor(config.statusColor(log.getStatus())).build()
 					.displayDetails();
+		}
 
 		return DefaultMarkup.builder().log(log).textColor(config.statusColor(log.getStatus())).build().displayDetails();
 	}

@@ -22,14 +22,23 @@ public class LabelMarkup extends MarkupDisplay {
 	}
 
 	private Color textColor() {
-		Color color = null;
-		String colorName = element.className().substring(element.className().lastIndexOf(' ') + 1);
+		Color color = Color.BLACK;
+		String colorName = "";
+		String[] spanClasses = element.className().split("\\s+");
+
+		if (spanClasses.length > 0) {
+			colorName = spanClasses[spanClasses.length - 1].trim();
+		} else {
+			// Add to logger
+			return color;
+		}
 
 		try {
 			color = (Color) Color.class.getField(colorName.toLowerCase()).get(null);
 			if (color == Color.WHITE)
 				color = Color.BLACK;
 		} catch (Exception e) {
+			// Add to logger
 			color = Color.BLACK;
 		}
 		return color;

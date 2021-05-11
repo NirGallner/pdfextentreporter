@@ -28,6 +28,9 @@ public class JsonMarkup extends MarkupDisplay {
 	private String jsonText() {
 		String jsonStringHolder = html.substring(html.indexOf("JSONTree"));
 		int startIndex = jsonStringHolder.indexOf('{');
+		if (startIndex == -1)
+			return "";
+
 		int endIndex = startIndex;
 		int bktCnt = 0;
 
@@ -40,6 +43,9 @@ public class JsonMarkup extends MarkupDisplay {
 			if (bktCnt == 0)
 				break;
 		}
+
+		if (endIndex == startIndex)
+			return "";
 
 		Gson gson = new GsonBuilder().setPrettyPrinting().create();
 		return gson.toJson(JsonParser.parseString(jsonStringHolder.substring(startIndex, endIndex)));
