@@ -33,25 +33,22 @@ public abstract class Medias {
 		}
 	}
 
-	private PDImageXObject generatePDImage() throws IOException {
+	private void generatePDImage() throws IOException {
 		// create base64 image file
 		if (MediaService.isBase64(media))
 			image = imageNotFound;
 		else
 			image = PDImageXObject.createFromFile(media.getPath(), document);
-
-		return image;
 	}
 
 	protected PDImageXObject processPDImage() {
 		try {
 			initializeNotFoundImage();
-			image = generatePDImage();
+			generatePDImage();
 		} catch (Exception e) {
 			// Todo write logger
 			image = imageNotFound;
 		}
-
 		return image;
 	}
 

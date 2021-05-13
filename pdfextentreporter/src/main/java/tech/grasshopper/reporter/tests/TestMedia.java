@@ -3,7 +3,6 @@ package tech.grasshopper.reporter.tests;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.vandeseer.easytable.structure.cell.ImageCell;
 
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 import tech.grasshopper.reporter.medias.Medias;
