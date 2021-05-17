@@ -40,8 +40,8 @@ public class DashboardHeaderDisplay extends Display {
 	}
 
 	private void createReportTitleText() {
-		Text text = Text.builder().textColor(config.getReportNameColor()).font(TITLE_FONT).fontSize(TITLE_FONT_SIZE)
-				.text(titleLengthOptimizer.optimizeText(textSanitizer.sanitizeText(config.getReportName())))
+		Text text = Text.builder().textColor(config.getReportTitleColor()).font(TITLE_FONT).fontSize(TITLE_FONT_SIZE)
+				.text(titleLengthOptimizer.optimizeText(textSanitizer.sanitizeText(config.getReportTitle())))
 				.xlocation(TITLE_X_LOCATION).ylocation(Y_LOCATION).build();
 		TextComponent.builder().content(content).text(text).build().display();
 	}

@@ -25,8 +25,8 @@ public class ExtentPDFReporterConfig extends AbstractConfiguration {
 	@Default
 	private boolean displayExpandedMedia = true;
 
-	private String name;
-	private String nameColor;
+	private String title;
+	private String titleColor;
 	private String dateFormat;
 	private String dateColor;
 
@@ -57,8 +57,6 @@ public class ExtentPDFReporterConfig extends AbstractConfiguration {
 
 	private String exceptionAttributeColor;
 
-	private String attributeTestStatusColor;
-
 	private String testNameColor;
 	private String testTimesColor;
 	private String testTimeStampColor;
@@ -86,14 +84,14 @@ public class ExtentPDFReporterConfig extends AbstractConfiguration {
 		return displayExpandedMedia;
 	}
 
-	public String getReportName() {
-		if (name == null || name.isEmpty())
-			name = Defaults.name;
-		return name;
+	public String getReportTitle() {
+		if (title == null || title.isEmpty())
+			title = Defaults.title;
+		return title;
 	}
 
-	public Color getReportNameColor() {
-		return createColor(nameColor, Defaults.nameColor);
+	public Color getReportTitleColor() {
+		return createColor(titleColor, Defaults.titleColor);
 	}
 
 	public DateTimeFormatter getReportDateFormat() {
@@ -189,10 +187,6 @@ public class ExtentPDFReporterConfig extends AbstractConfiguration {
 		return createColor(exceptionAttributeColor, Defaults.exceptionAttributeColor);
 	}
 
-	public Color getAttributeTestStatusColor() {
-		return createColor(attributeTestStatusColor, Defaults.attributeTestStatusColor);
-	}
-
 	public Color getTestNameColor() {
 		return createColor(testNameColor, Defaults.testNameColor);
 	}
@@ -240,8 +234,8 @@ public class ExtentPDFReporterConfig extends AbstractConfiguration {
 
 	private static class Defaults {
 
-		private static final String name = "PDF Extent Report";
-		private static final Color nameColor = Color.BLACK;
+		private static final String title = "PDF Extent Report";
+		private static final Color titleColor = Color.BLACK;
 		private static final DateTimeFormatter dateFormatter = DateTimeFormatter
 				.ofLocalizedDateTime(FormatStyle.MEDIUM);
 		private static final Color dateColor = Color.BLUE;
@@ -265,7 +259,6 @@ public class ExtentPDFReporterConfig extends AbstractConfiguration {
 		private static final Color systemNameColor = Color.BLACK;
 		private static final Color systemValueColor = Color.BLACK;
 		private static final Color exceptionAttributeColor = Color.RED;
-		private static final Color attributeTestStatusColor = Color.BLUE;
 		private static final Color testNameColor = Color.RED;
 		private static final Color testTimesColor = Color.BLUE;
 		private static final Color testTimeStampColor = Color.BLACK;
