@@ -39,7 +39,7 @@ public class DashboardDonutChartDisplay extends Display {
 	@Override
 	public void display() {
 
-		strategyDisplay = AnalysisStrategyDisplay.displaySettings((report.getStats().getAnalysisStrategy()));
+		strategyDisplay = AnalysisStrategyDisplay.displaySettings(report);
 
 		createFirstChartTitle();
 		createSecondChartTitle();

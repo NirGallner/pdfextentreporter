@@ -50,7 +50,7 @@ public class DashboardStatisticsDisplay extends Display {
 	@Override
 	public void display() {
 
-		strategyDisplay = AnalysisStrategyDisplay.displaySettings((report.getStats().getAnalysisStrategy()));
+		strategyDisplay = AnalysisStrategyDisplay.displaySettings(report);
 
 		createTestStartedTextBox();
 		createTestFinishedTextBox();

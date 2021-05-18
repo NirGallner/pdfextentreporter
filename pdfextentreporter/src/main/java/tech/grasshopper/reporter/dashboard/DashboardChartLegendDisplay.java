@@ -48,7 +48,7 @@ public class DashboardChartLegendDisplay extends Display {
 		statusColor.put(WARNING, config.getWarnColor());
 		statusColor.put(INFO, config.getInfoColor());
 
-		strategyDisplay = AnalysisStrategyDisplay.displaySettings((report.getStats().getAnalysisStrategy()));
+		strategyDisplay = AnalysisStrategyDisplay.displaySettings(report);
 
 		createFirstChartDataBox();
 		createSecondChartDataBox();

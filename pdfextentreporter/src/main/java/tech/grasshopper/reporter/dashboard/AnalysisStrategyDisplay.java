@@ -1,6 +1,6 @@
 package tech.grasshopper.reporter.dashboard;
 
-import com.aventstack.extentreports.AnalysisStrategy;
+import com.aventstack.extentreports.model.Report;
 
 public enum AnalysisStrategyDisplay {
 
@@ -116,16 +116,20 @@ public enum AnalysisStrategyDisplay {
 		return 170;
 	}
 
-	public static AnalysisStrategyDisplay displaySettings(AnalysisStrategy strategy) {
-		switch (strategy) {
+	public static AnalysisStrategyDisplay displaySettings(Report report) {
+
+		if (report.isBDD())
+			return BDD;
+
+		switch (report.getStats().getAnalysisStrategy()) {
 		case BDD:
-			return AnalysisStrategyDisplay.BDD;
+			return BDD;
 		case SUITE:
-			return AnalysisStrategyDisplay.SUITE;
+			return SUITE;
 		case CLASS:
-			return AnalysisStrategyDisplay.CLASS;
+			return CLASS;
 		default:
-			return AnalysisStrategyDisplay.TEST;
+			return TEST;
 		}
 	}
 }
