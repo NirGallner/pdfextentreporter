@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>tech.grasshopper</groupId>
 	<artifactId>pdfextentreporter</artifactId>
-	<version>0.1</version>
+	<version>0.2</version>
 	<description>Creating Extent reports in PDF format</description>
 
 	<properties>
