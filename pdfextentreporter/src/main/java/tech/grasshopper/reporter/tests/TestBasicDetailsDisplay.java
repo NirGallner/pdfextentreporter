@@ -41,12 +41,14 @@ public class TestBasicDetailsDisplay extends Display implements TestIndent, Dest
 	private static final PDFont CONTENT_FONT = ReportFont.BOLD_ITALIC_FONT;
 
 	private static final int NAME_FONT_SIZE = 15;
+	private static final int DESCRIPTION_FONT_SIZE = 11;
 	private static final int TIMES_FONT_SIZE = 12;
 	private static final int ATTRIBUTE_FONT_SIZE = 12;
 
 	private static final float PADDING = 5f;
 	private static final float WIDTH = 500f;
 	private static final float NAME_HEIGHT = 20f;
+	private static final float DESCRIPTION_HEIGHT = 20f;
 	private static final float TIMES_HEIGHT = 20f;
 	private static final float ATTRIBUTE_HEIGHT = 20f;
 	private static final float GAP_HEIGHT = 5f;
@@ -72,6 +74,7 @@ public class TestBasicDetailsDisplay extends Display implements TestIndent, Dest
 
 		createTableBuilder();
 		createNameRow();
+		createDescriptionRow();
 		createDurationRow();
 		createAttributesRow();
 		drawTable();
@@ -86,9 +89,20 @@ public class TestBasicDetailsDisplay extends Display implements TestIndent, Dest
 	private void createNameRow() {
 		tableBuilder.addRow(Row.builder()
 				.add(TextCell.builder().minHeight(NAME_HEIGHT).fontSize(NAME_FONT_SIZE)
-						.text(textSanitizer.sanitizeText(test.getName())).wordBreak(true)
-						.lineSpacing(MULTI_LINE_SPACING).textColor(config.getTestNameColor()).build())
+						.text(textSanitizer.sanitizeText(test.getName())).lineSpacing(MULTI_LINE_SPACING)
+						.textColor(config.getTestNameColor()).build())
 				.build());
+	}
+
+	private void createDescriptionRow() {
+		if (test.getDescription() != null && !test.getDescription().isEmpty()) {
+			numberOfRowsToRepeat++;
+			tableBuilder.addRow(Row.builder()
+					.add(TextCell.builder().minHeight(DESCRIPTION_HEIGHT).fontSize(DESCRIPTION_FONT_SIZE)
+							.text(textSanitizer.sanitizeText(test.getDescription())).lineSpacing(MULTI_LINE_SPACING)
+							.textColor(config.getTestDescriptionColor()).build())
+					.build());
+		}
 	}
 
 	private void createDurationRow() {
@@ -116,6 +130,9 @@ public class TestBasicDetailsDisplay extends Display implements TestIndent, Dest
 		createAttributeText(test.getAuthorSet(), AttributeType.AUTHOR, paraBuilder);
 		createAttributeText(test.getDeviceSet(), AttributeType.DEVICE, paraBuilder);
 
+		if (!test.getCategorySet().isEmpty() || !test.getAuthorSet().isEmpty() || !test.getDeviceSet().isEmpty())
+			numberOfRowsToRepeat++;
+
 		tableBuilder.addRow(
 				Row.builder().fontSize(ATTRIBUTE_FONT_SIZE).add(ParagraphCell.builder().paragraph(paraBuilder.build())
 						.minHeight(ATTRIBUTE_HEIGHT).lineSpacing(MULTI_LINE_SPACING).build()).build());
@@ -124,7 +141,6 @@ public class TestBasicDetailsDisplay extends Display implements TestIndent, Dest
 	private void createAttributeText(Set<? extends NamedAttribute> attributes, AttributeType type,
 			ParagraphBuilder paraBuilder) {
 		if (!attributes.isEmpty()) {
-			numberOfRowsToRepeat = 3;
 			String atts = attributes.stream().map(a -> textSanitizer.sanitizeText(a.getName()))
 					.collect(Collectors.joining(" / ", "/ ", " /"));
 			paraBuilder.append(StyledText.builder().text(atts).color(config.attributeHeaderColor(type)).build());

@@ -58,6 +58,7 @@ public class ExtentPDFReporterConfig extends AbstractConfiguration {
 	private String exceptionAttributeColor;
 
 	private String testNameColor;
+	private String testDescriptionColor;
 	private String testTimesColor;
 	private String testTimeStampColor;
 	private String testExceptionColor;
@@ -191,6 +192,10 @@ public class ExtentPDFReporterConfig extends AbstractConfiguration {
 		return createColor(testNameColor, Defaults.testNameColor);
 	}
 
+	public Color getTestDescriptionColor() {
+		return createColor(testDescriptionColor, Defaults.testDescriptionColor);
+	}
+
 	public Color getTestTimesColor() {
 		return createColor(testTimesColor, Defaults.testTimesColor);
 	}
@@ -260,6 +265,7 @@ public class ExtentPDFReporterConfig extends AbstractConfiguration {
 		private static final Color systemValueColor = Color.BLACK;
 		private static final Color exceptionAttributeColor = Color.RED;
 		private static final Color testNameColor = Color.RED;
+		private static final Color testDescriptionColor = Color.BLACK;
 		private static final Color testTimesColor = Color.BLUE;
 		private static final Color testTimeStampColor = Color.BLACK;
 		private static final Color testExceptionColor = Color.RED;
