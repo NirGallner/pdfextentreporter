@@ -74,9 +74,9 @@ public class TestBasicDetailsDisplay extends Display implements TestIndent, Dest
 
 		createTableBuilder();
 		createNameRow();
-		createDescriptionRow();
 		createDurationRow();
 		createAttributesRow();
+		createDescriptionRow();
 		drawTable();
 	}
 
@@ -92,17 +92,6 @@ public class TestBasicDetailsDisplay extends Display implements TestIndent, Dest
 						.text(textSanitizer.sanitizeText(test.getName())).lineSpacing(MULTI_LINE_SPACING)
 						.textColor(config.getTestNameColor()).build())
 				.build());
-	}
-
-	private void createDescriptionRow() {
-		if (test.getDescription() != null && !test.getDescription().isEmpty()) {
-			numberOfRowsToRepeat++;
-			tableBuilder.addRow(Row.builder()
-					.add(TextCell.builder().minHeight(DESCRIPTION_HEIGHT).fontSize(DESCRIPTION_FONT_SIZE)
-							.text(textSanitizer.sanitizeText(test.getDescription())).lineSpacing(MULTI_LINE_SPACING)
-							.textColor(config.getTestDescriptionColor()).build())
-					.build());
-		}
 	}
 
 	private void createDurationRow() {
@@ -144,6 +133,17 @@ public class TestBasicDetailsDisplay extends Display implements TestIndent, Dest
 			String atts = attributes.stream().map(a -> textSanitizer.sanitizeText(a.getName()))
 					.collect(Collectors.joining(" / ", "/ ", " /"));
 			paraBuilder.append(StyledText.builder().text(atts).color(config.attributeHeaderColor(type)).build());
+		}
+	}
+
+	private void createDescriptionRow() {
+		if (test.getDescription() != null && !test.getDescription().isEmpty()) {
+			numberOfRowsToRepeat++;
+			tableBuilder.addRow(Row.builder()
+					.add(TextCell.builder().minHeight(DESCRIPTION_HEIGHT).fontSize(DESCRIPTION_FONT_SIZE)
+							.text(textSanitizer.sanitizeText(test.getDescription())).lineSpacing(MULTI_LINE_SPACING)
+							.textColor(config.getTestDescriptionColor()).build())
+					.build());
 		}
 	}
 
