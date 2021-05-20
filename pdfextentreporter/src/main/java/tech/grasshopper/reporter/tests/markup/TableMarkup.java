@@ -27,8 +27,6 @@ public class TableMarkup extends MarkupDisplay {
 
 	private int maxTableColumnCount;
 
-	private int maxTableRowCount;
-
 	@Override
 	public AbstractCell displayDetails() {
 
@@ -47,23 +45,12 @@ public class TableMarkup extends MarkupDisplay {
 		float[] columnWidths = new float[cols];
 		Arrays.fill(columnWidths, colWidth);
 
-		boolean maxRows = false;
-		int rowCnt = rows.size();
-
-		if (maxTableRowCount > 0) {
-			maxRows = rows.size() > maxTableRowCount ? true : false;
-			rowCnt = rows.size() > maxTableRowCount ? maxTableRowCount : rows.size();
-		}
-
 		TableBuilder tableBuilder = Table.builder().addColumnsOfWidth(columnWidths).fontSize(LOG_FONT_SIZE)
 				.font(LOG_FONT).borderWidth(BORDER_WIDTH).borderColor(Color.LIGHT_GRAY).wordBreak(true);
 
-		int i = 1;
 		for (Element row : rows) {
 			if (row.children().isEmpty())
 				continue;
-			if (i > rowCnt)
-				break;
 			RowBuilder rowBuilder = Row.builder();
 
 			int j = 1;
@@ -75,7 +62,6 @@ public class TableMarkup extends MarkupDisplay {
 				j++;
 			}
 			tableBuilder.addRow(rowBuilder.build());
-			i++;
 		}
 
 		String tableCounts = "";
@@ -84,19 +70,7 @@ public class TableMarkup extends MarkupDisplay {
 		if (maxCols) {
 			tableCounts = maxTableColumnCount + " columns";
 			tableSettings = "'maxTableColumnCount'";
-		}
 
-		if (maxRows) {
-			if (maxCols) {
-				tableCounts = maxTableColumnCount + " columns and " + maxTableRowCount + " rows";
-				tableSettings = "'maxTableColumnCount' and 'maxTableRowCount'";
-			} else {
-				tableCounts = maxTableRowCount + " rows";
-				tableSettings = "'maxTableRowCount' ";
-			}
-		}
-
-		if (maxCols || maxRows) {
 			tableBuilder.addRow(Row.builder()
 					.add(TextCell.builder().colSpan(cols)
 							.text("Only first " + tableCounts + " are shown. Change this from the " + tableSettings

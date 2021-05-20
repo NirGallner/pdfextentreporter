@@ -63,9 +63,7 @@ public class ExtentPDFReporterConfig extends AbstractConfiguration {
 	private String testTimeStampColor;
 	private String testExceptionColor;
 
-	private int maxCodeBlockCount;
 	private int maxTableColumnCount;
-	private int maxTableRowCount;
 
 	private int testMaxIndentLevel;
 
@@ -217,18 +215,10 @@ public class ExtentPDFReporterConfig extends AbstractConfiguration {
 		}
 	}
 
-	public int getMaxCodeBlockCount() {
-		return maxCodeBlockCount;
-	}
-
 	public int getMaxTableColumnCount() {
 		if (maxTableColumnCount == 0)
 			maxTableColumnCount = Defaults.maxTableColumnCount;
 		return maxTableColumnCount;
-	}
-
-	public int getMaxTableRowCount() {
-		return maxTableRowCount;
 	}
 
 	public int getTestMaxIndentLevel() {
@@ -269,7 +259,7 @@ public class ExtentPDFReporterConfig extends AbstractConfiguration {
 		private static final Color testTimesColor = Color.BLUE;
 		private static final Color testTimeStampColor = Color.BLACK;
 		private static final Color testExceptionColor = Color.RED;
-		private static final int maxTableColumnCount = 3;
+		private static final int maxTableColumnCount = 5;
 		private static final int testMaxIndentLevel = 2;
 	}
 

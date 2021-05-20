@@ -21,8 +21,6 @@ public class CodeBlockMarkup extends MarkupDisplay {
 
 	private float width;
 
-	private int maxCodeBlockCount;
-
 	@Override
 	public AbstractCell displayDetails() {
 		return ParagraphCell.builder().paragraph(codeDetails()).width(width).padding(5f).lineSpacing(1.1f).build();

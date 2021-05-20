@@ -34,8 +34,7 @@ public class TestMarkup {
 		element = doc.selectFirst("body > table[class*=\"markup-table table\"]");
 		if (element != null) {
 			return TableMarkup.builder().element(element).textColor(config.statusColor(log.getStatus()))
-					.maxTableColumnCount(config.getMaxTableColumnCount()).maxTableRowCount(config.getMaxTableRowCount())
-					.width(width).build().displayDetails();
+					.maxTableColumnCount(config.getMaxTableColumnCount()).width(width).build().displayDetails();
 		}
 
 		Elements elements = doc.select("body > ol > li");
@@ -54,7 +53,7 @@ public class TestMarkup {
 		elements = doc.select("body textarea[class*=\"code-block\"]");
 		if (elements.size() > 0) {
 			return CodeBlockMarkup.builder().elements(elements).textColor(config.statusColor(log.getStatus()))
-					.maxCodeBlockCount(config.getMaxCodeBlockCount()).width(width).build().displayDetails();
+					.width(width).build().displayDetails();
 		}
 
 		if (html.contains("JSONTree")) {
