@@ -1,19 +1,18 @@
 package tech.grasshopper.reporter.tests.markup;
 
 import java.awt.Color;
+import java.util.Collections;
 
 import org.jsoup.nodes.Element;
-import org.vandeseer.easytable.structure.Row;
-import org.vandeseer.easytable.structure.Table;
-import org.vandeseer.easytable.structure.Table.TableBuilder;
 import org.vandeseer.easytable.structure.cell.AbstractCell;
-import org.vandeseer.easytable.structure.cell.TextCell;
+import org.vandeseer.easytable.structure.cell.paragraph.ParagraphCell;
+import org.vandeseer.easytable.structure.cell.paragraph.ParagraphCell.Paragraph;
+import org.vandeseer.easytable.structure.cell.paragraph.ParagraphCell.Paragraph.ParagraphBuilder;
+import org.vandeseer.easytable.structure.cell.paragraph.StyledText;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
-import tech.grasshopper.pdf.structure.cell.TableWithinTableCell;
-import tech.grasshopper.reporter.font.ReportFont;
 
 @Data
 @SuperBuilder
@@ -26,40 +25,27 @@ public class CodeBlockMarkup extends MarkupDisplay {
 
 	@Override
 	public AbstractCell displayDetails() {
-		return TableWithinTableCell.builder().table(codeTable()).build();
+		return ParagraphCell.builder().paragraph(codeDetails()).width(width).padding(5f).lineSpacing(1.1f).build();
 	}
 
-	private Table codeTable() {
-		boolean maxCodes = false;
-		int count = elements.size();
+	private Paragraph codeDetails() {
+		ParagraphBuilder paragraphBuilder = Paragraph.builder();
 
-		if (maxCodeBlockCount > 0) {
-			maxCodes = elements.size() > maxCodeBlockCount ? true : false;
-			count = elements.size() > maxCodeBlockCount ? maxCodeBlockCount : elements.size();
-		}
-
-		TableBuilder tableBuilder = Table.builder().addColumnsOfWidth(width).fontSize(LOG_FONT_SIZE).font(LOG_FONT)
-				.borderWidth(BORDER_WIDTH).borderColor(Color.LIGHT_GRAY).wordBreak(true).padding(5f);
-
-		int i = 1;
+		int count = 1;
 		for (Element e : elements) {
-			if (i > count)
-				break;
-			tableBuilder.addRow(Row.builder().add(TextCell.builder().text(textSanitizer.sanitizeText(e.text()))
-					.textColor(textColor).lineSpacing(MULTILINE_SPACING).build()).build());
-			i++;
+			StyledText text = StyledText.builder().fontSize((float) LOG_FONT_SIZE).font(LOG_FONT).color(textColor)
+					.text(textSanitizer.sanitizeText(e.text())).build();
+			paragraphBuilder.append(text);
+
+			if (count < elements.size()) {
+				paragraphBuilder.appendNewLine(10f);
+				paragraphBuilder.append(StyledText.builder().fontSize(12f).font(LOG_FONT).color(Color.GRAY)
+						.text(String.join("", Collections.nCopies(92, "-"))).build());
+				paragraphBuilder.appendNewLine(10f);
+			}
+			count++;
 		}
 
-		if (maxCodes) {
-			tableBuilder
-					.addRow(Row.builder()
-							.add(TextCell.builder().text("Only first " + maxCodeBlockCount
-									+ " code blocks are shown. Change this from the 'maxCodeBlockCount' setting.")
-									.minHeight(15f).font(ReportFont.REGULAR_FONT).fontSize(10).textColor(Color.RED)
-									.lineSpacing(MULTILINE_SPACING).build())
-							.build());
-		}
-
-		return tableBuilder.build();
+		return paragraphBuilder.build();
 	}
 }
