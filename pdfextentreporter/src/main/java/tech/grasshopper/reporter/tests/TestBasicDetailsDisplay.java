@@ -24,6 +24,7 @@ import lombok.Builder.Default;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
+import tech.grasshopper.pdf.structure.cell.TextLabelCell;
 import tech.grasshopper.reporter.context.AttributeType;
 import tech.grasshopper.reporter.destination.Destination;
 import tech.grasshopper.reporter.destination.DestinationAware;
@@ -46,7 +47,8 @@ public class TestBasicDetailsDisplay extends Display implements TestIndent, Dest
 	private static final int ATTRIBUTE_FONT_SIZE = 12;
 
 	private static final float PADDING = 5f;
-	private static final float WIDTH = 500f;
+	private static final float NAME_WIDTH = 450f;
+	private static final float STATUS_WIDTH = 50f;
 	private static final float NAME_HEIGHT = 20f;
 	private static final float DESCRIPTION_HEIGHT = 20f;
 	private static final float TIMES_HEIGHT = 20f;
@@ -81,9 +83,11 @@ public class TestBasicDetailsDisplay extends Display implements TestIndent, Dest
 	}
 
 	private void createTableBuilder() {
-		tableBuilder = Table.builder().addColumnsOfWidth(WIDTH).padding(PADDING).borderWidth(BORDER_WIDTH)
-				.font(ReportFont.BOLD_ITALIC_FONT).horizontalAlignment(HorizontalAlignment.LEFT)
-				.verticalAlignment(VerticalAlignment.MIDDLE);
+		tableBuilder = Table.builder()
+				.addColumnsOfWidth(NAME_WIDTH - (calculateIndent(test.getLevel(), config.getTestMaxIndentLevel())
+						* TestDetails.LEVEL_X_INDENT), STATUS_WIDTH)
+				.padding(PADDING).borderWidth(BORDER_WIDTH).font(ReportFont.BOLD_ITALIC_FONT)
+				.horizontalAlignment(HorizontalAlignment.LEFT).verticalAlignment(VerticalAlignment.MIDDLE);
 	}
 
 	private void createNameRow() {
@@ -91,12 +95,18 @@ public class TestBasicDetailsDisplay extends Display implements TestIndent, Dest
 				.add(TextCell.builder().minHeight(NAME_HEIGHT).fontSize(NAME_FONT_SIZE)
 						.text(textSanitizer.sanitizeText(test.getName())).lineSpacing(MULTI_LINE_SPACING)
 						.textColor(config.getTestNameColor()).build())
+				.add(TextLabelCell.builder().text(test.getStatus().toString())
+						.labelColor(config.statusColor(test.getStatus())).fontSize(12).font(ReportFont.BOLD_FONT)
+						.padding(0f).build())
 				.build());
 	}
 
 	private void createDurationRow() {
-		tableBuilder.addRow(Row.builder().add(TextCell.builder().minHeight(TIMES_HEIGHT).fontSize(TIMES_FONT_SIZE)
-				.text(testDuration()).textColor(config.getTestTimesColor()).build()).build());
+		tableBuilder
+				.addRow(Row
+						.builder().add(TextCell.builder().minHeight(TIMES_HEIGHT).fontSize(TIMES_FONT_SIZE)
+								.text(testDuration()).textColor(config.getTestTimesColor()).colSpan(2).build())
+						.build());
 	}
 
 	private String testDuration() {
@@ -124,7 +134,7 @@ public class TestBasicDetailsDisplay extends Display implements TestIndent, Dest
 
 		tableBuilder.addRow(
 				Row.builder().fontSize(ATTRIBUTE_FONT_SIZE).add(ParagraphCell.builder().paragraph(paraBuilder.build())
-						.minHeight(ATTRIBUTE_HEIGHT).lineSpacing(MULTI_LINE_SPACING).build()).build());
+						.minHeight(ATTRIBUTE_HEIGHT).lineSpacing(MULTI_LINE_SPACING).colSpan(2).build()).build());
 	}
 
 	private void createAttributeText(Set<? extends NamedAttribute> attributes, AttributeType type,
@@ -142,7 +152,7 @@ public class TestBasicDetailsDisplay extends Display implements TestIndent, Dest
 			tableBuilder.addRow(Row.builder()
 					.add(TextCell.builder().minHeight(DESCRIPTION_HEIGHT).fontSize(DESCRIPTION_FONT_SIZE)
 							.text(textSanitizer.sanitizeText(test.getDescription())).lineSpacing(MULTI_LINE_SPACING)
-							.textColor(config.getTestDescriptionColor()).build())
+							.textColor(config.getTestDescriptionColor()).colSpan(2).build())
 					.build());
 		}
 	}
