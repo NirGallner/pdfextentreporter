@@ -30,24 +30,28 @@ public class AttributeSummary extends Section implements PageHeaderAware {
 				.type(AttributeType.CATEGORY).report(report).annotations(annotations).ylocation(destinationYLocation)
 				.build();
 		categories.display();
-		createAttributeDestination(categories);
+		if (report.getCategoryCtx().hasItems())
+			createAttributeDestination(categories);
 
 		ContextAttributeSummary authors = ContextAttributeSummary.builder().config(config).document(document)
 				.type(AttributeType.AUTHOR).report(report).annotations(annotations).ylocation(categories.getYlocation())
 				.build();
 		authors.display();
-		createAttributeDestination(authors);
+		if (report.getAuthorCtx().hasItems())
+			createAttributeDestination(authors);
 
 		ContextAttributeSummary devices = ContextAttributeSummary.builder().config(config).document(document)
 				.type(AttributeType.DEVICE).report(report).annotations(annotations).ylocation(authors.getYlocation())
 				.build();
 		devices.display();
-		createAttributeDestination(devices);
+		if (report.getDeviceCtx().hasItems())
+			createAttributeDestination(devices);
 
 		SystemAttributeSummary systems = SystemAttributeSummary.builder().config(config).document(document)
 				.type(AttributeType.SYSTEM).report(report).ylocation(devices.getYlocation()).build();
 		systems.display();
-		createAttributeDestination(systems);
+		if (!report.getSystemEnvInfo().isEmpty())
+			createAttributeDestination(systems);
 	}
 
 	private void createAttributeDestination(AttributeSummaryDisplay summaryDisplay) {
