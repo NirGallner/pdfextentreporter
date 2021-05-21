@@ -100,7 +100,7 @@ public class AttributeTestStatusDetailsDisplay extends Display {
 
 	private void drawTestDetailsTable() {
 		TableCreator table = TableCreator.builder().tableBuilder(tableBuilder).document(document).startX(xlocation)
-				.startY(ylocation).repeatRows(1).build();
+				.startY(ylocation).build();
 		table.displayTable();
 
 		ylocation = table.getFinalY() - TABLE_GAP_HEIGHT;
