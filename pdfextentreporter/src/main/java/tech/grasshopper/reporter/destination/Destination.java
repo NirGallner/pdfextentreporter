@@ -39,6 +39,8 @@ public class Destination {
 
 		private List<Destination> testDestinations = new ArrayList<>();
 
+		private List<Destination> topLevelTestDestinations = new ArrayList<>();
+
 		private List<Destination> attributeDetailDestinations = new ArrayList<>();
 
 		private List<Destination> testMediaDestinations = new ArrayList<>();
@@ -49,6 +51,10 @@ public class Destination {
 
 		public void addTestDestination(Destination destination) {
 			testDestinations.add(destination);
+		}
+
+		public void addTopLevelTestDestination(Destination destination) {
+			topLevelTestDestinations.add(destination);
 		}
 
 		public void addAttributeDetailDestination(Destination destination) {

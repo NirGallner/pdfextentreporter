@@ -118,7 +118,8 @@ public class Bookmark {
 
 	private void createTestsOutline() {
 		if (!destinationStore.getTestDestinations().isEmpty())
-			outline.addLast(createChapterOutlineItems(destinationStore.getTestDestinations(), TESTS_BOOKMARK_TEXT));
+			outline.addLast(
+					createChapterOutlineItems(destinationStore.getTopLevelTestDestinations(), TESTS_BOOKMARK_TEXT));
 	}
 
 	private PDOutlineItem createOutlineItem(Destination destination, String title) {

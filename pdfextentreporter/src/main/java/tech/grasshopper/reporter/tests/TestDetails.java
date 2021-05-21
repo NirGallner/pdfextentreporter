@@ -9,6 +9,7 @@ import lombok.Builder.Default;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
+import tech.grasshopper.reporter.destination.Destination;
 import tech.grasshopper.reporter.header.PageHeader;
 import tech.grasshopper.reporter.header.PageHeaderAware;
 import tech.grasshopper.reporter.structure.Display;
@@ -81,7 +82,11 @@ public class TestDetails extends Section implements PageHeaderAware {
 	}
 
 	private void createTestDestination(TestBasicDetailsDisplay testDisplay) {
-		destinations.addTestDestination(testDisplay.createDestination());
+		Destination destination = testDisplay.createDestination();
+		destinations.addTestDestination(destination);
+
+		if (testDisplay.getTest().getLevel() == 0)
+			destinations.addTopLevelTestDestination(destination);
 	}
 
 	@Override
