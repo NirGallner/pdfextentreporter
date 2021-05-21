@@ -69,7 +69,8 @@ public class ReportGenerator {
 		AnnotationProcessor.builder().annotations(annotations).destinations(destinations).config(config).build()
 				.processAnnotations();
 
-		Bookmark bookmark = Bookmark.builder().destinationStore(destinations).config(config).build();
+		Bookmark bookmark = Bookmark.builder().destinationStore(destinations).config(config)
+				.report(report).build();
 		PDDocumentOutline outline = bookmark.createDocumentOutline();
 
 		document.getDocumentCatalog().setDocumentOutline(outline);

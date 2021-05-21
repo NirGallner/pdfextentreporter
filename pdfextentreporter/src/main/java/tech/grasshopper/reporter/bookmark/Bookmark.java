@@ -10,10 +10,13 @@ import org.apache.pdfbox.pdmodel.interactive.documentnavigation.destination.PDDe
 import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDDocumentOutline;
 import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDOutlineItem;
 
+import com.aventstack.extentreports.model.Report;
+
 import lombok.Builder;
 import lombok.Data;
 import tech.grasshopper.reporter.config.ExtentPDFReporterConfig;
 import tech.grasshopper.reporter.context.AttributeType;
+import tech.grasshopper.reporter.dashboard.AnalysisStrategyDisplay;
 import tech.grasshopper.reporter.destination.Destination;
 import tech.grasshopper.reporter.destination.Destination.DestinationStore;
 
@@ -21,17 +24,20 @@ import tech.grasshopper.reporter.destination.Destination.DestinationStore;
 @Builder
 public class Bookmark {
 
-	public final static String SUMMARY_BOOKMARK_TEXT = "SUMMARY";
+	private final static String SUMMARY_BOOKMARK_TEXT = "SUMMARY";
 	public final static String DASHBOARD_BOOKMARK_TEXT = "DASHBOARD";
-	public final static String ATTRIBUTES_BOOKMARK_TEXT = "ATTRIBUTES";
-	public final static String TESTS_BOOKMARK_TEXT = "TESTS";
-	public final static String MEDIAS_BOOKMARK_TEXT = "MEDIAS";
+	private final static String ATTRIBUTES_BOOKMARK_TEXT = "ATTRIBUTES";
+	private final static String NON_BDD_BOOKMARK_TEXT = "TESTS";
+	private final static String BDD_BOOKMARK_TEXT = "FEATURES";
+	private final static String MEDIAS_BOOKMARK_TEXT = "MEDIAS";
 
 	private final PDDocumentOutline outline = new PDDocumentOutline();
 
 	private DestinationStore destinationStore;
 
 	private ExtentPDFReporterConfig config;
+
+	private Report report;
 
 	public PDDocumentOutline createDocumentOutline() {
 
@@ -117,9 +123,13 @@ public class Bookmark {
 	}
 
 	private void createTestsOutline() {
+		String heading = NON_BDD_BOOKMARK_TEXT;
+
+		if (AnalysisStrategyDisplay.displaySettings(report) == AnalysisStrategyDisplay.BDD)
+			heading = BDD_BOOKMARK_TEXT;
+
 		if (!destinationStore.getTestDestinations().isEmpty())
-			outline.addLast(
-					createChapterOutlineItems(destinationStore.getTopLevelTestDestinations(), TESTS_BOOKMARK_TEXT));
+			outline.addLast(createChapterOutlineItems(destinationStore.getTopLevelTestDestinations(), heading));
 	}
 
 	private PDOutlineItem createOutlineItem(Destination destination, String title) {
