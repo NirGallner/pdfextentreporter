@@ -100,8 +100,7 @@ public class TestLogsDisplay extends Display implements TestIndent {
 			boolean multipleLogDetails = logWithMultipleDetails(l);
 			AbstractCell detailsCell = null, exceptionCell = null, mediaCell = null;
 
-			if (!l.getDetails().isEmpty())
-				detailsCell = createDetailsMarkupCell(l);
+			detailsCell = createDetailsMarkupCell(l);
 
 			if (l.hasException()) {
 				exceptionCell = createExceptionCell(l);
