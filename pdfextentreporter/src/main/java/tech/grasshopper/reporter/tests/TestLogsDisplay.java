@@ -1,6 +1,7 @@
 package tech.grasshopper.reporter.tests;
 
 import java.awt.Color;
+import java.util.Arrays;
 
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.vandeseer.easytable.settings.HorizontalAlignment;
@@ -96,25 +97,26 @@ public class TestLogsDisplay extends Display implements TestIndent {
 	private void createLogRows() {
 		test.getLogs().forEach(l -> {
 
-			AbstractCell detailCell = TextCell.builder().text(textSanitizer.sanitizeText(l.getDetails()))
-					.textColor(config.statusColor(l.getStatus())).lineSpacing(LOGS_TABLE_CONTENT_MULTILINE_SPACING)
-					.build();
+			boolean multipleLogDetails = logWithMultipleDetails(l);
+			AbstractCell detailsCell = null, exceptionCell = null, mediaCell = null;
+
+			if (!l.getDetails().isEmpty())
+				detailsCell = createDetailsMarkupCell(l);
+
+			if (l.hasException()) {
+				exceptionCell = createExceptionCell(l);
+				if (!multipleLogDetails)
+					detailsCell = exceptionCell;
+			}
 
 			if (l.hasMedia()) {
-
-				detailCell = createMediaCell(l);
-			} else if (l.hasException()) {
-
-				detailCell = TestStackTrace.builder().log(l).font(LOGS_STACK_TRACE_TABLE_CONTENT_FONT)
-						.color(config.getTestExceptionColor())
-						.width(LOGS_DETAILS_WIDTH - (test.getLevel() * TestDetails.LEVEL_X_INDENT) - (2 * PADDING))
-						.height(LOGS_DETAILS_HEIGHT).fontSize(LOGS_STACK_TRACE_TABLE_CONTENT_FONT_SIZE).padding(PADDING)
-						.build().createStackTraceCell();
-			} else if (TestMarkup.isMarkup(l.getDetails())) {
-
-				detailCell = TestMarkup.builder().log(l).width(LOGS_DETAILS_WIDTH - (2 * PADDING)).config(config)
-						.build().createMarkupCell();
+				mediaCell = createMediaCell(l);
+				if (!multipleLogDetails)
+					detailsCell = mediaCell;
 			}
+
+			if (multipleLogDetails)
+				detailsCell = createMultipleDetailsLogCell(l, detailsCell, exceptionCell, mediaCell);
 
 			Row row = Row.builder().font(LOGS_TABLE_CONTENT_FONT).fontSize(LOGS_TABLE_CONTENT_FONT_SIZE).wordBreak(true)
 					.padding(PADDING)
@@ -123,10 +125,39 @@ public class TestLogsDisplay extends Display implements TestIndent {
 					.add(TextCell.builder()
 							.text(DateUtil.formatTimeAMPM(DateUtil.convertToLocalDateTimeFromDate(l.getTimestamp())))
 							.textColor(config.getTestTimeStampColor()).build())
-					.add(detailCell).build();
+					.add(detailsCell).build();
 
 			tableBuilder.addRow(row);
 		});
+	}
+
+	private AbstractCell createMultipleDetailsLogCell(Log log, AbstractCell detailsCell, AbstractCell exceptionCell,
+			AbstractCell mediaCell) {
+		TableBuilder multipleDetailsBuilder = Table.builder()
+				.addColumnsOfWidth(LOGS_DETAILS_WIDTH - (test.getLevel() * TestDetails.LEVEL_X_INDENT)).borderWidth(0f);
+
+		if (detailsCell != null)
+			multipleDetailsBuilder.addRow(Row.builder().add(detailsCell).build());
+
+		if (exceptionCell != null)
+			multipleDetailsBuilder.addRow(Row.builder().add(exceptionCell).build());
+
+		if (mediaCell != null)
+			multipleDetailsBuilder.addRow(Row.builder().add(mediaCell).build());
+
+		return TableWithinTableCell.builder().table(multipleDetailsBuilder.build()).paddingTop(2f).paddingBottom(2f)
+				.paddingLeft(0f).paddingRight(0f).build();
+	}
+
+	private AbstractCell createDetailsMarkupCell(Log log) {
+		AbstractCell detailMarkupCell = TextCell.builder().text(textSanitizer.sanitizeText(log.getDetails()))
+				.textColor(config.statusColor(log.getStatus())).lineSpacing(LOGS_TABLE_CONTENT_MULTILINE_SPACING)
+				.build();
+
+		if (TestMarkup.isMarkup(log.getDetails()))
+			detailMarkupCell = TestMarkup.builder().log(log).width(LOGS_DETAILS_WIDTH - (2 * PADDING)).config(config)
+					.build().createMarkupCell();
+		return detailMarkupCell;
 	}
 
 	private AbstractCell createMediaCell(Log log) {
@@ -153,11 +184,27 @@ public class TestLogsDisplay extends Display implements TestIndent {
 					.height(LOGS_MEDIA_HEIGHT).padding(PADDING).build().createImageCell();
 	}
 
+	private AbstractCell createExceptionCell(Log log) {
+		return TestStackTrace.builder().log(log).font(LOGS_STACK_TRACE_TABLE_CONTENT_FONT)
+				.color(config.getTestExceptionColor())
+				.width(LOGS_DETAILS_WIDTH - (test.getLevel() * TestDetails.LEVEL_X_INDENT) - (2 * PADDING))
+				.height(LOGS_DETAILS_HEIGHT).fontSize(LOGS_STACK_TRACE_TABLE_CONTENT_FONT_SIZE).padding(PADDING).build()
+				.createStackTraceCell();
+	}
+
 	private void drawTable() {
 		TableCreator table = TableCreator.builder().tableBuilder(tableBuilder).document(document).startX(xlocation)
-				.startY(ylocation).repeatRows(1).splitRow(true).build();
+				.startY(ylocation).splitRow(true).build();
 		table.displayTable();
 
 		ylocation = table.getFinalY() - GAP_HEIGHT;
+	}
+
+	private boolean logWithMultipleDetails(Log log) {
+		Boolean[] detailPresent = { !log.getDetails().isEmpty(), log.hasException(), log.hasMedia() };
+
+		if (Arrays.stream(detailPresent).filter(d -> d == true).count() > 1)
+			return true;
+		return false;
 	}
 }
