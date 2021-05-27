@@ -21,16 +21,12 @@ import tech.grasshopper.reporter.structure.Section;
 public class MediaSummary extends Section implements PageHeaderAware {
 
 	@Default
-	private float yLocation = Display.CONTENT_START_Y;
+	protected float yLocation = Display.CONTENT_START_Y;
 
 	@Override
 	public void createSection() {
 
-		List<Test> allTests = new ArrayList<>();
-		report.getTestList().forEach(t -> {
-			allTests.add(t);
-			collectTestNodes(t, allTests);
-		});
+		List<Test> allTests = collectRelevantTests();
 
 		if (!checkDataValidity(allTests))
 			return;
@@ -39,17 +35,7 @@ public class MediaSummary extends Section implements PageHeaderAware {
 		createPage();
 
 		for (Test test : allTests) {
-			boolean containsMedia = false;
-
-			if (!test.getMedia().isEmpty())
-				containsMedia = true;
-
-			if (!containsMedia) {
-				for (Log log : test.getLogs()) {
-					if (log.hasMedia())
-						containsMedia = true;
-				}
-			}
+			boolean containsMedia = doesTestContainMedia(test);
 
 			if (containsMedia) {
 				ExpandedMediaDisplay expandedMediaDisplay = ExpandedMediaDisplay.builder().document(document)
@@ -61,7 +47,7 @@ public class MediaSummary extends Section implements PageHeaderAware {
 		}
 	}
 
-	private void createMediaDestination(ExpandedMediaDisplay expandedMediaDisplay) {
+	protected void createMediaDestination(ExpandedMediaDisplay expandedMediaDisplay) {
 		destinations.addTestMediaDestination(expandedMediaDisplay.createDestination());
 	}
 
@@ -70,21 +56,35 @@ public class MediaSummary extends Section implements PageHeaderAware {
 		return PageHeader.EXPANDED_MEDIA_SECTION;
 	}
 
-	private boolean checkDataValidity(List<Test> allTests) {
+	protected List<Test> collectRelevantTests() {
+		List<Test> tests = new ArrayList<>();
+		report.getTestList().forEach(t -> {
+			tests.add(t);
+			collectTestNodes(t, tests);
+		});
+		return tests;
+	}
 
-		for (Test test : allTests) {
-			if (!test.getMedia().isEmpty())
+	protected boolean doesTestContainMedia(Test test) {
+		if (!test.getMedia().isEmpty())
+			return true;
+
+		for (Log log : test.getLogs()) {
+			if (log.hasMedia())
 				return true;
-
-			for (Log log : test.getLogs()) {
-				if (log.hasMedia())
-					return true;
-			}
 		}
 		return false;
 	}
 
-	private void collectTestNodes(Test test, List<Test> tests) {
+	protected boolean checkDataValidity(List<Test> allTests) {
+		for (Test test : allTests) {
+			if (doesTestContainMedia(test))
+				return true;
+		}
+		return false;
+	}
+
+	protected void collectTestNodes(Test test, List<Test> tests) {
 		test.getChildren().forEach(t -> {
 			tests.add(t);
 			collectTestNodes(t, tests);

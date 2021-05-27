@@ -17,9 +17,11 @@ import tech.grasshopper.reporter.context.AttributeSummary;
 import tech.grasshopper.reporter.context.detail.AttributeDetails;
 import tech.grasshopper.reporter.dashboard.Dashboard;
 import tech.grasshopper.reporter.destination.Destination.DestinationStore;
+import tech.grasshopper.reporter.expanded.BDDMediaSummary;
 import tech.grasshopper.reporter.expanded.MediaSummary;
 import tech.grasshopper.reporter.font.ReportFont;
 import tech.grasshopper.reporter.header.PageHeader;
+import tech.grasshopper.reporter.tests.TestBDDDetails;
 import tech.grasshopper.reporter.tests.TestDetails;
 
 public class ReportGenerator {
@@ -54,17 +56,27 @@ public class ReportGenerator {
 			AttributeSummary.builder().document(document).report(report).config(config).destinations(destinations)
 					.annotations(annotations).pageHeader(pageHeader).build().createSection();
 
-		if (config.isDisplayTestDetails())
-			TestDetails.builder().document(document).report(report).config(config).destinations(destinations)
-					.annotations(annotations).pageHeader(pageHeader).build().createSection();
+		if (config.isDisplayTestDetails()) {
+			if (report.isBDD())
+				TestBDDDetails.builder().document(document).report(report).config(config).destinations(destinations)
+						.annotations(annotations).pageHeader(pageHeader).build().createSection();
+			else
+				TestDetails.builder().document(document).report(report).config(config).destinations(destinations)
+						.annotations(annotations).pageHeader(pageHeader).build().createSection();
+		}
 
 		if (config.isDisplayAttributeDetails())
 			AttributeDetails.builder().document(document).report(report).config(config).destinations(destinations)
 					.annotations(annotations).pageHeader(pageHeader).build().createSection();
 
-		if (config.isDisplayExpandedMedia())
-			MediaSummary.builder().document(document).report(report).config(config).destinations(destinations)
-					.annotations(annotations).pageHeader(pageHeader).build().createSection();
+		if (config.isDisplayExpandedMedia()) {
+			if (report.isBDD())
+				BDDMediaSummary.builder().document(document).report(report).config(config).destinations(destinations)
+						.annotations(annotations).pageHeader(pageHeader).build().createSection();
+			else
+				MediaSummary.builder().document(document).report(report).config(config).destinations(destinations)
+						.annotations(annotations).pageHeader(pageHeader).build().createSection();
+		}
 
 		AnnotationProcessor.builder().annotations(annotations).destinations(destinations).config(config).build()
 				.processAnnotations();
