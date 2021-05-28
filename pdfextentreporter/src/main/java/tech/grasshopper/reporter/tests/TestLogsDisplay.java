@@ -102,7 +102,8 @@ public class TestLogsDisplay extends Display implements TestIndent {
 
 	private AbstractCell createLogDisplayCell(Log log, Test test) {
 		LogDetailsCollector logDetailsCollector = LogDetailsCollector.builder().annotations(annotations).config(config)
-				.document(document).test(test).width(LOGS_DETAILS_WIDTH).build();
+				.document(document).test(test)
+				.width(LOGS_DETAILS_WIDTH - (test.getLevel() * TestDetails.LEVEL_X_INDENT)).build();
 
 		List<AbstractCell> allDetailCells = logDetailsCollector.createLogDetailCells(log);
 

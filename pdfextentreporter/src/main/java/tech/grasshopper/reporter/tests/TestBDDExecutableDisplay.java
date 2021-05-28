@@ -76,7 +76,8 @@ public class TestBDDExecutableDisplay extends Display {
 					.font(LOGS_TABLE_CONTENT_FONT).fontSize(LOGS_TABLE_CONTENT_FONT_SIZE).build());
 
 			LogDetailsCollector logDetailsCollector = LogDetailsCollector.builder().annotations(annotations)
-					.config(config).document(document).test(t).width(WIDTH).build();
+					.config(config).document(document).test(t).bddReport(true)
+					.width(WIDTH - (test.getLevel() * TestDetails.LEVEL_X_INDENT)).build();
 
 			t.getLogs().forEach(l -> {
 				List<AbstractCell> cellDetails = logDetailsCollector.createLogDetailCells(l);

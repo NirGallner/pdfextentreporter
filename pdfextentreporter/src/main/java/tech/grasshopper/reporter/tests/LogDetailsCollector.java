@@ -14,10 +14,12 @@ import org.vandeseer.easytable.structure.Table.TableBuilder;
 import org.vandeseer.easytable.structure.cell.AbstractCell;
 import org.vandeseer.easytable.structure.cell.TextCell;
 
+import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.model.Log;
 import com.aventstack.extentreports.model.Test;
 
 import lombok.Builder;
+import lombok.Builder.Default;
 import lombok.Data;
 import tech.grasshopper.pdf.annotation.Annotation;
 import tech.grasshopper.pdf.structure.cell.TableWithinTableCell;
@@ -41,6 +43,9 @@ public class LogDetailsCollector {
 	private AnnotationStore annotations;
 
 	private float width;
+
+	@Default
+	private boolean bddReport = false;
 
 	private static final float PADDING = 5f;
 	private static final float LOGS_MEDIA_HEIGHT = 100f;
@@ -71,13 +76,14 @@ public class LogDetailsCollector {
 	private AbstractCell createDetailsMarkupCell(Log log) {
 		TextSanitizer textSanitizer = TextSanitizer.builder().font(LOGS_TABLE_CONTENT_FONT).build();
 
+		Status status = bddReport ? test.getStatus() : log.getStatus();
 		AbstractCell detailMarkupCell = TextCell.builder().text(textSanitizer.sanitizeText(log.getDetails()))
 				.font(LOGS_TABLE_CONTENT_FONT).fontSize(LOGS_TABLE_CONTENT_FONT_SIZE)
-				.textColor(config.statusColor(log.getStatus())).build();
+				.textColor(config.statusColor(status)).build();
 
 		if (TestMarkup.isMarkup(log.getDetails()))
-			detailMarkupCell = TestMarkup.builder().log(log).width(width - (2 * PADDING)).config(config).build()
-					.createMarkupCell();
+			detailMarkupCell = TestMarkup.builder().log(log).test(test).bddReport(bddReport)
+					.width(width - (2 * PADDING)).config(config).build().createMarkupCell();
 		return detailMarkupCell;
 	}
 
@@ -106,9 +112,7 @@ public class LogDetailsCollector {
 
 	private AbstractCell createExceptionCell(Log log) {
 		return TestStackTrace.builder().log(log).font(LOGS_STACK_TRACE_TABLE_CONTENT_FONT)
-				.color(config.getTestExceptionColor())
-				.width(width - (test.getLevel() * TestDetails.LEVEL_X_INDENT) - (2 * PADDING))
-				.height(LOGS_DETAILS_HEIGHT).fontSize(LOGS_STACK_TRACE_TABLE_CONTENT_FONT_SIZE).padding(PADDING).build()
-				.createStackTraceCell();
+				.color(config.getTestExceptionColor()).width(width - (2 * PADDING)).height(LOGS_DETAILS_HEIGHT)
+				.fontSize(LOGS_STACK_TRACE_TABLE_CONTENT_FONT_SIZE).padding(PADDING).build().createStackTraceCell();
 	}
 }

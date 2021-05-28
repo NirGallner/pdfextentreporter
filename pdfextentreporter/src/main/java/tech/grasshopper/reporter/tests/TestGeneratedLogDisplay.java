@@ -73,7 +73,8 @@ public class TestGeneratedLogDisplay extends Display implements TestIndent {
 
 	private void createLogRows() {
 		test.getGeneratedLog().forEach(l -> {
-			AbstractCell detailCell = TestMarkup.builder().log(l).width(LOGS_DETAILS_WIDTH - (2 * PADDING))
+			AbstractCell detailCell = TestMarkup.builder().test(test).log(l)
+					.width(LOGS_DETAILS_WIDTH - (2 * PADDING) - (test.getLevel() * TestDetails.LEVEL_X_INDENT))
 					.config(config).build().createMarkupCell();
 
 			Row row = Row.builder().font(LOGS_TABLE_CONTENT_FONT).fontSize(LOGS_TABLE_CONTENT_FONT_SIZE).wordBreak(true)
