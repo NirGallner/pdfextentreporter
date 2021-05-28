@@ -7,11 +7,9 @@ import com.aventstack.extentreports.gherkin.model.ScenarioOutline;
 import com.aventstack.extentreports.model.Log;
 import com.aventstack.extentreports.model.Test;
 
-import lombok.Builder.Default;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
-import tech.grasshopper.reporter.structure.Display;
 
 @Data
 @SuperBuilder
