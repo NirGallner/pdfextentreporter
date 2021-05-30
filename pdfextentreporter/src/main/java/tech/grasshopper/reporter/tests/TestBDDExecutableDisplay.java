@@ -86,9 +86,9 @@ public class TestBDDExecutableDisplay extends Display {
 			});
 
 			if (nameAndLogDetails.size() == 1)
-				tableBuilder.addRow(Row.builder().add(nameAndLogDetails.get(0)).build());
+				tableBuilder.addRow(Row.builder().add(nameAndLogDetails.get(0)).padding(PADDING).build());
 			else if (nameAndLogDetails.size() > 1)
-				tableBuilder.addRow(Row.builder().add(createMultipleDetailsLogCell(nameAndLogDetails)).build());
+				tableBuilder.addRow(Row.builder().add(createMultipleDetailsLogCell(nameAndLogDetails)).padding(PADDING).build());
 		});
 	}
 
@@ -101,8 +101,7 @@ public class TestBDDExecutableDisplay extends Display {
 				multipleDetailsBuilder.addRow(Row.builder().add(c).build());
 		});
 
-		return TableWithinTableCell.builder().table(multipleDetailsBuilder.build()).paddingTop(2f).paddingBottom(2f)
-				.paddingLeft(0f).paddingRight(0f).build();
+		return TableWithinTableCell.builder().table(multipleDetailsBuilder.build()).padding(0f).build();
 	}
 
 	private void drawTable() {

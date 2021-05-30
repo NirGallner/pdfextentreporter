@@ -108,7 +108,7 @@ public class TestLogsDisplay extends Display implements TestIndent {
 		List<AbstractCell> allDetailCells = logDetailsCollector.createLogDetailCells(log);
 
 		if (allDetailCells.isEmpty())
-			return TextCell.builder().text("").build();
+			return TextCell.builder().text("").padding(PADDING).build();
 		else if (allDetailCells.size() == 1)
 			return allDetailCells.get(0);
 		else
@@ -121,11 +121,10 @@ public class TestLogsDisplay extends Display implements TestIndent {
 
 		allDetailCells.forEach(c -> {
 			if (c != null)
-				multipleDetailsBuilder.addRow(Row.builder().add(c).build());
+				multipleDetailsBuilder.addRow(Row.builder().add(c).padding(PADDING).build());
 		});
 
-		return TableWithinTableCell.builder().table(multipleDetailsBuilder.build()).paddingTop(2f).paddingBottom(2f)
-				.paddingLeft(0f).paddingRight(0f).build();
+		return TableWithinTableCell.builder().table(multipleDetailsBuilder.build()).padding(0f).build();
 	}
 
 	private void drawTable() {
