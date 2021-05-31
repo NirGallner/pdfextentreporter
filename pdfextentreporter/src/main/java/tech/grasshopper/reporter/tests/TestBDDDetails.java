@@ -46,7 +46,7 @@ public class TestBDDDetails extends Section implements PageHeaderAware {
 				boolean isSO = level1Test.getBddType() == ScenarioOutline.class ? true : false;
 
 				displayBasicTestDetails(level1Test);
-				if (!isSO) {
+				if (!isSO && level1Test.hasChildren()) {
 					// Display the next level test names and logs. Make destination to parent test.
 					// Hide children tests but collect destination with scenario (Level 1)
 					// destination
@@ -59,7 +59,8 @@ public class TestBDDDetails extends Section implements PageHeaderAware {
 					// Display the next level test names and logs. Make destination to parent test.
 					// Hide children () tests but collect destination with scenario (Level 2)
 					// destination
-					displayExecutableTestDetailsAndCreateHiddenTestDestination(level2Test);
+					if (level2Test.hasChildren())
+						displayExecutableTestDetailsAndCreateHiddenTestDestination(level2Test);
 				}
 			}
 		}
