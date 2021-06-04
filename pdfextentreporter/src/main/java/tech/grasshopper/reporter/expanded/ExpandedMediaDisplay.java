@@ -88,8 +88,9 @@ public class ExpandedMediaDisplay extends Display implements DestinationAware {
 		}
 
 		for (Media media : medias) {
-			tableBuilder.addRow(Row.builder().add(
-					ExpandedMedia.builder().media(media).document(document).padding(PADDING).build().createImageCell())
+			tableBuilder.addRow(Row.builder()
+					.add(ExpandedMedia.builder().media(media).document(document).padding(PADDING)
+							.locations(config.getMediaFolders()).build().createImageCell())
 					.borderWidth(1f).borderColor(Color.LIGHT_GRAY).build());
 		}
 

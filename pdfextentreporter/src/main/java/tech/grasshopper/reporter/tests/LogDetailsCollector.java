@@ -100,7 +100,8 @@ public class LogDetailsCollector {
 							.fontSize(15).textColor(Color.RED).showLine(false).verticalAlignment(VerticalAlignment.TOP)
 							.horizontalAlignment(HorizontalAlignment.CENTER).build())
 					.add(TestMedia.builder().media(log.getMedia()).document(document)
-							.width(width - LOGS_MEDIA_PLUS_WIDTH).height(LOGS_MEDIA_HEIGHT).build().createImageCell())
+							.width(width - LOGS_MEDIA_PLUS_WIDTH).height(LOGS_MEDIA_HEIGHT)
+							.locations(config.getMediaFolders()).build().createImageCell())
 					.build());
 
 			return TableWithinTableCell.builder().table(tableBuilder.build()).width(width - LOGS_MEDIA_PLUS_WIDTH)

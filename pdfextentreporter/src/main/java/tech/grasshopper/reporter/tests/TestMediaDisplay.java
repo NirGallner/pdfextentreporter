@@ -40,7 +40,7 @@ public class TestMediaDisplay extends Display implements TestIndent {
 	protected Test test;
 
 	private TableBuilder tableBuilder;
-	
+
 	private AnnotationStore annotations;
 
 	@Override
@@ -76,7 +76,7 @@ public class TestMediaDisplay extends Display implements TestIndent {
 			tableBuilder.addColumnsOfWidth(plusWidth);
 			Annotation annotation = Annotation.builder().id(test.getId()).build();
 			annotations.addTestMediaAnnotation(annotation);
-			
+
 			rowBuilder.add(TextLinkCell.builder().text("+").annotation(annotation).font(ReportFont.REGULAR_FONT)
 					.fontSize(15).textColor(Color.RED).showLine(false).padding(2f).borderWidth(0f)
 					.verticalAlignment(VerticalAlignment.TOP).build());
@@ -85,7 +85,7 @@ public class TestMediaDisplay extends Display implements TestIndent {
 		for (Media media : medias) {
 			tableBuilder.addColumnsOfWidth(MEDIA_WIDTH);
 			rowBuilder.add(TestMedia.builder().media(media).document(document).width(MEDIA_WIDTH).height(MEDIA_HEIGHT)
-					.padding(PADDING).build().createImageCell());
+					.padding(PADDING).locations(config.getMediaFolders()).build().createImageCell());
 		}
 
 		if (maxMedia) {

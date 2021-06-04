@@ -1,7 +1,9 @@
 package tech.grasshopper.reporter.medias;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
@@ -18,6 +20,7 @@ public abstract class Medias {
 	protected Media media;
 	protected PDDocument document;
 	protected PDImageXObject image;
+	protected String[] locations;
 
 	protected float padding;
 
@@ -37,8 +40,21 @@ public abstract class Medias {
 		// create base64 image file
 		if (MediaService.isBase64(media))
 			image = imageNotFound;
-		else
-			image = PDImageXObject.createFromFile(media.getPath(), document);
+		else {
+			String path = media.getResolvedPath();
+			if (path == null || path.isEmpty())
+				path = media.getPath();
+
+			if (!new File(path).exists()) {
+				// System.out.println(media.getPath());
+				Media m = new Media(media.getPath(), "", media.getResolvedPath(), new HashMap<String, Object>());
+				MediaService.tryResolveMediaPath(m, locations);
+				if (m.getResolvedPath() != null)
+					path = m.getResolvedPath();
+			}
+			// System.out.println("pdf path - " + path);
+			image = PDImageXObject.createFromFile(path, document);
+		}
 	}
 
 	protected PDImageXObject processPDImage() {

@@ -67,6 +67,8 @@ public class ExtentPDFReporterConfig extends AbstractConfiguration {
 
 	private int testMaxIndentLevel;
 
+	private String[] mediaFolders;
+
 	public boolean isDisplayAttributeSummary() {
 		return displayAttributeSummary;
 	}
@@ -227,6 +229,12 @@ public class ExtentPDFReporterConfig extends AbstractConfiguration {
 		return testMaxIndentLevel;
 	}
 
+	public String[] getMediaFolders() {
+		if (mediaFolders == null)
+			mediaFolders = Defaults.mediaFolders;
+		return mediaFolders;
+	}
+
 	private static class Defaults {
 
 		private static final String title = "PDF Extent Report";
@@ -261,6 +269,7 @@ public class ExtentPDFReporterConfig extends AbstractConfiguration {
 		private static final Color testExceptionColor = Color.RED;
 		private static final int maxTableColumnCount = 5;
 		private static final int testMaxIndentLevel = 2;
+		private static final String[] mediaFolders = new String[] { "", "images", "medias", "screenshots" };
 	}
 
 	public Color attributeHeaderColor(AttributeType type) {
