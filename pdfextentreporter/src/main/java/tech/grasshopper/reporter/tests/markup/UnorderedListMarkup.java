@@ -17,6 +17,10 @@ import tech.grasshopper.pdf.structure.cell.TableWithinTableCell;
 @EqualsAndHashCode(callSuper = false)
 public class UnorderedListMarkup extends MarkupDisplay {
 
+	private float width;
+
+	private static final float STAR_COLUMN_WIDTH = 15f;
+
 	@Override
 	public AbstractCell displayDetails() {
 
@@ -25,8 +29,8 @@ public class UnorderedListMarkup extends MarkupDisplay {
 
 	private Table listTable() {
 
-		TableBuilder tableBuilder = Table.builder().addColumnsOfWidth(15f, 430f).fontSize(LOG_FONT_SIZE).font(LOG_FONT)
-				.borderWidth(0).wordBreak(true);
+		TableBuilder tableBuilder = Table.builder().addColumnsOfWidth(STAR_COLUMN_WIDTH, width - STAR_COLUMN_WIDTH)
+				.fontSize(LOG_FONT_SIZE).font(LOG_FONT).borderWidth(0).wordBreak(true);
 
 		for (Element e : elements) {
 			tableBuilder.addRow(Row.builder().add(TextCell.builder().text("*").build())

@@ -49,13 +49,13 @@ public class TestMarkup {
 		Elements elements = doc.select("body > ol > li");
 		if (elements.size() > 0) {
 
-			return OrderedListMarkup.builder().elements(elements).textColor(config.statusColor(status)).build()
+			return OrderedListMarkup.builder().elements(elements).textColor(config.statusColor(status)).width(width).build()
 					.displayDetails();
 		}
 
 		elements = doc.select("body > ul > li");
 		if (elements.size() > 0) {
-			return UnorderedListMarkup.builder().elements(elements).textColor(config.statusColor(status)).build()
+			return UnorderedListMarkup.builder().elements(elements).textColor(config.statusColor(status)).width(width).build()
 					.displayDetails();
 		}
 
