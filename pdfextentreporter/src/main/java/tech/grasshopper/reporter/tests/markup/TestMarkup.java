@@ -1,5 +1,8 @@
 package tech.grasshopper.reporter.tests.markup;
 
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -19,6 +22,8 @@ import tech.grasshopper.reporter.config.ExtentPDFReporterConfig;
 @Builder
 public class TestMarkup {
 
+	private static final Logger logger = Logger.getLogger(TestMarkup.class.getName());
+
 	private Test test;
 
 	private Log log;
@@ -32,34 +37,40 @@ public class TestMarkup {
 
 	public AbstractCell createMarkupCell() {
 		String html = log.getDetails();
-		Document doc = Jsoup.parseBodyFragment(html);
 		Status status = bddReport ? test.getStatus() : log.getStatus();
 
-		Element element = doc.selectFirst("body > span[class*=\"badge\"]");
+		Document document = null;
+		try {
+			document = Jsoup.parseBodyFragment(html);
+		} catch (Exception e) {
+			logger.log(Level.SEVERE, "Error is parsing markup html, diplaying raw log details");
+			return displayDefault(status);
+		}
+
+		Element element = document.selectFirst("body > span[class*=\"badge\"]");
 		if (element != null) {
 			return LabelMarkup.builder().element(element).build().displayDetails();
 		}
 
-		element = doc.selectFirst("body > table[class*=\"markup-table table\"]");
+		element = document.selectFirst("body > table[class*=\"markup-table table\"]");
 		if (element != null) {
 			return TableMarkup.builder().element(element).textColor(config.statusColor(status))
 					.maxTableColumnCount(config.getMaxTableColumnCount()).width(width).build().displayDetails();
 		}
 
-		Elements elements = doc.select("body > ol > li");
+		Elements elements = document.select("body > ol > li");
 		if (elements.size() > 0) {
-
-			return OrderedListMarkup.builder().elements(elements).textColor(config.statusColor(status)).width(width).build()
-					.displayDetails();
+			return OrderedListMarkup.builder().elements(elements).textColor(config.statusColor(status)).width(width)
+					.build().displayDetails();
 		}
 
-		elements = doc.select("body > ul > li");
+		elements = document.select("body > ul > li");
 		if (elements.size() > 0) {
-			return UnorderedListMarkup.builder().elements(elements).textColor(config.statusColor(status)).width(width).build()
-					.displayDetails();
+			return UnorderedListMarkup.builder().elements(elements).textColor(config.statusColor(status)).width(width)
+					.build().displayDetails();
 		}
 
-		elements = doc.select("body textarea[class*=\"code-block\"]");
+		elements = document.select("body textarea[class*=\"code-block\"]");
 		if (elements.size() > 0) {
 			return CodeBlockMarkup.builder().elements(elements).textColor(config.statusColor(status)).width(width)
 					.build().displayDetails();
@@ -69,6 +80,10 @@ public class TestMarkup {
 			return JsonMarkup.builder().html(html).textColor(config.statusColor(status)).build().displayDetails();
 		}
 
+		return displayDefault(status);
+	}
+
+	private AbstractCell displayDefault(Status status) {
 		return DefaultMarkup.builder().log(log).textColor(config.statusColor(status)).build().displayDetails();
 	}
 

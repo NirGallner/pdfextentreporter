@@ -6,6 +6,7 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.vandeseer.easytable.structure.cell.AbstractCell;
+import org.vandeseer.easytable.structure.cell.TextCell;
 
 import lombok.Builder.Default;
 import lombok.Data;
@@ -28,8 +29,12 @@ public abstract class MarkupDisplay {
 
 	@Default
 	protected Color textColor = Color.BLACK;
-	
+
 	protected final TextSanitizer textSanitizer = TextSanitizer.builder().font(LOG_FONT).build();
 
 	public abstract AbstractCell displayDetails();
+
+	protected AbstractCell errorDisplay(String error) {
+		return TextCell.builder().text(error).fontSize(LOG_FONT_SIZE).font(LOG_FONT).textColor(Color.RED).build();
+	}
 }

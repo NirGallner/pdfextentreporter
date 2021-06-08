@@ -2,6 +2,8 @@ package tech.grasshopper.reporter.tests.markup;
 
 import java.awt.Color;
 import java.util.Arrays;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -23,23 +25,47 @@ import tech.grasshopper.reporter.font.ReportFont;
 @EqualsAndHashCode(callSuper = false)
 public class TableMarkup extends MarkupDisplay {
 
+	private static final Logger logger = Logger.getLogger(TableMarkup.class.getName());
+
 	private float width;
 
 	private int maxTableColumnCount;
 
 	@Override
 	public AbstractCell displayDetails() {
+		Elements rows = null;
+		try {
+			rows = element.select("tr");
+			if (rows.isEmpty()) {
+				logger.log(Level.SEVERE, "No data rows available.");
+				return errorDisplay("Table data is not available.");
+			}
+		} catch (Exception e) {
+			logger.log(Level.SEVERE, "Unable to retrieve data rows.");
+			return errorDisplay("Unable to access data.");
+		}
 
-		return TableWithinTableCell.builder().table(internalTable()).build();
+		int cols = 0;
+		try {
+			for (Element row : rows) {
+				cols = row.select("td").size();
+				if (cols > 0)
+					break;
+			}
+			if (cols == 0) {
+				logger.log(Level.SEVERE, "No data columns available.");
+				return errorDisplay("Table data is not available.");
+			}
+		} catch (Exception e) {
+			logger.log(Level.SEVERE, "Unable to retrieve data columns.");
+			return errorDisplay("Unable to access data.");
+		}
+		cols = cols > maxTableColumnCount ? maxTableColumnCount : cols;
+
+		return TableWithinTableCell.builder().table(internalTable(rows, cols)).build();
 	}
 
-	private Table internalTable() {
-
-		Elements rows = element.select("tr");
-
-		int cols = rows.get(0).select("td").size();
-		boolean maxCols = cols > maxTableColumnCount ? true : false;
-		cols = cols > maxTableColumnCount ? maxTableColumnCount : cols;
+	private Table internalTable(Elements rows, int cols) {
 
 		float colWidth = width / cols;
 		float[] columnWidths = new float[cols];
@@ -51,13 +77,28 @@ public class TableMarkup extends MarkupDisplay {
 		for (Element row : rows) {
 			if (row.children().isEmpty())
 				continue;
-			RowBuilder rowBuilder = Row.builder();
 
+			Elements cells = row.select("td");
+			if (cells.isEmpty()) {
+				logger.log(Level.WARNING, "Row does not contain any cell data.");
+				continue;
+			}
+
+			RowBuilder rowBuilder = Row.builder();
 			int j = 1;
-			for (Element cell : row.select("td")) {
+			for (Element cell : cells) {
 				if (j > cols)
 					break;
-				rowBuilder.add(TextCell.builder().text(textSanitizer.sanitizeText(cell.text())).textColor(textColor)
+
+				String text = "";
+				try {
+					text = cell.text();
+				} catch (Exception e) {
+					text = "Error!";
+					logger.log(Level.SEVERE, "Unable to get text for cell, default to error message.");
+				}
+
+				rowBuilder.add(TextCell.builder().text(textSanitizer.sanitizeText(text)).textColor(textColor)
 						.lineSpacing(MULTILINE_SPACING).build());
 				j++;
 			}
@@ -67,9 +108,12 @@ public class TableMarkup extends MarkupDisplay {
 		String tableCounts = "";
 		String tableSettings = "";
 
-		if (maxCols) {
+		if (cols > maxTableColumnCount ? true : false) {
 			tableCounts = maxTableColumnCount + " columns";
 			tableSettings = "'maxTableColumnCount'";
+
+			logger.log(Level.WARNING,
+					"Only first " + tableCounts + " are shown. Change this from the " + tableSettings + " settings.");
 
 			tableBuilder.addRow(Row.builder()
 					.add(TextCell.builder().colSpan(cols)
@@ -79,7 +123,6 @@ public class TableMarkup extends MarkupDisplay {
 							.wordBreak(true).lineSpacing(MULTILINE_SPACING).build())
 					.build());
 		}
-
 		return tableBuilder.build();
 	}
 }
