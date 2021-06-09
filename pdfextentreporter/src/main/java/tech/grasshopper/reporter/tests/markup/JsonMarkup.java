@@ -59,7 +59,7 @@ public class JsonMarkup extends MarkupDisplay {
 			return gson.toJson(JsonParser.parseString(jsonStringHolder.substring(startIndex, endIndex)));
 		} catch (Exception e) {
 			logger.log(Level.SEVERE, "Unable to process JSON code block.");
-			return "Error in accessing and processing code block.";
+			return "Error in accessing and processing JSON code block.";
 		}
 	}
 }

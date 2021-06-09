@@ -24,7 +24,8 @@ import tech.grasshopper.reporter.font.ReportFont;
 @SuperBuilder
 @EqualsAndHashCode(callSuper = false)
 public class TableMarkup extends MarkupDisplay {
-
+	// The code is not optimum with regards to exception handling. Needs to be
+	// refactored in future.
 	private static final Logger logger = Logger.getLogger(TableMarkup.class.getName());
 
 	private float width;
@@ -60,15 +61,15 @@ public class TableMarkup extends MarkupDisplay {
 			logger.log(Level.SEVERE, "Unable to retrieve data columns.");
 			return errorDisplay("Unable to access data.");
 		}
-		cols = cols > maxTableColumnCount ? maxTableColumnCount : cols;
-
 		return TableWithinTableCell.builder().table(internalTable(rows, cols)).build();
 	}
 
-	private Table internalTable(Elements rows, int cols) {
+	private Table internalTable(Elements rows, int columnCount) {
 
-		float colWidth = width / cols;
-		float[] columnWidths = new float[cols];
+		int displayColumnCount = columnCount > maxTableColumnCount ? maxTableColumnCount : columnCount;
+
+		float colWidth = width / displayColumnCount;
+		float[] columnWidths = new float[displayColumnCount];
 		Arrays.fill(columnWidths, colWidth);
 
 		TableBuilder tableBuilder = Table.builder().addColumnsOfWidth(columnWidths).fontSize(LOG_FONT_SIZE)
@@ -87,7 +88,7 @@ public class TableMarkup extends MarkupDisplay {
 			RowBuilder rowBuilder = Row.builder();
 			int j = 1;
 			for (Element cell : cells) {
-				if (j > cols)
+				if (j > displayColumnCount)
 					break;
 
 				String text = "";
@@ -108,20 +109,17 @@ public class TableMarkup extends MarkupDisplay {
 		String tableCounts = "";
 		String tableSettings = "";
 
-		if (cols > maxTableColumnCount ? true : false) {
+		if (columnCount > maxTableColumnCount) {
 			tableCounts = maxTableColumnCount + " columns";
 			tableSettings = "'maxTableColumnCount'";
 
 			logger.log(Level.WARNING,
-					"Only first " + tableCounts + " are shown. Change this from the " + tableSettings + " settings.");
+					"Only first " + tableCounts + " are shown. Modify the " + tableSettings + " settings.");
 
-			tableBuilder.addRow(Row.builder()
-					.add(TextCell.builder().colSpan(cols)
-							.text("Only first " + tableCounts + " are shown. Change this from the " + tableSettings
-									+ " settings.")
-							.minHeight(15f).font(ReportFont.REGULAR_FONT).fontSize(10).textColor(Color.RED)
-							.wordBreak(true).lineSpacing(MULTILINE_SPACING).build())
-					.build());
+			tableBuilder.addRow(Row.builder().add(TextCell.builder().colSpan(displayColumnCount)
+					.text("Only first " + tableCounts + " are shown. Modify the " + tableSettings + " settings.")
+					.minHeight(15f).font(ReportFont.REGULAR_FONT).fontSize(10).textColor(Color.RED).wordBreak(true)
+					.lineSpacing(MULTILINE_SPACING).build()).build());
 		}
 		return tableBuilder.build();
 	}

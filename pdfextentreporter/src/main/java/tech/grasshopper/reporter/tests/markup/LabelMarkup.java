@@ -15,7 +15,8 @@ import tech.grasshopper.pdf.structure.cell.TextLabelCell;
 @SuperBuilder
 @EqualsAndHashCode(callSuper = false)
 public class LabelMarkup extends MarkupDisplay {
-
+	// The code is not optimum with regards to exception handling. Needs to be
+	// refactored in future.
 	private static final Logger logger = Logger.getLogger(LabelMarkup.class.getName());
 
 	@Override
@@ -32,7 +33,7 @@ public class LabelMarkup extends MarkupDisplay {
 		try {
 			textColor = textColor();
 		} catch (Exception e) {
-			logger.log(Level.WARNING, "Unable to retrieve text color for label text, using default black.");
+			logger.log(Level.WARNING, "Unable to retrieve text color for label text, using default BLACK.");
 			return TextLabelCell.builder().text(textSanitizer.sanitizeText(element.text())).labelColor(Color.BLACK)
 					.fontSize(LOG_FONT_SIZE).font(LOG_FONT).lineSpacing(MULTILINE_SPACING).build();
 		}
@@ -44,12 +45,17 @@ public class LabelMarkup extends MarkupDisplay {
 	private Color textColor() {
 		Color color = Color.BLACK;
 		String colorName = "";
-		String[] spanClasses = element.className().split("\\s+");
 
-		if (spanClasses.length > 0) {
+		if (element.className() != null && !element.className().isEmpty()) {
+			String[] spanClasses = element.className().split("\\s+");
+			// Color is last class name.
 			colorName = spanClasses[spanClasses.length - 1].trim();
+			if (colorName == null || colorName.equals("")) {
+				logger.log(Level.WARNING, "No label color available, using default BLACK.");
+				return color;
+			}
 		} else {
-			logger.log(Level.WARNING, "No label color available, using default black.");
+			logger.log(Level.WARNING, "No label color available, using default BLACK.");
 			return color;
 		}
 
@@ -57,12 +63,12 @@ public class LabelMarkup extends MarkupDisplay {
 			color = (Color) Color.class.getField(colorName.toLowerCase()).get(null);
 			if (color == Color.WHITE) {
 				color = Color.BLACK;
-				logger.log(Level.INFO, "Label color white cannot be displayed properly, using default black.");
+				logger.log(Level.INFO, "Label color WHITE cannot be displayed properly, using default BLACK.");
 			}
 		} catch (Exception e) {
 			color = Color.BLACK;
 			logger.log(Level.WARNING, "No matching color name found for label in class java.awt.Color for "
-					+ colorName.toUpperCase() + ", using default black.");
+					+ colorName.toUpperCase() + ", using default BLACK.");
 		}
 		return color;
 	}
