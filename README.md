@@ -10,6 +10,16 @@ The PDF report is a single file with the medias embedded in it. This allows it t
 
 The report uses MIT or Apache licensed code for PDF display which removes any licensing issues. Following are the PDF related dependencies – PDFBox, easytable and pdfbox-layout. The report uses the open source Liberation Sans font family.
 
+The following dependency needs to be added for creating the Extent PDF report.
+
+```
+<dependency>
+	<groupId>tech.grasshopper</groupId>
+	<artifactId>pdfextentreporter</artifactId>
+	<version>0.3</version>
+</dependency>
+```
+
 ### Dashboard
 
 ![sample](https://raw.githubusercontent.com/grasshopper7/pdf-extent-report/master/pdf-extent-report/images/dashboard_default.png)
