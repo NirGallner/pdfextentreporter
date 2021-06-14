@@ -1,6 +1,7 @@
 Refer to this [article](https://grasshopper.tech/2555/) for more details.
 
 [Sample Report](https://github.com/grasshopper7/pdf-extent-report/blob/master/pdf-extent-report/reports/TESTSimplePDFReport.pdf)
+
 [BDD Sample Report](https://github.com/grasshopper7/pdf-extent-report/blob/master/pdf-extent-report/reports/BDDPDFReport.pdf)
 
 The report contains four sections – summary section with a dashboard and attribute summary, test details section, attribute details section and media section. There is a one to one mapping between the Spark and PDF reports. The summary section maps to the dashboard tab of the Spark report. The test details section maps to the test tab of the Spark report. The attribute details section maps to the category, author, device and exception tabs.
