@@ -1,4 +1,4 @@
-Refer to this [article](https://grasshopper.tech/2555/) for more details.
+Refer to this [article](https://ghchirp.tech/2555/) for more details.
 
 [Sample Report](https://github.com/grasshopper7/pdfextentreporter/blob/master/pdfextentreporter/sample/TESTSimplePDFReport.pdf)
 
