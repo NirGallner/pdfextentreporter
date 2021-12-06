@@ -20,7 +20,6 @@ import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 import tech.grasshopper.pdf.structure.cell.TableWithinTableCell;
 import tech.grasshopper.reporter.annotation.AnnotationStore;
-import tech.grasshopper.reporter.font.ReportFont;
 import tech.grasshopper.reporter.optimizer.TextSanitizer;
 import tech.grasshopper.reporter.structure.Display;
 import tech.grasshopper.reporter.structure.TableCreator;
@@ -30,11 +29,11 @@ import tech.grasshopper.reporter.structure.TableCreator;
 @EqualsAndHashCode(callSuper = false)
 public class TestBDDExecutableDisplay extends Display {
 
-	private static final PDFont CONTENT_FONT = ReportFont.ITALIC_FONT;
+	private final PDFont CONTENT_FONT = reportFont.getItalicFont();
 
 	private static final int CONTENT_FONT_SIZE = 12;
 	private static final int LOGS_TABLE_CONTENT_FONT_SIZE = 10;
-	private static final PDFont LOGS_TABLE_CONTENT_FONT = ReportFont.REGULAR_FONT;
+	private final PDFont LOGS_TABLE_CONTENT_FONT = reportFont.getRegularFont();
 
 	private static final float PADDING = 5f;
 	private static final float WIDTH = 500f;
@@ -76,7 +75,7 @@ public class TestBDDExecutableDisplay extends Display {
 					.font(LOGS_TABLE_CONTENT_FONT).fontSize(LOGS_TABLE_CONTENT_FONT_SIZE).build());
 
 			LogDetailsCollector logDetailsCollector = LogDetailsCollector.builder().annotations(annotations)
-					.config(config).document(document).test(t).bddReport(true)
+					.config(config).document(document).reportFont(reportFont).test(t).bddReport(true)
 					.width(WIDTH - (test.getLevel() * TestDetails.LEVEL_X_INDENT)).build();
 
 			t.getLogs().forEach(l -> {
@@ -88,7 +87,8 @@ public class TestBDDExecutableDisplay extends Display {
 			if (nameAndLogDetails.size() == 1)
 				tableBuilder.addRow(Row.builder().add(nameAndLogDetails.get(0)).padding(PADDING).build());
 			else if (nameAndLogDetails.size() > 1)
-				tableBuilder.addRow(Row.builder().add(createMultipleDetailsLogCell(nameAndLogDetails)).padding(PADDING).build());
+				tableBuilder.addRow(
+						Row.builder().add(createMultipleDetailsLogCell(nameAndLogDetails)).padding(PADDING).build());
 		});
 	}
 

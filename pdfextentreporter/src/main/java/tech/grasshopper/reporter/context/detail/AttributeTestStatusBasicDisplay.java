@@ -23,7 +23,6 @@ import lombok.experimental.SuperBuilder;
 import tech.grasshopper.reporter.context.AttributeType;
 import tech.grasshopper.reporter.destination.Destination;
 import tech.grasshopper.reporter.destination.DestinationAware;
-import tech.grasshopper.reporter.font.ReportFont;
 import tech.grasshopper.reporter.optimizer.TextSanitizer;
 import tech.grasshopper.reporter.structure.Display;
 import tech.grasshopper.reporter.structure.TableCreator;
@@ -33,7 +32,6 @@ import tech.grasshopper.reporter.structure.TableCreator;
 @EqualsAndHashCode(callSuper = false)
 public class AttributeTestStatusBasicDisplay extends Display implements DestinationAware {
 
-	private static final PDFont NAME_FONT = ReportFont.BOLD_ITALIC_FONT;
 	private static final int NAME_FONT_SIZE = 15;
 	private static final int STATUS_FONT_SIZE = 12;
 
@@ -52,8 +50,6 @@ public class AttributeTestStatusBasicDisplay extends Display implements Destinat
 
 	private int destinationY;
 
-	protected final TextSanitizer textSanitizer = TextSanitizer.builder().font(NAME_FONT).build();
-
 	@Override
 	public void display() {
 
@@ -69,8 +65,12 @@ public class AttributeTestStatusBasicDisplay extends Display implements Destinat
 	}
 
 	private void createNameRow() {
+		PDFont nameFont = reportFont.getBoldItalicFont();
+
+		TextSanitizer textSanitizer = TextSanitizer.builder().font(nameFont).build();
+
 		tableBuilder.addRow(Row.builder().add(TextCell.builder().minHeight(NAME_HEIGHT).fontSize(NAME_FONT_SIZE)
-				.font(NAME_FONT)
+				.font(nameFont)
 				.text(type.toString().toLowerCase() + "- " + textSanitizer.sanitizeText(attribute.getAttr().getName()))
 				.wordBreak(true).lineSpacing(MULTILINE_SPACING).textColor(config.attributeHeaderColor(type)).build())
 				.build());
@@ -86,8 +86,8 @@ public class AttributeTestStatusBasicDisplay extends Display implements Destinat
 			}
 		}
 
-		tableBuilder
-				.addRow(Row.builder().height(STATUS_HEIGHT).fontSize(STATUS_FONT_SIZE).font(ReportFont.BOLD_ITALIC_FONT)
+		tableBuilder.addRow(
+				Row.builder().height(STATUS_HEIGHT).fontSize(STATUS_FONT_SIZE).font(reportFont.getBoldItalicFont())
 						.add(ParagraphCell.builder().paragraph(paraBuilder.build()).build()).build());
 	}
 

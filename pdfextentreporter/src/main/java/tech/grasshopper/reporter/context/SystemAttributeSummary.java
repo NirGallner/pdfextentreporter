@@ -14,7 +14,6 @@ import lombok.Builder.Default;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
-import tech.grasshopper.reporter.font.ReportFont;
 
 @Data
 @SuperBuilder
@@ -49,15 +48,15 @@ public class SystemAttributeSummary extends AttributeSummaryDisplay {
 	}
 
 	private void createTitleRow() {
-		tableBuilder.addRow(Row.builder().height(NAME_HEIGHT).font(ReportFont.BOLD_ITALIC_FONT).fontSize(NAME_FONT_SIZE)
-				.borderWidth(0).add(TextCell.builder().text(type.toString()).textColor(config.getSystemTitleColor())
-						.colSpan(2).build())
+		tableBuilder.addRow(Row.builder().height(NAME_HEIGHT).font(reportFont.getBoldItalicFont())
+				.fontSize(NAME_FONT_SIZE).borderWidth(0).add(TextCell.builder().text(type.toString())
+						.textColor(config.getSystemTitleColor()).colSpan(2).build())
 				.build());
 	}
 
 	private void createHeaderRow() {
-		tableBuilder
-				.addRow(Row.builder().font(ReportFont.BOLD_ITALIC_FONT).fontSize(HEADER_FONT_SIZE).height(HEADER_HEIGHT)
+		tableBuilder.addRow(
+				Row.builder().font(reportFont.getBoldItalicFont()).fontSize(HEADER_FONT_SIZE).height(HEADER_HEIGHT)
 						.add(TextCell.builder().text("Name").textColor(config.getSystemNameColor()).build())
 						.add(TextCell.builder().text("Value").textColor(config.getSystemValueColor()).build()).build());
 	}
@@ -75,7 +74,7 @@ public class SystemAttributeSummary extends AttributeSummaryDisplay {
 			tableBuilder.addRow(row);
 		});
 	}
-	
+
 	protected void drawTable() {
 		splitRow = true;
 		super.drawTable();

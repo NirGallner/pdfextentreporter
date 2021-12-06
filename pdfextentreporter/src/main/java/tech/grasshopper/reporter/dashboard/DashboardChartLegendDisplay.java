@@ -20,7 +20,6 @@ import tech.grasshopper.reporter.component.Component;
 import tech.grasshopper.reporter.component.decorator.BackgroundDecorator;
 import tech.grasshopper.reporter.component.text.Text;
 import tech.grasshopper.reporter.component.text.TextComponent;
-import tech.grasshopper.reporter.font.ReportFont;
 import tech.grasshopper.reporter.structure.Display;
 
 @Data
@@ -90,7 +89,7 @@ public class DashboardChartLegendDisplay extends Display {
 
 	private void createLegendKey(String legendText, float xlocation, float ylocation, Color legendColor) {
 		Text text = Text.builder().fontSize(LEGEND_KEY_FONT_SIZE).xlocation(xlocation).ylocation(ylocation)
-				.text(legendText).font(ReportFont.ITALIC_FONT).build();
+				.text(legendText).font(reportFont.getItalicFont()).build();
 		Component component = TextComponent.builder().content(content).text(text).build();
 		component = BackgroundDecorator.builder().component(component).content(content).containerColor(legendColor)
 				.xContainerBottomLeft(xlocation - 5).yContainerBottomLeft(ylocation - 6)
@@ -100,7 +99,7 @@ public class DashboardChartLegendDisplay extends Display {
 
 	private void createLegendValue(float xlocation, float ylocation, Long legendValue) {
 		Text text = Text.builder().fontSize(LEGEND_VALUE_FONT_SIZE).xlocation(xlocation + 65).ylocation(ylocation)
-				.text(String.valueOf(legendValue)).font(ReportFont.BOLD_FONT).build();
+				.text(String.valueOf(legendValue)).font(reportFont.getBoldFont()).build();
 		Component component = TextComponent.builder().content(content).text(text).build();
 		component.display();
 	}

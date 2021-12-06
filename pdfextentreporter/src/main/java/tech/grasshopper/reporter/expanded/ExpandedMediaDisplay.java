@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.pdfbox.pdmodel.PDPage;
-import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.vandeseer.easytable.settings.HorizontalAlignment;
 import org.vandeseer.easytable.settings.VerticalAlignment;
 import org.vandeseer.easytable.structure.Row;
@@ -24,7 +23,6 @@ import tech.grasshopper.pdf.structure.cell.TextLinkCell;
 import tech.grasshopper.reporter.annotation.AnnotationStore;
 import tech.grasshopper.reporter.destination.Destination;
 import tech.grasshopper.reporter.destination.DestinationAware;
-import tech.grasshopper.reporter.font.ReportFont;
 import tech.grasshopper.reporter.optimizer.TextSanitizer;
 import tech.grasshopper.reporter.structure.Display;
 import tech.grasshopper.reporter.structure.TableCreator;
@@ -33,8 +31,6 @@ import tech.grasshopper.reporter.structure.TableCreator;
 @SuperBuilder
 @EqualsAndHashCode(callSuper = false)
 public class ExpandedMediaDisplay extends Display implements DestinationAware {
-
-	private static final PDFont CONTENT_FONT = ReportFont.BOLD_ITALIC_FONT;
 
 	private static final int NAME_FONT_SIZE = 15;
 
@@ -52,25 +48,26 @@ public class ExpandedMediaDisplay extends Display implements DestinationAware {
 
 	private TableBuilder tableBuilder;
 
-	protected final TextSanitizer textSanitizer = TextSanitizer.builder().font(CONTENT_FONT).build();
-
 	private AnnotationStore annotations;
 
 	@Override
 	public Destination createDestination() {
+		TextSanitizer textSanitizer = TextSanitizer.builder().font(reportFont.getBoldItalicFont()).build();
+
 		return Destination.builder().id(test.getId()).name(textSanitizer.sanitizeText(test.getName()))
 				.yCoord(destinationY).page(page).build();
 	}
 
 	@Override
 	public void display() {
-
 		tableBuilder = Table.builder().addColumnsOfWidth(WIDTH).padding(PADDING).borderWidth(BORDER_WIDTH)
-				.font(ReportFont.BOLD_ITALIC_FONT).horizontalAlignment(HorizontalAlignment.LEFT)
+				.font(reportFont.getBoldItalicFont()).horizontalAlignment(HorizontalAlignment.LEFT)
 				.verticalAlignment(VerticalAlignment.MIDDLE);
 
 		Annotation annotation = Annotation.builder().id(test.getId()).build();
 		annotations.addTestNameMediaAnnotation(annotation);
+
+		TextSanitizer textSanitizer = TextSanitizer.builder().font(reportFont.getBoldItalicFont()).build();
 
 		tableBuilder.addRow(Row.builder()
 				.add(TextLinkCell.builder().annotation(annotation).showLine(false).minHeight(NAME_HEIGHT)

@@ -15,7 +15,6 @@ import tech.grasshopper.reporter.component.decorator.BackgroundDecorator;
 import tech.grasshopper.reporter.component.decorator.BorderDecorator;
 import tech.grasshopper.reporter.component.text.MultipleTextComponent;
 import tech.grasshopper.reporter.component.text.Text;
-import tech.grasshopper.reporter.font.ReportFont;
 import tech.grasshopper.reporter.optimizer.TextLengthOptimizer;
 import tech.grasshopper.reporter.structure.Display;
 import tech.grasshopper.reporter.util.DateUtil;
@@ -89,16 +88,16 @@ public class DashboardStatisticsDisplay extends Display {
 
 	private void createFirstLevelFailedTextBox() {
 		List<Text> texts = createDurationPassFailTexts(strategyDisplay.firstLevelText() + " Failed : ",
-				String.valueOf(report.getStats().getParent().get(Status.FAIL)),config.getFailCountColor(),
+				String.valueOf(report.getStats().getParent().get(Status.FAIL)), config.getFailCountColor(),
 				TEST_FAILED_X_LOCATION);
 		createTestStatisticsTextBox(texts, TEST_FAILED_X_LOCATION, CONTAINER_PASS_FAIL_WIDTH);
 	}
 
 	private List<Text> createDurationPassFailTexts(String title, String value, Color valueColor, float xLocation) {
 		List<Text> texts = new ArrayList<>();
-		texts.add(Text.builder().fontSize(TITLE_FONT_SIZE).font(ReportFont.ITALIC_FONT).textColor(Color.BLACK)
+		texts.add(Text.builder().fontSize(TITLE_FONT_SIZE).font(reportFont.getItalicFont()).textColor(Color.BLACK)
 				.xlocation(xLocation + CONTAINER_PADDING).ylocation(FIRST_ROW_Y_LOCATION).text(title).build());
-		texts.add(Text.builder().fontSize(DURATION_PASS_FAIL_FONT_SIZE).font(ReportFont.BOLD_ITALIC_FONT)
+		texts.add(Text.builder().fontSize(DURATION_PASS_FAIL_FONT_SIZE).font(reportFont.getBoldItalicFont())
 				.textColor(valueColor).xlocation(xLocation + CONTAINER_PADDING).ylocation(SECOND_ROW_Y_LOCATION)
 				.text(value).build());
 		return texts;
@@ -106,31 +105,31 @@ public class DashboardStatisticsDisplay extends Display {
 
 	private List<Text> createTestTexts(LocalDateTime datetime, String title, Color dateTimeColor, float xLocation) {
 		List<Text> texts = new ArrayList<>();
-		texts.add(Text.builder().fontSize(TITLE_FONT_SIZE).font(ReportFont.ITALIC_FONT).textColor(Color.BLACK)
+		texts.add(Text.builder().fontSize(TITLE_FONT_SIZE).font(reportFont.getItalicFont()).textColor(Color.BLACK)
 				.xlocation(xLocation + CONTAINER_PADDING).ylocation(FIRST_ROW_Y_LOCATION).text(title).build());
 
-		int titleWidth = TextLengthOptimizer.builder().font(ReportFont.ITALIC_FONT).fontsize(TITLE_FONT_SIZE).build()
-				.textWidth(title);
+		int titleWidth = TextLengthOptimizer.builder().font(reportFont.getItalicFont()).fontsize(TITLE_FONT_SIZE)
+				.build().textWidth(title);
 
-		texts.add(Text.builder().fontSize(DATE_FONT_SIZE).font(ReportFont.BOLD_ITALIC_FONT).textColor(dateTimeColor)
+		texts.add(Text.builder().fontSize(DATE_FONT_SIZE).font(reportFont.getBoldItalicFont()).textColor(dateTimeColor)
 				.xlocation(xLocation + CONTAINER_PADDING + titleWidth + 2).ylocation(FIRST_ROW_Y_LOCATION)
 				.text(DateUtil.formatDateWOYear(datetime)).build());
 
-		texts.add(Text.builder().fontSize(DATE_FONT_SIZE).font(ReportFont.BOLD_ITALIC_FONT).textColor(dateTimeColor)
+		texts.add(Text.builder().fontSize(DATE_FONT_SIZE).font(reportFont.getBoldItalicFont()).textColor(dateTimeColor)
 				.xlocation(xLocation + CONTAINER_PADDING).ylocation(SECOND_ROW_Y_LOCATION)
 				.text(DateUtil.formatTime(datetime)).build());
 
-		int timeWidth = TextLengthOptimizer.builder().font(ReportFont.BOLD_ITALIC_FONT).fontsize(DATE_FONT_SIZE).build()
-				.textWidth(DateUtil.formatTime(datetime));
+		int timeWidth = TextLengthOptimizer.builder().font(reportFont.getBoldItalicFont()).fontsize(DATE_FONT_SIZE)
+				.build().textWidth(DateUtil.formatTime(datetime));
 
-		texts.add(Text.builder().fontSize(DATE_MILLIS_FONT_SIZE).font(ReportFont.BOLD_ITALIC_FONT)
+		texts.add(Text.builder().fontSize(DATE_MILLIS_FONT_SIZE).font(reportFont.getBoldItalicFont())
 				.textColor(dateTimeColor).xlocation(xLocation + CONTAINER_PADDING + timeWidth + 1)
 				.ylocation(SECOND_ROW_Y_LOCATION).text("." + DateUtil.formatTimeMillis(datetime)).build());
 
-		int millisWidth = TextLengthOptimizer.builder().font(ReportFont.BOLD_ITALIC_FONT)
+		int millisWidth = TextLengthOptimizer.builder().font(reportFont.getBoldItalicFont())
 				.fontsize(DATE_MILLIS_FONT_SIZE).build().textWidth("." + DateUtil.formatTimeMillis(datetime));
 
-		texts.add(Text.builder().fontSize(DATE_FONT_SIZE).font(ReportFont.BOLD_ITALIC_FONT).textColor(dateTimeColor)
+		texts.add(Text.builder().fontSize(DATE_FONT_SIZE).font(reportFont.getBoldItalicFont()).textColor(dateTimeColor)
 				.xlocation(xLocation + CONTAINER_PADDING + timeWidth + 1 + millisWidth + 5)
 				.ylocation(SECOND_ROW_Y_LOCATION).text(DateUtil.formatAMPM(datetime)).build());
 

@@ -8,6 +8,7 @@ import com.aventstack.extentreports.model.Log;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
+import tech.grasshopper.reporter.optimizer.TextSanitizer;
 
 @Data
 @SuperBuilder
@@ -18,8 +19,9 @@ public class DefaultMarkup extends MarkupDisplay {
 
 	@Override
 	public AbstractCell displayDetails() {
+		TextSanitizer textSanitizer = TextSanitizer.builder().font(logFont).build();
 
 		return TextCell.builder().text(textSanitizer.sanitizeText(log.getDetails())).textColor(textColor)
-				.fontSize(LOG_FONT_SIZE).font(LOG_FONT).lineSpacing(MULTILINE_SPACING).build();
+				.fontSize(LOG_FONT_SIZE).font(logFont).lineSpacing(MULTILINE_SPACING).build();
 	}
 }

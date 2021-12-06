@@ -3,7 +3,6 @@ package tech.grasshopper.reporter.tests;
 import java.awt.Color;
 import java.util.List;
 
-import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.vandeseer.easytable.settings.HorizontalAlignment;
 import org.vandeseer.easytable.settings.VerticalAlignment;
 import org.vandeseer.easytable.structure.Row;
@@ -21,8 +20,6 @@ import lombok.experimental.SuperBuilder;
 import tech.grasshopper.pdf.structure.cell.TableWithinTableCell;
 import tech.grasshopper.pdf.structure.cell.TextLabelCell;
 import tech.grasshopper.reporter.annotation.AnnotationStore;
-import tech.grasshopper.reporter.font.ReportFont;
-import tech.grasshopper.reporter.optimizer.TextSanitizer;
 import tech.grasshopper.reporter.structure.Display;
 import tech.grasshopper.reporter.structure.TableCreator;
 import tech.grasshopper.reporter.util.DateUtil;
@@ -42,15 +39,12 @@ public class TestLogsDisplay extends Display implements TestIndent {
 
 	private static final float BORDER_WIDTH = 1f;
 	private static final int LOGS_TABLE_CONTENT_FONT_SIZE = 10;
-	private static final PDFont LOGS_TABLE_CONTENT_FONT = ReportFont.REGULAR_FONT;
 
 	private static final float GAP_HEIGHT = 15f;
 
 	protected Test test;
 
 	protected TableBuilder tableBuilder;
-
-	protected final TextSanitizer textSanitizer = TextSanitizer.builder().font(LOGS_TABLE_CONTENT_FONT).build();
 
 	private AnnotationStore annotations;
 
@@ -77,7 +71,7 @@ public class TestLogsDisplay extends Display implements TestIndent {
 	}
 
 	private void createHeaderRow() {
-		tableBuilder.addRow(Row.builder().height(LOGS_HEADER_HEIGHT).font(ReportFont.ITALIC_FONT)
+		tableBuilder.addRow(Row.builder().height(LOGS_HEADER_HEIGHT).font(reportFont.getItalicFont())
 				.fontSize(LOGS_HEADER_FONT_SIZE).add(TextCell.builder().text("Status").build())
 				.add(TextCell.builder().text("Timestamp").build()).add(TextCell.builder().text("Log Details").build())
 				.build());
@@ -87,7 +81,7 @@ public class TestLogsDisplay extends Display implements TestIndent {
 		test.getLogs().forEach(l -> {
 			AbstractCell detailsCell = createLogDisplayCell(l, test);
 
-			Row row = Row.builder().padding(PADDING).font(LOGS_TABLE_CONTENT_FONT)
+			Row row = Row.builder().padding(PADDING).font(reportFont.getRegularFont())
 					.fontSize(LOGS_TABLE_CONTENT_FONT_SIZE)
 					.add(TextLabelCell.builder().text(l.getStatus().toString())
 							.labelColor(config.statusColor(l.getStatus())).build())
@@ -102,7 +96,7 @@ public class TestLogsDisplay extends Display implements TestIndent {
 
 	private AbstractCell createLogDisplayCell(Log log, Test test) {
 		LogDetailsCollector logDetailsCollector = LogDetailsCollector.builder().annotations(annotations).config(config)
-				.document(document).test(test)
+				.document(document).reportFont(reportFont).test(test)
 				.width(LOGS_DETAILS_WIDTH - (test.getLevel() * TestDetails.LEVEL_X_INDENT)).build();
 
 		List<AbstractCell> allDetailCells = logDetailsCollector.createLogDetailCells(log);

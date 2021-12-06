@@ -13,6 +13,7 @@ import com.google.gson.JsonParser;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
+import tech.grasshopper.reporter.optimizer.TextSanitizer;
 
 @Data
 @SuperBuilder
@@ -25,9 +26,9 @@ public class JsonMarkup extends MarkupDisplay {
 
 	@Override
 	public AbstractCell displayDetails() {
-
+		TextSanitizer textSanitizer = TextSanitizer.builder().font(logFont).build();
 		return TextCell.builder().text(textSanitizer.sanitizeText(jsonText())).textColor(textColor)
-				.fontSize(LOG_FONT_SIZE).font(LOG_FONT).lineSpacing(MULTILINE_SPACING).build();
+				.fontSize(LOG_FONT_SIZE).font(logFont).lineSpacing(MULTILINE_SPACING).build();
 	}
 
 	// The code is not optimum with regards to exception handling. Needs to be

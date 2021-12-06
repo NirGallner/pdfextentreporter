@@ -27,13 +27,15 @@ public class Dashboard extends Section implements DestinationAware {
 
 		try (final PDPageContentStream content = new PDPageContentStream(document, page, AppendMode.APPEND, true)) {
 
-			DashboardHeaderDisplay.builder().config(config).content(content).build().display();
+			DashboardHeaderDisplay.builder().config(config).content(content).reportFont(reportFont).build().display();
 
-			DashboardStatisticsDisplay.builder().config(config).content(content).report(report).build().display();
+			DashboardStatisticsDisplay.builder().config(config).content(content).report(report).reportFont(reportFont)
+					.build().display();
 
 			DashboardDonutChartDisplay.builder().document(document).config(config).content(content).report(report)
+					.reportFont(reportFont).build().display();
+			DashboardChartLegendDisplay.builder().config(config).content(content).report(report).reportFont(reportFont)
 					.build().display();
-			DashboardChartLegendDisplay.builder().config(config).content(content).report(report).build().display();
 		}
 
 		createDestination();

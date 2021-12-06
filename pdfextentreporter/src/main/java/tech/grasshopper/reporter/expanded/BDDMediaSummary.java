@@ -32,7 +32,8 @@ public class BDDMediaSummary extends MediaSummary {
 
 			if (containsMedia) {
 				ExpandedMediaDisplay expandedMediaDisplay = ExpandedMediaDisplay.builder().document(document)
-						.config(config).test(test).annotations(annotations).ylocation(yLocation).build();
+						.reportFont(reportFont).config(config).test(test).annotations(annotations).ylocation(yLocation)
+						.build();
 				expandedMediaDisplay.display();
 				createMediaDestination(expandedMediaDisplay);
 				yLocation = expandedMediaDisplay.getYlocation();

@@ -32,7 +32,7 @@ public class PageHeader {
 		sectionPageNumberMap.put(pageTitle, pageNo);
 	}
 
-	public void processHeader(PDDocument document) {
+	public void processHeader(PDDocument document, ReportFont reportFont) {
 
 		if (sectionPageNumberMap.isEmpty())
 			return;
@@ -46,25 +46,27 @@ public class PageHeader {
 				sectionName = entry.getKey();
 				startPageNum = entry.getValue();
 			} else {
-				createTitleAndNumber(document, startPageNum, entry.getValue(), sectionName);
+				createTitleAndNumber(document, reportFont, startPageNum, entry.getValue(), sectionName);
 				sectionName = entry.getKey();
 				startPageNum = entry.getValue();
 			}
 		}
-		createTitleAndNumber(document, startPageNum, document.getNumberOfPages(), sectionName);
+		createTitleAndNumber(document, reportFont, startPageNum, document.getNumberOfPages(), sectionName);
 	}
 
-	private void createTitleAndNumber(PDDocument document, int startPageNum, int endPageNum, String sectionName) {
+	private void createTitleAndNumber(PDDocument document, ReportFont reportFont, int startPageNum, int endPageNum,
+			String sectionName) {
 		for (int i = startPageNum; i < endPageNum; i++) {
 			PDPage page = document.getPage(i);
 
 			try (final PDPageContentStream content = new PDPageContentStream(document, page, AppendMode.APPEND, true)) {
-				Text pageTitle = Text.builder().textColor(Color.LIGHT_GRAY).xlocation(60).font(ReportFont.ITALIC_FONT)
-						.ylocation(page.getMediaBox().getHeight() - 40).text(sectionName).build();
+				Text pageTitle = Text.builder().textColor(Color.LIGHT_GRAY).xlocation(60)
+						.font(reportFont.getItalicFont()).ylocation(page.getMediaBox().getHeight() - 40)
+						.text(sectionName).build();
 				TextComponent.builder().text(pageTitle).content(content).build().display();
 
 				Text pageNumber = Text.builder().textColor(Color.LIGHT_GRAY)
-						.xlocation(page.getMediaBox().getWidth() - 90).font(ReportFont.ITALIC_FONT)
+						.xlocation(page.getMediaBox().getWidth() - 90).font(reportFont.getItalicFont())
 						.ylocation(page.getMediaBox().getHeight() - 40).text("-- " + (i + 1) + " --").build();
 				TextComponent.builder().text(pageNumber).content(content).build().display();
 			} catch (IOException e) {

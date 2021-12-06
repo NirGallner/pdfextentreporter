@@ -10,6 +10,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 import tech.grasshopper.pdf.structure.cell.TextLabelCell;
+import tech.grasshopper.reporter.optimizer.TextSanitizer;
 
 @Data
 @SuperBuilder
@@ -30,16 +31,18 @@ public class LabelMarkup extends MarkupDisplay {
 		}
 
 		Color textColor = null;
+		TextSanitizer textSanitizer = TextSanitizer.builder().font(logFont).build();
+
 		try {
 			textColor = textColor();
 		} catch (Exception e) {
 			logger.log(Level.WARNING, "Unable to retrieve text color for label text, using default BLACK.");
 			return TextLabelCell.builder().text(textSanitizer.sanitizeText(element.text())).labelColor(Color.BLACK)
-					.fontSize(LOG_FONT_SIZE).font(LOG_FONT).lineSpacing(MULTILINE_SPACING).build();
+					.fontSize(LOG_FONT_SIZE).font(logFont).lineSpacing(MULTILINE_SPACING).build();
 		}
 
 		return TextLabelCell.builder().text(textSanitizer.sanitizeText(text)).labelColor(textColor)
-				.fontSize(LOG_FONT_SIZE).font(LOG_FONT).lineSpacing(MULTILINE_SPACING).build();
+				.fontSize(LOG_FONT_SIZE).font(logFont).lineSpacing(MULTILINE_SPACING).build();
 	}
 
 	private Color textColor() {

@@ -27,7 +27,6 @@ public class TestDetails extends Section implements PageHeaderAware {
 
 	@Override
 	public void createSection() {
-
 		if (report.getTestList().isEmpty())
 			return;
 
@@ -43,14 +42,14 @@ public class TestDetails extends Section implements PageHeaderAware {
 		for (Test test : allTests) {
 
 			TestBasicDetailsDisplay testBasicDetailsDisplay = TestBasicDetailsDisplay.builder().document(document)
-					.config(config).test(test).ylocation(yLocation).build();
+					.reportFont(reportFont).config(config).test(test).ylocation(yLocation).build();
 			testBasicDetailsDisplay.display();
 			createTestDestination(testBasicDetailsDisplay);
 			yLocation = testBasicDetailsDisplay.getYlocation();
 
 			if (test.hasScreenCapture()) {
-				TestMediaDisplay testMediaDisplay = TestMediaDisplay.builder().document(document).config(config)
-						.test(test).annotations(annotations).ylocation(yLocation).build();
+				TestMediaDisplay testMediaDisplay = TestMediaDisplay.builder().document(document).reportFont(reportFont)
+						.config(config).test(test).annotations(annotations).ylocation(yLocation).build();
 				testMediaDisplay.display();
 
 				yLocation = testMediaDisplay.getYlocation();
@@ -58,15 +57,15 @@ public class TestDetails extends Section implements PageHeaderAware {
 
 			if (!test.getGeneratedLog().isEmpty()) {
 				TestGeneratedLogDisplay testGeneratedLogDisplay = TestGeneratedLogDisplay.builder().document(document)
-						.config(config).test(test).ylocation(yLocation).build();
+						.reportFont(reportFont).config(config).test(test).ylocation(yLocation).build();
 				testGeneratedLogDisplay.display();
 
 				yLocation = testGeneratedLogDisplay.getYlocation();
 			}
 
 			if (test.hasLog()) {
-				TestLogsDisplay testLogsDisplay = TestLogsDisplay.builder().document(document).config(config).test(test)
-						.annotations(annotations).ylocation(yLocation).build();
+				TestLogsDisplay testLogsDisplay = TestLogsDisplay.builder().document(document).reportFont(reportFont)
+						.config(config).test(test).annotations(annotations).ylocation(yLocation).build();
 				testLogsDisplay.display();
 
 				yLocation = testLogsDisplay.getYlocation();

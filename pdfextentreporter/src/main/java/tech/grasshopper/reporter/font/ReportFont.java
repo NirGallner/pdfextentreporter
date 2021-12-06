@@ -8,37 +8,36 @@ import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
 
+import lombok.Getter;
 import tech.grasshopper.reporter.exception.PdfReportException;
 
+@Getter
 public class ReportFont {
 
 	private static final Logger logger = Logger.getLogger(ReportFont.class.getName());
 
-	public static PDFont REGULAR_FONT;
-	public static PDFont BOLD_FONT;
-	public static PDFont ITALIC_FONT;
-	public static PDFont BOLD_ITALIC_FONT;
-	public static final String FONT_FOLDER = "/tech/grasshopper/ttf/";
-
-	private PDDocument document;
+	private PDFont regularFont;
+	private PDFont boldFont;
+	private PDFont italicFont;
+	private PDFont boldItalicFont;
+	private static final String FONT_FOLDER = "/tech/grasshopper/ttf/";
 
 	public ReportFont(PDDocument document) {
-		this.document = document;
+		loadReportFontFamily(document);
 	}
 
-	public void loadReportFontFamily() {
-
+	private void loadReportFontFamily(PDDocument document) {
 		try {
-			REGULAR_FONT = PDType0Font.load(document,
+			regularFont = PDType0Font.load(document,
 					ReportFont.class.getResourceAsStream(FONT_FOLDER + "LiberationSans-Regular.ttf"));
 
-			BOLD_FONT = PDType0Font.load(document,
+			boldFont = PDType0Font.load(document,
 					ReportFont.class.getResourceAsStream(FONT_FOLDER + "LiberationSans-Bold.ttf"));
 
-			ITALIC_FONT = PDType0Font.load(document,
+			italicFont = PDType0Font.load(document,
 					ReportFont.class.getResourceAsStream(FONT_FOLDER + "LiberationSans-Italic.ttf"));
 
-			BOLD_ITALIC_FONT = PDType0Font.load(document,
+			boldItalicFont = PDType0Font.load(document,
 					ReportFont.class.getResourceAsStream(FONT_FOLDER + "LiberationSans-BoldItalic.ttf"));
 		} catch (IOException e) {
 			logger.log(Level.WARNING,
@@ -46,5 +45,11 @@ public class ReportFont {
 					e);
 			throw new PdfReportException(e);
 		}
+	}
+
+	@Override
+	public String toString() {
+		return regularFont.getName() + " - " + boldFont.getName() + " - " + italicFont.getName() + " - "
+				+ boldItalicFont.getName();
 	}
 }

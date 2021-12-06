@@ -11,7 +11,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 import tech.grasshopper.reporter.destination.Destination;
-import tech.grasshopper.reporter.font.ReportFont;
 import tech.grasshopper.reporter.header.PageHeader;
 import tech.grasshopper.reporter.header.PageHeaderAware;
 import tech.grasshopper.reporter.optimizer.TextSanitizer;
@@ -68,7 +67,7 @@ public class TestBDDDetails extends Section implements PageHeaderAware {
 
 	private void displayBasicTestDetails(Test test) {
 		TestBasicDetailsDisplay testBasicDetailsDisplay = TestBasicDetailsDisplay.builder().document(document)
-				.config(config).test(test).ylocation(yLocation).build();
+				.reportFont(reportFont).config(config).test(test).ylocation(yLocation).build();
 		testBasicDetailsDisplay.display();
 		createTestDestination(testBasicDetailsDisplay);
 		yLocation = testBasicDetailsDisplay.getYlocation();
@@ -76,11 +75,11 @@ public class TestBDDDetails extends Section implements PageHeaderAware {
 
 	private void displayExecutableTestDetailsAndCreateHiddenTestDestination(Test test) {
 		TestBDDExecutableDisplay executableDisplay = TestBDDExecutableDisplay.builder().test(test).document(document)
-				.config(config).ylocation(yLocation).annotations(annotations).build();
+				.reportFont(reportFont).config(config).ylocation(yLocation).annotations(annotations).build();
 		executableDisplay.display();
 		yLocation = executableDisplay.getYlocation();
 
-		TextSanitizer textSanitizer = TextSanitizer.builder().font(ReportFont.REGULAR_FONT).build();
+		TextSanitizer textSanitizer = TextSanitizer.builder().font(reportFont.getRegularFont()).build();
 
 		List<Test> childTests = new ArrayList<>();
 		collectTestNodes(test, childTests);

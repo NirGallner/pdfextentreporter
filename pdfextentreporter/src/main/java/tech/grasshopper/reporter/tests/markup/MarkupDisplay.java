@@ -10,9 +10,8 @@ import org.vandeseer.easytable.structure.cell.TextCell;
 
 import lombok.Builder.Default;
 import lombok.Data;
+import lombok.NonNull;
 import lombok.experimental.SuperBuilder;
-import tech.grasshopper.reporter.font.ReportFont;
-import tech.grasshopper.reporter.optimizer.TextSanitizer;
 
 @Data
 @SuperBuilder
@@ -21,7 +20,8 @@ public abstract class MarkupDisplay {
 	protected final float BORDER_WIDTH = 1f;
 	protected final float MULTILINE_SPACING = 1f;
 
-	protected final PDFont LOG_FONT = ReportFont.REGULAR_FONT;
+	@NonNull
+	protected PDFont logFont;
 	protected final int LOG_FONT_SIZE = 11;
 
 	protected Element element;
@@ -30,11 +30,9 @@ public abstract class MarkupDisplay {
 	@Default
 	protected Color textColor = Color.BLACK;
 
-	protected final TextSanitizer textSanitizer = TextSanitizer.builder().font(LOG_FONT).build();
-
 	public abstract AbstractCell displayDetails();
 
 	protected AbstractCell errorDisplay(String error) {
-		return TextCell.builder().text(error).fontSize(LOG_FONT_SIZE).font(LOG_FONT).textColor(Color.RED).build();
+		return TextCell.builder().text(error).fontSize(LOG_FONT_SIZE).font(logFont).textColor(Color.RED).build();
 	}
 }

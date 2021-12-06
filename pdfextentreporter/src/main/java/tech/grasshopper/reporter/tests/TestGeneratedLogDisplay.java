@@ -2,7 +2,6 @@ package tech.grasshopper.reporter.tests;
 
 import java.awt.Color;
 
-import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.vandeseer.easytable.settings.HorizontalAlignment;
 import org.vandeseer.easytable.settings.VerticalAlignment;
 import org.vandeseer.easytable.structure.Row;
@@ -17,7 +16,6 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 import tech.grasshopper.pdf.structure.cell.TextLabelCell;
-import tech.grasshopper.reporter.font.ReportFont;
 import tech.grasshopper.reporter.structure.Display;
 import tech.grasshopper.reporter.structure.TableCreator;
 import tech.grasshopper.reporter.tests.markup.TestMarkup;
@@ -38,7 +36,6 @@ public class TestGeneratedLogDisplay extends Display implements TestIndent {
 	private static final float BORDER_WIDTH = 1f;
 	private static final float GAP_HEIGHT = 10f;
 	private static final int LOGS_TABLE_CONTENT_FONT_SIZE = 10;
-	private static final PDFont LOGS_TABLE_CONTENT_FONT = ReportFont.REGULAR_FONT;
 
 	protected Test test;
 
@@ -66,7 +63,7 @@ public class TestGeneratedLogDisplay extends Display implements TestIndent {
 	}
 
 	private void createHeaderRow() {
-		tableBuilder.addRow(Row.builder().height(LOGS_HEADER_HEIGHT).font(ReportFont.ITALIC_FONT)
+		tableBuilder.addRow(Row.builder().height(LOGS_HEADER_HEIGHT).font(reportFont.getItalicFont())
 				.fontSize(LOGS_HEADER_FONT_SIZE).add(TextCell.builder().text("Status").build())
 				.add(TextCell.builder().text("Generated Log Details").build()).build());
 	}
@@ -75,10 +72,10 @@ public class TestGeneratedLogDisplay extends Display implements TestIndent {
 		test.getGeneratedLog().forEach(l -> {
 			AbstractCell detailCell = TestMarkup.builder().test(test).log(l)
 					.width(LOGS_DETAILS_WIDTH - (2 * PADDING) - (test.getLevel() * TestDetails.LEVEL_X_INDENT))
-					.config(config).build().createMarkupCell();
+					.config(config).reportFont(reportFont).build().createMarkupCell();
 
-			Row row = Row.builder().font(LOGS_TABLE_CONTENT_FONT).fontSize(LOGS_TABLE_CONTENT_FONT_SIZE).wordBreak(true)
-					.padding(PADDING).add(TextLabelCell.builder().text(l.getStatus().toString())
+			Row row = Row.builder().font(reportFont.getRegularFont()).fontSize(LOGS_TABLE_CONTENT_FONT_SIZE)
+					.wordBreak(true).padding(PADDING).add(TextLabelCell.builder().text(l.getStatus().toString())
 							.labelColor(config.statusColor(l.getStatus())).build())
 					.add(detailCell).build();
 			tableBuilder.addRow(row);

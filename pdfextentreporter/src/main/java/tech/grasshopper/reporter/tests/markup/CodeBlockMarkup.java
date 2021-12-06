@@ -17,6 +17,7 @@ import org.vandeseer.easytable.util.PdfUtil;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
+import tech.grasshopper.reporter.optimizer.TextSanitizer;
 
 @Data
 @SuperBuilder
@@ -50,14 +51,15 @@ public class CodeBlockMarkup extends MarkupDisplay {
 				logger.log(Level.SEVERE, "Unable to process code block.");
 			}
 
-			StyledText codeText = StyledText.builder().fontSize((float) LOG_FONT_SIZE).font(LOG_FONT).color(textColor)
+			TextSanitizer textSanitizer = TextSanitizer.builder().font(logFont).build();
+			StyledText codeText = StyledText.builder().fontSize((float) LOG_FONT_SIZE).font(logFont).color(textColor)
 					.text(textSanitizer.sanitizeText(text)).build();
 			paragraphBuilder.append(codeText);
 
 			if (count < elements.size()) {
 				paragraphBuilder.appendNewLine(10f);
 
-				paragraphBuilder.append(StyledText.builder().fontSize((float) LOG_FONT_SIZE).font(LOG_FONT)
+				paragraphBuilder.append(StyledText.builder().fontSize((float) LOG_FONT_SIZE).font(logFont)
 						.color(Color.GRAY).text(createDashedLine()).build());
 
 				paragraphBuilder.appendNewLine(10f);
@@ -70,7 +72,7 @@ public class CodeBlockMarkup extends MarkupDisplay {
 	private String createDashedLine() {
 		// Subtract 5f just for kicks
 		List<String> dashedLines = PdfUtil.getOptimalTextBreakLines(
-				String.join("", Collections.nCopies(MAX_DASH_COUNT, "-")), LOG_FONT, LOG_FONT_SIZE, width - 5f);
+				String.join("", Collections.nCopies(MAX_DASH_COUNT, "-")), logFont, LOG_FONT_SIZE, width - 5f);
 
 		return dashedLines.isEmpty() ? String.join("", Collections.nCopies(DEFAULT_DASH_COUNT, "-"))
 				: dashedLines.get(0);

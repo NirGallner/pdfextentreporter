@@ -28,7 +28,6 @@ import tech.grasshopper.pdf.structure.cell.TextLabelCell;
 import tech.grasshopper.reporter.context.AttributeType;
 import tech.grasshopper.reporter.destination.Destination;
 import tech.grasshopper.reporter.destination.DestinationAware;
-import tech.grasshopper.reporter.font.ReportFont;
 import tech.grasshopper.reporter.optimizer.TextSanitizer;
 import tech.grasshopper.reporter.structure.Display;
 import tech.grasshopper.reporter.structure.TableCreator;
@@ -39,7 +38,7 @@ import tech.grasshopper.reporter.util.DateUtil;
 @EqualsAndHashCode(callSuper = false)
 public class TestBasicDetailsDisplay extends Display implements TestIndent, DestinationAware {
 
-	private static final PDFont CONTENT_FONT = ReportFont.BOLD_ITALIC_FONT;
+	private final PDFont CONTENT_FONT = reportFont.getBoldItalicFont();
 
 	private static final int NAME_FONT_SIZE = 15;
 	private static final int DESCRIPTION_FONT_SIZE = 11;
@@ -86,7 +85,7 @@ public class TestBasicDetailsDisplay extends Display implements TestIndent, Dest
 		tableBuilder = Table.builder()
 				.addColumnsOfWidth(NAME_WIDTH - (calculateIndent(test.getLevel(), config.getTestMaxIndentLevel())
 						* TestDetails.LEVEL_X_INDENT), STATUS_WIDTH)
-				.padding(PADDING).borderWidth(BORDER_WIDTH).font(ReportFont.BOLD_ITALIC_FONT)
+				.padding(PADDING).borderWidth(BORDER_WIDTH).font(reportFont.getBoldItalicFont())
 				.horizontalAlignment(HorizontalAlignment.LEFT).verticalAlignment(VerticalAlignment.MIDDLE);
 	}
 
@@ -96,7 +95,7 @@ public class TestBasicDetailsDisplay extends Display implements TestIndent, Dest
 						.text(textSanitizer.sanitizeText(test.getName())).lineSpacing(MULTI_LINE_SPACING)
 						.textColor(config.getTestNameColor()).build())
 				.add(TextLabelCell.builder().text(test.getStatus().toString())
-						.labelColor(config.statusColor(test.getStatus())).fontSize(12).font(ReportFont.BOLD_FONT)
+						.labelColor(config.statusColor(test.getStatus())).fontSize(12).font(reportFont.getBoldFont())
 						.padding(0f).build())
 				.build());
 	}

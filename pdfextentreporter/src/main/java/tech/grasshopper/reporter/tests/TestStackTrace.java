@@ -13,7 +13,6 @@ import com.aventstack.extentreports.model.Log;
 import lombok.Builder;
 import lombok.Builder.Default;
 import lombok.Data;
-import tech.grasshopper.reporter.font.ReportFont;
 import tech.grasshopper.reporter.optimizer.TextSanitizer;
 
 @Data
@@ -47,7 +46,7 @@ public class TestStackTrace {
 
 			stackText = splitLines.stream().collect(Collectors.joining(System.getProperty("line.separator")));
 		}
-		return TextCell.builder().text(stackText).lineSpacing(lineSpacing).minHeight(height)
-				.font(ReportFont.REGULAR_FONT).fontSize(fontSize).wordBreak(true).textColor(color).build();
+		return TextCell.builder().text(stackText).lineSpacing(lineSpacing).minHeight(height).font(font)
+				.fontSize(fontSize).wordBreak(true).textColor(color).build();
 	}
 }

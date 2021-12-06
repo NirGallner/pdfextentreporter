@@ -20,7 +20,6 @@ import lombok.experimental.SuperBuilder;
 import tech.grasshopper.pdf.annotation.Annotation;
 import tech.grasshopper.pdf.structure.cell.TextLinkCell;
 import tech.grasshopper.reporter.annotation.AnnotationStore;
-import tech.grasshopper.reporter.font.ReportFont;
 
 @Data
 @SuperBuilder
@@ -64,24 +63,25 @@ public class ContextAttributeSummary extends AttributeSummaryDisplay {
 	}
 
 	private void createTitleRow() {
-		tableBuilder.addRow(Row.builder().height(NAME_HEIGHT).font(ReportFont.BOLD_ITALIC_FONT).fontSize(NAME_FONT_SIZE)
-				.borderWidth(0)
+		tableBuilder.addRow(Row.builder().height(NAME_HEIGHT).font(reportFont.getBoldItalicFont())
+				.fontSize(NAME_FONT_SIZE).borderWidth(0)
 				.add(TextCell.builder().text(type.toString()).textColor(config.attributeHeaderColor(type))
 						.horizontalAlignment(HorizontalAlignment.LEFT).colSpan(7).build())
 				.build());
 	}
 
 	private void createHeaderRow() {
-		tableBuilder.addRow(Row.builder().height(HEADER_HEIGHT).font(ReportFont.ITALIC_FONT).fontSize(HEADER_FONT_SIZE)
-				.add(TextCell.builder().text("Name").textColor(config.attributeNameColor(type))
-						.font(ReportFont.BOLD_ITALIC_FONT).lineSpacing(MULTILINE_SPACING)
-						.horizontalAlignment(HorizontalAlignment.LEFT).build())
-				.add(TextCell.builder().text("Pass").textColor(config.getPassColor()).build())
-				.add(TextCell.builder().text("Fail").textColor(config.getFailColor()).build())
-				.add(TextCell.builder().text("Skip").textColor(config.getSkipColor()).build())
-				.add(TextCell.builder().text("Warn").textColor(config.getWarnColor()).build())
-				.add(TextCell.builder().text("Info").textColor(config.getInfoColor()).build())
-				.add(TextCell.builder().text("Pass %").textColor(config.getPassColor()).build()).build());
+		tableBuilder
+				.addRow(Row.builder().height(HEADER_HEIGHT).font(reportFont.getItalicFont()).fontSize(HEADER_FONT_SIZE)
+						.add(TextCell.builder().text("Name").textColor(config.attributeNameColor(type))
+								.font(reportFont.getBoldItalicFont()).lineSpacing(MULTILINE_SPACING)
+								.horizontalAlignment(HorizontalAlignment.LEFT).build())
+						.add(TextCell.builder().text("Pass").textColor(config.getPassColor()).build())
+						.add(TextCell.builder().text("Fail").textColor(config.getFailColor()).build())
+						.add(TextCell.builder().text("Skip").textColor(config.getSkipColor()).build())
+						.add(TextCell.builder().text("Warn").textColor(config.getWarnColor()).build())
+						.add(TextCell.builder().text("Info").textColor(config.getInfoColor()).build())
+						.add(TextCell.builder().text("Pass %").textColor(config.getPassColor()).build()).build());
 	}
 
 	private void createDataRows() {

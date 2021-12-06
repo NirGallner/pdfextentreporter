@@ -18,7 +18,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 import tech.grasshopper.pdf.structure.cell.TableWithinTableCell;
-import tech.grasshopper.reporter.font.ReportFont;
+import tech.grasshopper.reporter.optimizer.TextSanitizer;
 
 @Data
 @SuperBuilder
@@ -73,7 +73,7 @@ public class TableMarkup extends MarkupDisplay {
 		Arrays.fill(columnWidths, colWidth);
 
 		TableBuilder tableBuilder = Table.builder().addColumnsOfWidth(columnWidths).fontSize(LOG_FONT_SIZE)
-				.font(LOG_FONT).borderWidth(BORDER_WIDTH).borderColor(Color.LIGHT_GRAY).wordBreak(true);
+				.font(logFont).borderWidth(BORDER_WIDTH).borderColor(Color.LIGHT_GRAY).wordBreak(true);
 
 		for (Element row : rows) {
 			if (row.children().isEmpty())
@@ -86,7 +86,9 @@ public class TableMarkup extends MarkupDisplay {
 			}
 
 			RowBuilder rowBuilder = Row.builder();
+			TextSanitizer textSanitizer = TextSanitizer.builder().font(logFont).build();
 			int j = 1;
+			
 			for (Element cell : cells) {
 				if (j > displayColumnCount)
 					break;
@@ -118,7 +120,7 @@ public class TableMarkup extends MarkupDisplay {
 
 			tableBuilder.addRow(Row.builder().add(TextCell.builder().colSpan(displayColumnCount)
 					.text("Only first " + tableCounts + " are shown. Modify the " + tableSettings + " settings.")
-					.minHeight(15f).font(ReportFont.REGULAR_FONT).fontSize(10).textColor(Color.RED).wordBreak(true)
+					.minHeight(15f).font(logFont).fontSize(10).textColor(Color.RED).wordBreak(true)
 					.lineSpacing(MULTILINE_SPACING).build()).build());
 		}
 		return tableBuilder.build();

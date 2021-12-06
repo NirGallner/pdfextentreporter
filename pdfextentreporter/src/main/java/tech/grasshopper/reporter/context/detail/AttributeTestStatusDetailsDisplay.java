@@ -21,7 +21,6 @@ import tech.grasshopper.pdf.annotation.Annotation;
 import tech.grasshopper.pdf.structure.cell.TextLabelCell;
 import tech.grasshopper.pdf.structure.cell.TextLinkCell;
 import tech.grasshopper.reporter.annotation.AnnotationStore;
-import tech.grasshopper.reporter.font.ReportFont;
 import tech.grasshopper.reporter.optimizer.TextSanitizer;
 import tech.grasshopper.reporter.structure.Display;
 import tech.grasshopper.reporter.structure.TableCreator;
@@ -43,7 +42,6 @@ public class AttributeTestStatusDetailsDisplay extends Display {
 
 	private static final float TABLE_BORDER_WIDTH = 1f;
 	private static final int TABLE_CONTENT_FONT_SIZE = 11;
-	private static final PDFont TABLE_CONTENT_FONT = ReportFont.REGULAR_FONT;
 	private static final float TABLE_CONTENT_COLUMN_PADDING = 7f;
 	private static final float MULTILINE_SPACING = 1f;
 
@@ -52,8 +50,6 @@ public class AttributeTestStatusDetailsDisplay extends Display {
 	protected TableBuilder tableBuilder;
 
 	protected AnnotationStore annotations;
-
-	protected final TextSanitizer textSanitizer = TextSanitizer.builder().font(TABLE_CONTENT_FONT).build();
 
 	@Override
 	public void display() {
@@ -72,18 +68,22 @@ public class AttributeTestStatusDetailsDisplay extends Display {
 	}
 
 	private void createTestHeaderRow() {
-		tableBuilder.addRow(Row.builder().height(HEADER_HEIGHT).font(ReportFont.BOLD_ITALIC_FONT)
+		tableBuilder.addRow(Row.builder().height(HEADER_HEIGHT).font(reportFont.getBoldItalicFont())
 				.fontSize(HEADER_FONT_SIZE).add(TextCell.builder().text("Status").build())
 				.add(TextCell.builder().text("Timestamp").build()).add(TextCell.builder().text("Test Name").build())
 				.build());
 	}
 
 	private void createTestDataRows() {
+		PDFont tableContentFont = reportFont.getRegularFont();
+
+		TextSanitizer textSanitizer = TextSanitizer.builder().font(tableContentFont).build();
+
 		attribute.getTestList().forEach(t -> {
 			Annotation annotation = Annotation.builder().id(t.getId()).build();
 			annotations.addTestNameAnnotation(annotation);
 
-			Row row = Row.builder().font(TABLE_CONTENT_FONT).fontSize(TABLE_CONTENT_FONT_SIZE).wordBreak(true)
+			Row row = Row.builder().font(tableContentFont).fontSize(TABLE_CONTENT_FONT_SIZE).wordBreak(true)
 					.padding(TABLE_CONTENT_COLUMN_PADDING)
 					.add(TextLabelCell.builder().text(t.getStatus().toString())
 							.labelColor(config.statusColor(t.getStatus())).build())

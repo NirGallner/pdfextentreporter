@@ -36,6 +36,8 @@ public class LogDetailsCollector {
 
 	private PDDocument document;
 
+	private ReportFont reportFont;
+
 	private Test test;
 
 	private ExtentPDFReporterConfig config;
@@ -51,9 +53,7 @@ public class LogDetailsCollector {
 	private static final float LOGS_MEDIA_HEIGHT = 100f;
 	private static final float LOGS_MEDIA_WIDTH = 100f;
 	private static final int LOGS_TABLE_CONTENT_FONT_SIZE = 10;
-	private static final PDFont LOGS_TABLE_CONTENT_FONT = ReportFont.REGULAR_FONT;
-	private static final int LOGS_STACK_TRACE_TABLE_CONTENT_FONT_SIZE = 11;
-	private static final PDFont LOGS_STACK_TRACE_TABLE_CONTENT_FONT = ReportFont.BOLD_FONT;
+	private static final int LOGS_STACK_TRACE_TABLE_CONTENT_FONT_SIZE = 10;
 
 	private static final float LOGS_DETAILS_HEIGHT = 15f;
 	private static final float LOGS_MEDIA_PLUS_WIDTH = 15f;
@@ -74,6 +74,8 @@ public class LogDetailsCollector {
 	}
 
 	private AbstractCell createDetailsMarkupCell(Log log) {
+		PDFont LOGS_TABLE_CONTENT_FONT = reportFont.getRegularFont();
+
 		TextSanitizer textSanitizer = TextSanitizer.builder().font(LOGS_TABLE_CONTENT_FONT).build();
 
 		Status status = bddReport ? test.getStatus() : log.getStatus();
@@ -82,7 +84,7 @@ public class LogDetailsCollector {
 				.textColor(config.statusColor(status)).build();
 
 		if (TestMarkup.isMarkup(log.getDetails()))
-			detailMarkupCell = TestMarkup.builder().log(log).test(test).bddReport(bddReport)
+			detailMarkupCell = TestMarkup.builder().log(log).test(test).bddReport(bddReport).reportFont(reportFont)
 					.width(width - (2 * PADDING)).config(config).build().createMarkupCell();
 		return detailMarkupCell;
 	}
@@ -96,7 +98,7 @@ public class LogDetailsCollector {
 			annotations.addTestMediaAnnotation(annotation);
 
 			tableBuilder.addRow(Row.builder()
-					.add(TextLinkCell.builder().text("+").annotation(annotation).font(ReportFont.REGULAR_FONT)
+					.add(TextLinkCell.builder().text("+").annotation(annotation).font(reportFont.getRegularFont())
 							.fontSize(15).textColor(Color.RED).showLine(false).verticalAlignment(VerticalAlignment.TOP)
 							.horizontalAlignment(HorizontalAlignment.CENTER).build())
 					.add(TestMedia.builder().media(log.getMedia()).document(document)
@@ -112,8 +114,8 @@ public class LogDetailsCollector {
 	}
 
 	private AbstractCell createExceptionCell(Log log) {
-		return TestStackTrace.builder().log(log).font(LOGS_STACK_TRACE_TABLE_CONTENT_FONT)
-				.color(config.getTestExceptionColor()).width(width - (2 * PADDING)).height(LOGS_DETAILS_HEIGHT)
+		return TestStackTrace.builder().log(log).font(reportFont.getRegularFont()).color(config.getTestExceptionColor())
+				.width(width - (2 * PADDING)).height(LOGS_DETAILS_HEIGHT)
 				.fontSize(LOGS_STACK_TRACE_TABLE_CONTENT_FONT_SIZE).padding(PADDING).build().createStackTraceCell();
 	}
 }

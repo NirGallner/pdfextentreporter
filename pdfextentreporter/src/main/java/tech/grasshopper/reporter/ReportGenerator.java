@@ -30,6 +30,7 @@ public class ReportGenerator {
 	private ExtentPDFReporterConfig config;
 	private File reportFile;
 	private PDDocument document;
+	private ReportFont reportFont;
 	private DestinationStore destinations;
 	private AnnotationStore annotations;
 	private PageHeader pageHeader;
@@ -39,43 +40,47 @@ public class ReportGenerator {
 		this.config = config;
 		this.reportFile = file;
 		this.document = new PDDocument();
+		this.reportFont = new ReportFont(this.document);
 		this.destinations = new DestinationStore();
 		this.annotations = new AnnotationStore();
 		this.pageHeader = new PageHeader();
 
-		loadFontFamily();
 		createReportDirectory();
 	}
 
 	public void generate() throws IOException {
 
-		Dashboard.builder().document(document).report(report).config(config).destinations(destinations).build()
-				.createSection();
+		Dashboard.builder().document(document).reportFont(reportFont).report(report).config(config)
+				.destinations(destinations).build().createSection();
 
 		if (config.isDisplayAttributeSummary())
-			AttributeSummary.builder().document(document).report(report).config(config).destinations(destinations)
-					.annotations(annotations).pageHeader(pageHeader).build().createSection();
+			AttributeSummary.builder().document(document).report(report).reportFont(reportFont).config(config)
+					.destinations(destinations).annotations(annotations).pageHeader(pageHeader).build().createSection();
 
 		if (config.isDisplayTestDetails()) {
 			if (report.isBDD())
-				TestBDDDetails.builder().document(document).report(report).config(config).destinations(destinations)
-						.annotations(annotations).pageHeader(pageHeader).build().createSection();
+				TestBDDDetails.builder().document(document).report(report).reportFont(reportFont).config(config)
+						.destinations(destinations).annotations(annotations).pageHeader(pageHeader).build()
+						.createSection();
 			else
-				TestDetails.builder().document(document).report(report).config(config).destinations(destinations)
-						.annotations(annotations).pageHeader(pageHeader).build().createSection();
+				TestDetails.builder().document(document).report(report).reportFont(reportFont).config(config)
+						.destinations(destinations).annotations(annotations).pageHeader(pageHeader).build()
+						.createSection();
 		}
 
 		if (config.isDisplayAttributeDetails())
-			AttributeDetails.builder().document(document).report(report).config(config).destinations(destinations)
-					.annotations(annotations).pageHeader(pageHeader).build().createSection();
+			AttributeDetails.builder().document(document).report(report).reportFont(reportFont).config(config)
+					.destinations(destinations).annotations(annotations).pageHeader(pageHeader).build().createSection();
 
 		if (config.isDisplayExpandedMedia()) {
 			if (report.isBDD())
-				BDDMediaSummary.builder().document(document).report(report).config(config).destinations(destinations)
-						.annotations(annotations).pageHeader(pageHeader).build().createSection();
+				BDDMediaSummary.builder().document(document).report(report).reportFont(reportFont).config(config)
+						.destinations(destinations).annotations(annotations).pageHeader(pageHeader).build()
+						.createSection();
 			else
-				MediaSummary.builder().document(document).report(report).config(config).destinations(destinations)
-						.annotations(annotations).pageHeader(pageHeader).build().createSection();
+				MediaSummary.builder().document(document).report(report).reportFont(reportFont).config(config)
+						.destinations(destinations).annotations(annotations).pageHeader(pageHeader).build()
+						.createSection();
 		}
 
 		AnnotationProcessor.builder().annotations(annotations).destinations(destinations).config(config).build()
@@ -87,15 +92,10 @@ public class ReportGenerator {
 		document.getDocumentCatalog().setDocumentOutline(outline);
 		document.getDocumentCatalog().setPageMode(PageMode.USE_OUTLINES);
 
-		pageHeader.processHeader(document);
+		pageHeader.processHeader(document, reportFont);
 
 		document.save(reportFile);
 		document.close();
-	}
-
-	private void loadFontFamily() {
-		ReportFont reportFont = new ReportFont(document);
-		reportFont.loadReportFontFamily();
 	}
 
 	private void createReportDirectory() {
@@ -103,5 +103,4 @@ public class ReportGenerator {
 		if (!dir.exists())
 			dir.mkdirs();
 	}
-
 }

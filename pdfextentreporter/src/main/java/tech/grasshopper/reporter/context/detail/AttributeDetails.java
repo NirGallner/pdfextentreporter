@@ -43,14 +43,15 @@ public class AttributeDetails extends Section implements PageHeaderAware {
 
 		for (NamedAttributeContext<? extends NamedAttribute> attribute : attributes) {
 			AttributeTestStatusBasicDisplay attributeBasicDisplay = AttributeTestStatusBasicDisplay.builder()
-					.document(document).config(config).type(type).attribute(attribute).ylocation(yLocation).build();
+					.document(document).reportFont(reportFont).config(config).type(type).attribute(attribute)
+					.ylocation(yLocation).build();
 			attributeBasicDisplay.display();
 			createAttributeDestination(attributeBasicDisplay);
 			yLocation = attributeBasicDisplay.getYlocation();
 
 			AttributeTestStatusDetailsDisplay attributeDetailsDisplay = AttributeTestStatusDetailsDisplay.builder()
-					.document(document).config(config).attribute(attribute).annotations(annotations)
-					.ylocation(yLocation).build();
+					.document(document).reportFont(reportFont).config(config).attribute(attribute)
+					.annotations(annotations).ylocation(yLocation).build();
 			attributeDetailsDisplay.display();
 			yLocation = attributeDetailsDisplay.getYlocation();
 		}

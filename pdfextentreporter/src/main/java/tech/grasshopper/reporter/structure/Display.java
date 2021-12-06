@@ -10,6 +10,7 @@ import lombok.Builder.Default;
 import lombok.Data;
 import lombok.experimental.SuperBuilder;
 import tech.grasshopper.reporter.config.ExtentPDFReporterConfig;
+import tech.grasshopper.reporter.font.ReportFont;
 
 @Data
 @SuperBuilder
@@ -24,6 +25,8 @@ public abstract class Display {
 	protected ExtentPDFReporterConfig config;
 
 	protected PDDocument document;
+
+	protected ReportFont reportFont;
 
 	protected PDPage page;
 

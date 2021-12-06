@@ -10,6 +10,7 @@ import lombok.experimental.SuperBuilder;
 import tech.grasshopper.reporter.annotation.AnnotationStore;
 import tech.grasshopper.reporter.config.ExtentPDFReporterConfig;
 import tech.grasshopper.reporter.destination.Destination.DestinationStore;
+import tech.grasshopper.reporter.font.ReportFont;
 import tech.grasshopper.reporter.header.PageHeader;
 
 @Data
@@ -18,6 +19,9 @@ public abstract class Section {
 
 	@NonNull
 	protected PDDocument document;
+
+	@NonNull
+	protected ReportFont reportFont;
 
 	protected DestinationStore destinations;
 

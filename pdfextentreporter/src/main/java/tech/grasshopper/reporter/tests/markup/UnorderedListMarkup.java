@@ -14,6 +14,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 import tech.grasshopper.pdf.structure.cell.TableWithinTableCell;
+import tech.grasshopper.reporter.optimizer.TextSanitizer;
 
 @Data
 @SuperBuilder
@@ -35,8 +36,9 @@ public class UnorderedListMarkup extends MarkupDisplay {
 	private Table listTable() {
 
 		TableBuilder tableBuilder = Table.builder().addColumnsOfWidth(STAR_COLUMN_WIDTH, width - STAR_COLUMN_WIDTH)
-				.fontSize(LOG_FONT_SIZE).font(LOG_FONT).borderWidth(0).wordBreak(true);
+				.fontSize(LOG_FONT_SIZE).font(logFont).borderWidth(0).wordBreak(true);
 
+		TextSanitizer textSanitizer = TextSanitizer.builder().font(logFont).build();
 		for (Element elem : elements) {
 			String text = "";
 			// Catch all exceptions for safety. Needs to be refactored in future.

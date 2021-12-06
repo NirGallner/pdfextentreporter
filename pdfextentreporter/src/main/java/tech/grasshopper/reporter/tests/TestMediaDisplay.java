@@ -20,7 +20,6 @@ import lombok.experimental.SuperBuilder;
 import tech.grasshopper.pdf.annotation.Annotation;
 import tech.grasshopper.pdf.structure.cell.TextLinkCell;
 import tech.grasshopper.reporter.annotation.AnnotationStore;
-import tech.grasshopper.reporter.font.ReportFont;
 import tech.grasshopper.reporter.structure.Display;
 import tech.grasshopper.reporter.structure.TableCreator;
 
@@ -77,7 +76,7 @@ public class TestMediaDisplay extends Display implements TestIndent {
 			Annotation annotation = Annotation.builder().id(test.getId()).build();
 			annotations.addTestMediaAnnotation(annotation);
 
-			rowBuilder.add(TextLinkCell.builder().text("+").annotation(annotation).font(ReportFont.REGULAR_FONT)
+			rowBuilder.add(TextLinkCell.builder().text("+").annotation(annotation).font(reportFont.getRegularFont())
 					.fontSize(15).textColor(Color.RED).showLine(false).padding(2f).borderWidth(0f)
 					.verticalAlignment(VerticalAlignment.TOP).build());
 		}
@@ -91,7 +90,7 @@ public class TestMediaDisplay extends Display implements TestIndent {
 		if (maxMedia) {
 			tableBuilder.addColumnsOfWidth(MEDIA_MAX_MSG_WIDTH);
 			rowBuilder.add(TextCell.builder().text("Only first " + mediaCount + " medias are shown.")
-					.font(ReportFont.REGULAR_FONT).fontSize(10).textColor(Color.RED)
+					.font(reportFont.getRegularFont()).fontSize(10).textColor(Color.RED)
 					.verticalAlignment(VerticalAlignment.TOP).wordBreak(true).build());
 		}
 		tableBuilder.addRow(rowBuilder.build());

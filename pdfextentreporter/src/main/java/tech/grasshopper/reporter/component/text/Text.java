@@ -7,7 +7,7 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 import lombok.Builder;
 import lombok.Builder.Default;
 import lombok.Data;
-import tech.grasshopper.reporter.font.ReportFont;
+import lombok.NonNull;
 
 @Data
 @Builder
@@ -15,8 +15,8 @@ public class Text {
 
 	@Default
 	private Color textColor = Color.BLACK;
-	@Default
-	private PDFont font = ReportFont.REGULAR_FONT;
+	@NonNull
+	private PDFont font;
 	@Default
 	private float fontSize = 12;
 	private float xlocation;

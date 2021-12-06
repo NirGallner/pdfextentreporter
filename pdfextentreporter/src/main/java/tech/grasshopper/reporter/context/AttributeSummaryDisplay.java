@@ -20,7 +20,6 @@ import lombok.experimental.SuperBuilder;
 import tech.grasshopper.reporter.destination.Destination;
 import tech.grasshopper.reporter.destination.DestinationAware;
 import tech.grasshopper.reporter.exception.PdfReportException;
-import tech.grasshopper.reporter.font.ReportFont;
 import tech.grasshopper.reporter.optimizer.TextSanitizer;
 import tech.grasshopper.reporter.structure.Display;
 import tech.grasshopper.reporter.structure.TableCreator;
@@ -42,7 +41,7 @@ public abstract class AttributeSummaryDisplay extends Display implements Destina
 	protected static final float HEADER_PADDING = 5f;
 	protected static final float TABLE_PADDING = 7f;
 	protected static final int TABLE_CONTENT_FONT_SIZE = 12;
-	protected static final PDFont TABLE_CONTENT_FONT = ReportFont.REGULAR_FONT;
+	protected PDFont TABLE_CONTENT_FONT = reportFont.getRegularFont();
 	protected static final float MULTILINE_SPACING = 1f;
 
 	protected AttributeType type;

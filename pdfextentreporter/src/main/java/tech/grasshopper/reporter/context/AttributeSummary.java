@@ -27,28 +27,29 @@ public class AttributeSummary extends Section implements PageHeaderAware {
 		createPage();
 
 		ContextAttributeSummary categories = ContextAttributeSummary.builder().config(config).document(document)
-				.type(AttributeType.CATEGORY).report(report).annotations(annotations).ylocation(destinationYLocation)
-				.build();
+				.type(AttributeType.CATEGORY).report(report).reportFont(reportFont).annotations(annotations)
+				.ylocation(destinationYLocation).build();
 		categories.display();
 		if (report.getCategoryCtx().hasItems())
 			createAttributeDestination(categories);
 
 		ContextAttributeSummary authors = ContextAttributeSummary.builder().config(config).document(document)
-				.type(AttributeType.AUTHOR).report(report).annotations(annotations).ylocation(categories.getYlocation())
-				.build();
+				.type(AttributeType.AUTHOR).report(report).reportFont(reportFont).annotations(annotations)
+				.ylocation(categories.getYlocation()).build();
 		authors.display();
 		if (report.getAuthorCtx().hasItems())
 			createAttributeDestination(authors);
 
 		ContextAttributeSummary devices = ContextAttributeSummary.builder().config(config).document(document)
-				.type(AttributeType.DEVICE).report(report).annotations(annotations).ylocation(authors.getYlocation())
-				.build();
+				.type(AttributeType.DEVICE).report(report).reportFont(reportFont).annotations(annotations)
+				.ylocation(authors.getYlocation()).build();
 		devices.display();
 		if (report.getDeviceCtx().hasItems())
 			createAttributeDestination(devices);
 
 		SystemAttributeSummary systems = SystemAttributeSummary.builder().config(config).document(document)
-				.type(AttributeType.SYSTEM).report(report).ylocation(devices.getYlocation()).build();
+				.type(AttributeType.SYSTEM).report(report).reportFont(reportFont).ylocation(devices.getYlocation())
+				.build();
 		systems.display();
 		if (!report.getSystemEnvInfo().isEmpty())
 			createAttributeDestination(systems);

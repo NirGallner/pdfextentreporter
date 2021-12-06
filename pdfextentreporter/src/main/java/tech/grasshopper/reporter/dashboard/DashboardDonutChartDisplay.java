@@ -17,7 +17,6 @@ import lombok.experimental.SuperBuilder;
 import tech.grasshopper.reporter.component.chart.ChartDisplayer;
 import tech.grasshopper.reporter.component.text.Text;
 import tech.grasshopper.reporter.component.text.TextComponent;
-import tech.grasshopper.reporter.font.ReportFont;
 import tech.grasshopper.reporter.structure.Display;
 
 @Data
@@ -55,24 +54,24 @@ public class DashboardDonutChartDisplay extends Display {
 	private void createFirstChartTitle() {
 		Text text = Text.builder().fontSize(CHART_TITLE_FONT_SIZE)
 				.xlocation(strategyDisplay.firstLevelChartXLocation() + CHART_TITLE_X_PADDING)
-				.ylocation(CHART_TITLE_Y_LOCATION).text(strategyDisplay.firstLevelText()).font(ReportFont.ITALIC_FONT)
-				.build();
+				.ylocation(CHART_TITLE_Y_LOCATION).text(strategyDisplay.firstLevelText())
+				.font(reportFont.getItalicFont()).build();
 		TextComponent.builder().content(content).text(text).build().display();
 	}
 
 	private void createSecondChartTitle() {
 		Text text = Text.builder().fontSize(CHART_TITLE_FONT_SIZE)
 				.xlocation(strategyDisplay.secondLevelChartXLocation() + CHART_TITLE_X_PADDING)
-				.ylocation(CHART_TITLE_Y_LOCATION).text(strategyDisplay.secondLevelText()).font(ReportFont.ITALIC_FONT)
-				.build();
+				.ylocation(CHART_TITLE_Y_LOCATION).text(strategyDisplay.secondLevelText())
+				.font(reportFont.getItalicFont()).build();
 		TextComponent.builder().content(content).text(text).build().display();
 	}
 
 	private void createThirdChartTitle() {
 		Text text = Text.builder().fontSize(CHART_TITLE_FONT_SIZE)
 				.xlocation(strategyDisplay.thirdLevelChartXLocation() + CHART_TITLE_X_PADDING)
-				.ylocation(CHART_TITLE_Y_LOCATION).text(strategyDisplay.thirdLevelText()).font(ReportFont.ITALIC_FONT)
-				.build();
+				.ylocation(CHART_TITLE_Y_LOCATION).text(strategyDisplay.thirdLevelText())
+				.font(reportFont.getItalicFont()).build();
 		TextComponent.builder().content(content).text(text).build().display();
 	}
 
@@ -80,7 +79,7 @@ public class DashboardDonutChartDisplay extends Display {
 		if (strategyDisplay.displayLogsChart()) {
 			Text text = Text.builder().fontSize(CHART_TITLE_FONT_SIZE)
 					.xlocation(strategyDisplay.logsChartXLocation() + CHART_TITLE_X_PADDING)
-					.ylocation(CHART_TITLE_Y_LOCATION).text(strategyDisplay.logsText()).font(ReportFont.ITALIC_FONT)
+					.ylocation(CHART_TITLE_Y_LOCATION).text(strategyDisplay.logsText()).font(reportFont.getItalicFont())
 					.build();
 			TextComponent.builder().content(content).text(text).build().display();
 		}
