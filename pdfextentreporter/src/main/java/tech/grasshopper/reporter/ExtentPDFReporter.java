@@ -22,7 +22,7 @@ public class ExtentPDFReporter extends AbstractFileReporter
 
 	private static final Logger logger = Logger.getLogger(ExtentPDFReporter.class.getName());
 	private static final String REPORTER_NAME = "pdf";
-	private static final String FILE_NAME = "Index.pdf";
+	private static final String FILE_NAME = "report.pdf";
 
 	private Disposable disposable;
 	private Report report;
