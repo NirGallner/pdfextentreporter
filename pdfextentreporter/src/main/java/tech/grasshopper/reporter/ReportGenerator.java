@@ -9,6 +9,7 @@ import org.apache.pdfbox.pdmodel.interactive.documentnavigation.outline.PDDocume
 
 import com.aventstack.extentreports.model.Report;
 
+import lombok.Getter;
 import tech.grasshopper.reporter.annotation.AnnotationProcessor;
 import tech.grasshopper.reporter.annotation.AnnotationStore;
 import tech.grasshopper.reporter.bookmark.Bookmark;
@@ -24,6 +25,7 @@ import tech.grasshopper.reporter.header.PageHeader;
 import tech.grasshopper.reporter.tests.TestBDDDetails;
 import tech.grasshopper.reporter.tests.TestDetails;
 
+@Getter
 public class ReportGenerator {
 
 	private Report report;
@@ -50,38 +52,15 @@ public class ReportGenerator {
 
 	public void generate() throws IOException {
 
-		Dashboard.builder().document(document).reportFont(reportFont).report(report).config(config)
-				.destinations(destinations).build().createSection();
+		createDashboardSection();
 
-		if (config.isDisplayAttributeSummary())
-			AttributeSummary.builder().document(document).report(report).reportFont(reportFont).config(config)
-					.destinations(destinations).annotations(annotations).pageHeader(pageHeader).build().createSection();
+		createAttributeSummarySection();
 
-		if (config.isDisplayTestDetails()) {
-			if (report.isBDD())
-				TestBDDDetails.builder().document(document).report(report).reportFont(reportFont).config(config)
-						.destinations(destinations).annotations(annotations).pageHeader(pageHeader).build()
-						.createSection();
-			else
-				TestDetails.builder().document(document).report(report).reportFont(reportFont).config(config)
-						.destinations(destinations).annotations(annotations).pageHeader(pageHeader).build()
-						.createSection();
-		}
+		createTestDetailsSection();
 
-		if (config.isDisplayAttributeDetails())
-			AttributeDetails.builder().document(document).report(report).reportFont(reportFont).config(config)
-					.destinations(destinations).annotations(annotations).pageHeader(pageHeader).build().createSection();
+		createAttributeDetailsSection();
 
-		if (config.isDisplayExpandedMedia()) {
-			if (report.isBDD())
-				BDDMediaSummary.builder().document(document).report(report).reportFont(reportFont).config(config)
-						.destinations(destinations).annotations(annotations).pageHeader(pageHeader).build()
-						.createSection();
-			else
-				MediaSummary.builder().document(document).report(report).reportFont(reportFont).config(config)
-						.destinations(destinations).annotations(annotations).pageHeader(pageHeader).build()
-						.createSection();
-		}
+		createExpandedMediaSection();
 
 		AnnotationProcessor.builder().annotations(annotations).destinations(destinations).config(config).build()
 				.processAnnotations();
@@ -96,6 +75,49 @@ public class ReportGenerator {
 
 		document.save(reportFile);
 		document.close();
+	}
+
+	protected void createExpandedMediaSection() {
+		if (config.isDisplayExpandedMedia()) {
+			if (report.isBDD())
+				BDDMediaSummary.builder().document(document).report(report).reportFont(reportFont).config(config)
+						.destinations(destinations).annotations(annotations).pageHeader(pageHeader).build()
+						.createSection();
+			else
+				MediaSummary.builder().document(document).report(report).reportFont(reportFont).config(config)
+						.destinations(destinations).annotations(annotations).pageHeader(pageHeader).build()
+						.createSection();
+		}
+	}
+
+	protected void createAttributeDetailsSection() {
+		if (config.isDisplayAttributeDetails())
+			AttributeDetails.builder().document(document).report(report).reportFont(reportFont).config(config)
+					.destinations(destinations).annotations(annotations).pageHeader(pageHeader).build().createSection();
+	}
+
+	protected void createTestDetailsSection() {
+		if (config.isDisplayTestDetails()) {
+			if (report.isBDD())
+				TestBDDDetails.builder().document(document).report(report).reportFont(reportFont).config(config)
+						.destinations(destinations).annotations(annotations).pageHeader(pageHeader).build()
+						.createSection();
+			else
+				TestDetails.builder().document(document).report(report).reportFont(reportFont).config(config)
+						.destinations(destinations).annotations(annotations).pageHeader(pageHeader).build()
+						.createSection();
+		}
+	}
+
+	protected void createAttributeSummarySection() {
+		if (config.isDisplayAttributeSummary())
+			AttributeSummary.builder().document(document).report(report).reportFont(reportFont).config(config)
+					.destinations(destinations).annotations(annotations).pageHeader(pageHeader).build().createSection();
+	}
+
+	protected void createDashboardSection() {
+		Dashboard.builder().document(document).reportFont(reportFont).report(report).config(config)
+				.destinations(destinations).build().createSection();
 	}
 
 	private void createReportDirectory() {
