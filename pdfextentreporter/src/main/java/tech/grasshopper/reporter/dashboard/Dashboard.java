@@ -8,6 +8,10 @@ import lombok.EqualsAndHashCode;
 import lombok.SneakyThrows;
 import lombok.experimental.SuperBuilder;
 import tech.grasshopper.reporter.bookmark.Bookmark;
+import tech.grasshopper.reporter.dashboard.chart.DashboardDonutChartDisplay;
+import tech.grasshopper.reporter.dashboard.header.DashboardHeaderDisplay;
+import tech.grasshopper.reporter.dashboard.legend.DashboardChartLegendDisplay;
+import tech.grasshopper.reporter.dashboard.statistics.DashboardStatisticsDisplay;
 import tech.grasshopper.reporter.destination.Destination;
 import tech.grasshopper.reporter.destination.DestinationAware;
 import tech.grasshopper.reporter.structure.PageCreator;
@@ -17,7 +21,7 @@ import tech.grasshopper.reporter.structure.Section;
 @EqualsAndHashCode(callSuper = false)
 public class Dashboard extends Section implements DestinationAware {
 
-	private PDPage page;
+	protected PDPage page;
 
 	@Override
 	@SneakyThrows

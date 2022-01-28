@@ -1,4 +1,4 @@
-package tech.grasshopper.reporter.dashboard;
+package tech.grasshopper.reporter.dashboard.statistics;
 
 import java.awt.Color;
 import java.time.LocalDateTime;
@@ -15,6 +15,7 @@ import tech.grasshopper.reporter.component.decorator.BackgroundDecorator;
 import tech.grasshopper.reporter.component.decorator.BorderDecorator;
 import tech.grasshopper.reporter.component.text.MultipleTextComponent;
 import tech.grasshopper.reporter.component.text.Text;
+import tech.grasshopper.reporter.dashboard.AnalysisStrategyDisplay;
 import tech.grasshopper.reporter.optimizer.TextLengthOptimizer;
 import tech.grasshopper.reporter.structure.Display;
 import tech.grasshopper.reporter.util.DateUtil;

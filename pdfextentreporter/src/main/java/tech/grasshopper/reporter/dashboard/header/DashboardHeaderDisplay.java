@@ -1,4 +1,4 @@
-package tech.grasshopper.reporter.dashboard;
+package tech.grasshopper.reporter.dashboard.header;
 
 import java.time.LocalDateTime;
 
