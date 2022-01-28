@@ -38,7 +38,8 @@ public class TestStackTrace {
 		String stackText = "";
 
 		if (stackTrace != null && !stackTrace.isEmpty()) {
-			String[] lines = stackTrace.trim().split("\\r?\\n");
+			// String[] lines = stackTrace.trim().split("\\r?\\n");
+			String[] lines = stackTrace.trim().split("\\R");
 			List<String> splitLines = new ArrayList<>();
 
 			for (String line : lines)
