@@ -23,7 +23,7 @@ public class TestDetails extends Section implements PageHeaderAware {
 	public static final int LEVEL_X_INDENT = 20;
 
 	@Default
-	private float yLocation = Display.CONTENT_START_Y;
+	protected float yLocation = Display.CONTENT_START_Y;
 
 	@Override
 	public void createSection() {
@@ -39,38 +39,56 @@ public class TestDetails extends Section implements PageHeaderAware {
 			collectTestNodes(t, allTests);
 		});
 
+		displayTestAndLogDetails(allTests);
+	}
+
+	protected void displayTestAndLogDetails(List<Test> allTests) {
 		for (Test test : allTests) {
 
-			TestBasicDetailsDisplay testBasicDetailsDisplay = TestBasicDetailsDisplay.builder().document(document)
-					.reportFont(reportFont).config(config).test(test).ylocation(yLocation).build();
-			testBasicDetailsDisplay.display();
-			createTestDestination(testBasicDetailsDisplay);
-			yLocation = testBasicDetailsDisplay.getYlocation();
-
-			if (test.hasScreenCapture()) {
-				TestMediaDisplay testMediaDisplay = TestMediaDisplay.builder().document(document).reportFont(reportFont)
-						.config(config).test(test).annotations(annotations).ylocation(yLocation).build();
-				testMediaDisplay.display();
-
-				yLocation = testMediaDisplay.getYlocation();
-			}
-
-			if (!test.getGeneratedLog().isEmpty()) {
-				TestGeneratedLogDisplay testGeneratedLogDisplay = TestGeneratedLogDisplay.builder().document(document)
-						.reportFont(reportFont).config(config).test(test).ylocation(yLocation).build();
-				testGeneratedLogDisplay.display();
-
-				yLocation = testGeneratedLogDisplay.getYlocation();
-			}
-
-			if (test.hasLog()) {
-				TestLogsDisplay testLogsDisplay = TestLogsDisplay.builder().document(document).reportFont(reportFont)
-						.config(config).test(test).annotations(annotations).ylocation(yLocation).build();
-				testLogsDisplay.display();
-
-				yLocation = testLogsDisplay.getYlocation();
-			}
+			displayTestBasicData(test);
+			displayTestMedias(test);
+			displayTestGeneratedLogs(test);
+			displayTestLogs(test);
 		}
+	}
+
+	protected void displayTestLogs(Test test) {
+		if (test.hasLog()) {
+			TestLogsDisplay testLogsDisplay = TestLogsDisplay.builder().document(document).reportFont(reportFont)
+					.config(config).test(test).annotations(annotations).ylocation(yLocation).build();
+			testLogsDisplay.display();
+
+			yLocation = testLogsDisplay.getYlocation();
+		}
+	}
+
+	protected void displayTestGeneratedLogs(Test test) {
+		if (!test.getGeneratedLog().isEmpty()) {
+			TestGeneratedLogDisplay testGeneratedLogDisplay = TestGeneratedLogDisplay.builder().document(document)
+					.reportFont(reportFont).config(config).test(test).ylocation(yLocation).build();
+			testGeneratedLogDisplay.display();
+
+			yLocation = testGeneratedLogDisplay.getYlocation();
+		}
+	}
+
+	protected void displayTestMedias(Test test) {
+		if (test.hasScreenCapture()) {
+			TestMediaDisplay testMediaDisplay = TestMediaDisplay.builder().document(document).reportFont(reportFont)
+					.config(config).test(test).annotations(annotations).ylocation(yLocation).build();
+			testMediaDisplay.display();
+
+			yLocation = testMediaDisplay.getYlocation();
+		}
+	}
+
+	protected void displayTestBasicData(Test test) {
+		TestBasicDetailsDisplay testBasicDetailsDisplay = TestBasicDetailsDisplay.builder().document(document)
+				.reportFont(reportFont).config(config).test(test).ylocation(yLocation).build();
+		testBasicDetailsDisplay.display();
+		createTestDestination(testBasicDetailsDisplay);
+
+		yLocation = testBasicDetailsDisplay.getYlocation();
 	}
 
 	private void collectTestNodes(Test test, List<Test> tests) {
@@ -92,5 +110,4 @@ public class TestDetails extends Section implements PageHeaderAware {
 	public String getSectionTitle() {
 		return PageHeader.TEST_DETAILS_SECTION;
 	}
-
 }

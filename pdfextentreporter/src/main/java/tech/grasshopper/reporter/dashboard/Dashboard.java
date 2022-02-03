@@ -36,13 +36,22 @@ public class Dashboard extends Section implements DestinationAware {
 			DashboardStatisticsDisplay.builder().config(config).content(content).report(report).reportFont(reportFont)
 					.build().display();
 
-			DashboardDonutChartDisplay.builder().document(document).config(config).content(content).report(report)
-					.reportFont(reportFont).build().display();
-			DashboardChartLegendDisplay.builder().config(config).content(content).report(report).reportFont(reportFont)
-					.build().display();
+			createChartDonut(content);
+
+			createChartLegend(content);
 		}
 
 		createDestination();
+	}
+
+	protected void createChartLegend(final PDPageContentStream content) {
+		DashboardChartLegendDisplay.builder().config(config).content(content).report(report).reportFont(reportFont)
+				.build().display();
+	}
+
+	protected void createChartDonut(final PDPageContentStream content) {
+		DashboardDonutChartDisplay.builder().document(document).config(config).content(content).report(report)
+				.reportFont(reportFont).build().display();
 	}
 
 	@Override

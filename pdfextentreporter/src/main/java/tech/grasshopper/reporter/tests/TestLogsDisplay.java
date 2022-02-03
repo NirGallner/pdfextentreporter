@@ -6,6 +6,7 @@ import java.util.List;
 import org.vandeseer.easytable.settings.HorizontalAlignment;
 import org.vandeseer.easytable.settings.VerticalAlignment;
 import org.vandeseer.easytable.structure.Row;
+import org.vandeseer.easytable.structure.Row.RowBuilder;
 import org.vandeseer.easytable.structure.Table;
 import org.vandeseer.easytable.structure.Table.TableBuilder;
 import org.vandeseer.easytable.structure.cell.AbstractCell;
@@ -29,24 +30,24 @@ import tech.grasshopper.reporter.util.DateUtil;
 @EqualsAndHashCode(callSuper = false)
 public class TestLogsDisplay extends Display implements TestIndent {
 
-	private static final float LOGS_HEADER_HEIGHT = 20f;
+	protected static final float LOGS_HEADER_HEIGHT = 20f;
 
-	private static final int LOGS_HEADER_FONT_SIZE = 11;
-	private static final float PADDING = 5f;
-	private static final float LOGS_STATUS_WIDTH = 50f;
+	protected static final int LOGS_HEADER_FONT_SIZE = 11;
+	protected static final float PADDING = 5f;
+	protected static final float LOGS_STATUS_WIDTH = 50f;
 	private static final float LOGS_TIMESTAMP_WIDTH = 70f;
 	private static final float LOGS_DETAILS_WIDTH = 380f;
 
-	private static final float BORDER_WIDTH = 1f;
-	private static final int LOGS_TABLE_CONTENT_FONT_SIZE = 10;
+	protected static final float BORDER_WIDTH = 1f;
+	protected static final int LOGS_TABLE_CONTENT_FONT_SIZE = 10;
 
-	private static final float GAP_HEIGHT = 15f;
+	protected static final float GAP_HEIGHT = 15f;
 
 	protected Test test;
 
 	protected TableBuilder tableBuilder;
 
-	private AnnotationStore annotations;
+	protected AnnotationStore annotations;
 
 	@Override
 	public void display() {
@@ -63,38 +64,52 @@ public class TestLogsDisplay extends Display implements TestIndent {
 	}
 
 	private void createTableBuilder() {
-		tableBuilder = Table.builder()
-				.addColumnsOfWidth(LOGS_STATUS_WIDTH, LOGS_TIMESTAMP_WIDTH,
-						LOGS_DETAILS_WIDTH - (test.getLevel() * TestDetails.LEVEL_X_INDENT))
-				.padding(PADDING).borderColor(Color.LIGHT_GRAY).borderWidth(BORDER_WIDTH)
-				.horizontalAlignment(HorizontalAlignment.LEFT).verticalAlignment(VerticalAlignment.TOP);
+		tableBuilder = Table.builder().addColumnsOfWidth(columnsWidth()).padding(PADDING).borderColor(Color.LIGHT_GRAY)
+				.borderWidth(BORDER_WIDTH).horizontalAlignment(HorizontalAlignment.LEFT)
+				.verticalAlignment(VerticalAlignment.TOP);
+	}
+
+	protected float[] columnsWidth() {
+		return new float[] { LOGS_STATUS_WIDTH, LOGS_TIMESTAMP_WIDTH,
+				LOGS_DETAILS_WIDTH - (test.getLevel() * TestDetails.LEVEL_X_INDENT) };
 	}
 
 	private void createHeaderRow() {
-		tableBuilder.addRow(Row.builder().height(LOGS_HEADER_HEIGHT).font(reportFont.getItalicFont())
-				.fontSize(LOGS_HEADER_FONT_SIZE).add(TextCell.builder().text("Status").build())
-				.add(TextCell.builder().text("Timestamp").build()).add(TextCell.builder().text("Log Details").build())
-				.build());
+		RowBuilder rowBuilder = Row.builder().height(LOGS_HEADER_HEIGHT).font(reportFont.getItalicFont())
+				.fontSize(LOGS_HEADER_FONT_SIZE);
+
+		tableHeaders(rowBuilder);
+		tableBuilder.addRow(rowBuilder.build());
+	}
+
+	protected void tableHeaders(RowBuilder rowBuilder) {
+		rowBuilder.add(TextCell.builder().text("Status").build()).add(TextCell.builder().text("Timestamp").build())
+				.add(TextCell.builder().text("Log Details").build());
 	}
 
 	private void createLogRows() {
 		test.getLogs().forEach(l -> {
 			AbstractCell detailsCell = createLogDisplayCell(l, test);
 
-			Row row = Row.builder().padding(PADDING).font(reportFont.getRegularFont())
-					.fontSize(LOGS_TABLE_CONTENT_FONT_SIZE)
-					.add(TextLabelCell.builder().text(l.getStatus().toString())
-							.labelColor(config.statusColor(l.getStatus())).build())
-					.add(TextCell.builder()
-							.text(DateUtil.formatTimeAMPM(DateUtil.convertToLocalDateTimeFromDate(l.getTimestamp())))
-							.textColor(config.getTestTimeStampColor()).build())
-					.add(detailsCell).build();
+			RowBuilder rowBuilder = Row.builder().padding(PADDING).font(reportFont.getRegularFont())
+					.fontSize(LOGS_TABLE_CONTENT_FONT_SIZE);
+			logRow(rowBuilder, detailsCell, l);
 
-			tableBuilder.addRow(row);
+			tableBuilder.addRow(rowBuilder.build());
 		});
 	}
 
-	private AbstractCell createLogDisplayCell(Log log, Test test) {
+	protected void logRow(RowBuilder rowBuilder, AbstractCell detailsCell, Log l) {
+		rowBuilder
+				.add(TextLabelCell.builder().text(l.getStatus().toString())
+						.labelColor(config.statusColor(l.getStatus())).build())
+				.add(TextCell.builder()
+						.text(DateUtil.formatTimeAMPM(DateUtil.convertToLocalDateTimeFromDate(l.getTimestamp())))
+						.textColor(config.getTestTimeStampColor()).build())
+				.add(detailsCell);
+	}
+
+	protected AbstractCell createLogDisplayCell(Log log, Test test) {
 		LogDetailsCollector logDetailsCollector = LogDetailsCollector.builder().annotations(annotations).config(config)
 				.document(document).reportFont(reportFont).test(test)
 				.width(LOGS_DETAILS_WIDTH - (test.getLevel() * TestDetails.LEVEL_X_INDENT)).build();
@@ -109,7 +124,7 @@ public class TestLogsDisplay extends Display implements TestIndent {
 			return createMultipleDetailsLogCell(allDetailCells);
 	}
 
-	private AbstractCell createMultipleDetailsLogCell(List<AbstractCell> allDetailCells) {
+	protected AbstractCell createMultipleDetailsLogCell(List<AbstractCell> allDetailCells) {
 		TableBuilder multipleDetailsBuilder = Table.builder()
 				.addColumnsOfWidth(LOGS_DETAILS_WIDTH - (test.getLevel() * TestDetails.LEVEL_X_INDENT)).borderWidth(0f);
 

@@ -28,14 +28,14 @@ import tech.grasshopper.reporter.tests.TestDetails;
 @Getter
 public class ReportGenerator {
 
-	private Report report;
-	private ExtentPDFReporterConfig config;
-	private File reportFile;
-	private PDDocument document;
-	private ReportFont reportFont;
-	private DestinationStore destinations;
-	private AnnotationStore annotations;
-	private PageHeader pageHeader;
+	protected Report report;
+	protected ExtentPDFReporterConfig config;
+	protected File reportFile;
+	protected PDDocument document;
+	protected ReportFont reportFont;
+	protected DestinationStore destinations;
+	protected AnnotationStore annotations;
+	protected PageHeader pageHeader;
 
 	public ReportGenerator(Report report, ExtentPDFReporterConfig config, File file) {
 		this.report = report;
@@ -62,8 +62,7 @@ public class ReportGenerator {
 
 		createExpandedMediaSection();
 
-		AnnotationProcessor.builder().annotations(annotations).destinations(destinations).config(config).build()
-				.processAnnotations();
+		processAnnotations();
 
 		Bookmark bookmark = Bookmark.builder().destinationStore(destinations).config(config).report(report).build();
 		PDDocumentOutline outline = bookmark.createDocumentOutline();
@@ -75,6 +74,11 @@ public class ReportGenerator {
 
 		document.save(reportFile);
 		document.close();
+	}
+
+	protected void processAnnotations() {
+		AnnotationProcessor.builder().annotations(annotations).destinations(destinations).config(config).build()
+				.processAnnotations();
 	}
 
 	protected void createExpandedMediaSection() {

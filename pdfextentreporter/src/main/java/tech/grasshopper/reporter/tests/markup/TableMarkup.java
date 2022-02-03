@@ -14,8 +14,10 @@ import org.vandeseer.easytable.structure.Table.TableBuilder;
 import org.vandeseer.easytable.structure.cell.AbstractCell;
 import org.vandeseer.easytable.structure.cell.TextCell;
 
+import lombok.AccessLevel;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Setter;
 import lombok.experimental.SuperBuilder;
 import tech.grasshopper.pdf.structure.cell.TableWithinTableCell;
 import tech.grasshopper.reporter.optimizer.TextSanitizer;
@@ -26,11 +28,14 @@ import tech.grasshopper.reporter.optimizer.TextSanitizer;
 public class TableMarkup extends MarkupDisplay {
 	// The code is not optimum with regards to exception handling. Needs to be
 	// refactored in future.
-	private static final Logger logger = Logger.getLogger(TableMarkup.class.getName());
+	protected static final Logger logger = Logger.getLogger(TableMarkup.class.getName());
 
-	private float width;
+	protected float width;
 
 	private int maxTableColumnCount;
+
+	@Setter(AccessLevel.NONE)
+	protected int displayColumnCount;
 
 	@Override
 	public AbstractCell displayDetails() {
@@ -64,13 +69,17 @@ public class TableMarkup extends MarkupDisplay {
 		return TableWithinTableCell.builder().table(internalTable(rows, cols)).build();
 	}
 
-	private Table internalTable(Elements rows, int columnCount) {
-
-		int displayColumnCount = columnCount > maxTableColumnCount ? maxTableColumnCount : columnCount;
-
+	protected float[] columnWidthData(int columnCount) {
 		float colWidth = width / displayColumnCount;
 		float[] columnWidths = new float[displayColumnCount];
 		Arrays.fill(columnWidths, colWidth);
+
+		return columnWidths;
+	}
+
+	private Table internalTable(Elements rows, int columnCount) {
+		displayColumnCount = columnCount > maxTableColumnCount ? maxTableColumnCount : columnCount;
+		float[] columnWidths = columnWidthData(columnCount);
 
 		TableBuilder tableBuilder = Table.builder().addColumnsOfWidth(columnWidths).fontSize(LOG_FONT_SIZE)
 				.font(logFont).borderWidth(BORDER_WIDTH).borderColor(Color.LIGHT_GRAY).wordBreak(true);
@@ -85,27 +94,7 @@ public class TableMarkup extends MarkupDisplay {
 				continue;
 			}
 
-			RowBuilder rowBuilder = Row.builder();
-			TextSanitizer textSanitizer = TextSanitizer.builder().font(logFont).build();
-			int j = 1;
-			
-			for (Element cell : cells) {
-				if (j > displayColumnCount)
-					break;
-
-				String text = "";
-				try {
-					text = cell.text();
-				} catch (Exception e) {
-					text = "Error!";
-					logger.log(Level.SEVERE, "Unable to get text for cell, default to error message.");
-				}
-
-				rowBuilder.add(TextCell.builder().text(textSanitizer.sanitizeText(text)).textColor(textColor)
-						.lineSpacing(MULTILINE_SPACING).build());
-				j++;
-			}
-			tableBuilder.addRow(rowBuilder.build());
+			tableBuilder.addRow(createTableCellData(cells));
 		}
 
 		String tableCounts = "";
@@ -124,5 +113,29 @@ public class TableMarkup extends MarkupDisplay {
 					.lineSpacing(MULTILINE_SPACING).build()).build());
 		}
 		return tableBuilder.build();
+	}
+
+	protected Row createTableCellData(Elements cells) {
+		RowBuilder rowBuilder = Row.builder();
+		TextSanitizer textSanitizer = TextSanitizer.builder().font(logFont).build();
+		int j = 1;
+
+		for (Element cell : cells) {
+			if (j > displayColumnCount)
+				break;
+
+			String text = "";
+			try {
+				text = cell.text();
+			} catch (Exception e) {
+				text = "Error!";
+				logger.log(Level.SEVERE, "Unable to get text for cell, default to error message.");
+			}
+
+			rowBuilder.add(TextCell.builder().text(textSanitizer.sanitizeText(text)).textColor(textColor)
+					.lineSpacing(MULTILINE_SPACING).build());
+			j++;
+		}
+		return rowBuilder.build();
 	}
 }

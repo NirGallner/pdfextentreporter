@@ -18,9 +18,10 @@ import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.model.Log;
 import com.aventstack.extentreports.model.Test;
 
-import lombok.Builder;
 import lombok.Builder.Default;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+import lombok.experimental.SuperBuilder;
 import tech.grasshopper.pdf.annotation.Annotation;
 import tech.grasshopper.pdf.structure.cell.TableWithinTableCell;
 import tech.grasshopper.pdf.structure.cell.TextLinkCell;
@@ -31,28 +32,29 @@ import tech.grasshopper.reporter.optimizer.TextSanitizer;
 import tech.grasshopper.reporter.tests.markup.TestMarkup;
 
 @Data
-@Builder
+@SuperBuilder
+@EqualsAndHashCode(callSuper = false)
 public class LogDetailsCollector {
 
 	private PDDocument document;
 
-	private ReportFont reportFont;
+	protected ReportFont reportFont;
 
-	private Test test;
+	protected Test test;
 
-	private ExtentPDFReporterConfig config;
+	protected ExtentPDFReporterConfig config;
 
 	private AnnotationStore annotations;
 
-	private float width;
+	protected float width;
 
 	@Default
 	private boolean bddReport = false;
 
-	private static final float PADDING = 5f;
+	protected static final float PADDING = 5f;
 	private static final float LOGS_MEDIA_HEIGHT = 100f;
 	private static final float LOGS_MEDIA_WIDTH = 100f;
-	private static final int LOGS_TABLE_CONTENT_FONT_SIZE = 10;
+	protected static final int LOGS_TABLE_CONTENT_FONT_SIZE = 10;
 	private static final int LOGS_STACK_TRACE_TABLE_CONTENT_FONT_SIZE = 10;
 
 	private static final float LOGS_DETAILS_HEIGHT = 15f;
@@ -73,7 +75,7 @@ public class LogDetailsCollector {
 		return allDetailCells;
 	}
 
-	private AbstractCell createDetailsMarkupCell(Log log) {
+	protected AbstractCell createDetailsMarkupCell(Log log) {
 		PDFont LOGS_TABLE_CONTENT_FONT = reportFont.getRegularFont();
 
 		TextSanitizer textSanitizer = TextSanitizer.builder().font(LOGS_TABLE_CONTENT_FONT).build();
@@ -89,7 +91,7 @@ public class LogDetailsCollector {
 		return detailMarkupCell;
 	}
 
-	private AbstractCell createMediaCell(Log log) {
+	protected AbstractCell createMediaCell(Log log) {
 		if (config.isDisplayExpandedMedia()) {
 			TableBuilder tableBuilder = Table.builder()
 					.addColumnsOfWidth(LOGS_MEDIA_PLUS_WIDTH, width - LOGS_MEDIA_PLUS_WIDTH).padding(0f);
@@ -113,7 +115,7 @@ public class LogDetailsCollector {
 					.height(LOGS_MEDIA_HEIGHT).padding(PADDING).build().createImageCell();
 	}
 
-	private AbstractCell createExceptionCell(Log log) {
+	protected AbstractCell createExceptionCell(Log log) {
 		return TestStackTrace.builder().log(log).font(reportFont.getRegularFont()).color(config.getTestExceptionColor())
 				.width(width - (2 * PADDING)).height(LOGS_DETAILS_HEIGHT)
 				.fontSize(LOGS_STACK_TRACE_TABLE_CONTENT_FONT_SIZE).padding(PADDING).build().createStackTraceCell();
