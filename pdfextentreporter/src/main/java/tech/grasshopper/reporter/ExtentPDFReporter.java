@@ -27,7 +27,7 @@ public class ExtentPDFReporter extends AbstractFileReporter
 	private Disposable disposable;
 	private Report report;
 
-	private ExtentPDFReporterConfig config = ExtentPDFReporterConfig.builder().reporter(this).build();
+	protected ExtentPDFReporterConfig config = ExtentPDFReporterConfig.builder().reporter(this).build();
 
 	public ExtentPDFReporter(String path) {
 		super(new File(path));
