@@ -16,7 +16,7 @@ The following dependency needs to be added for creating the Extent PDF report.
 <dependency>
 	<groupId>tech.grasshopper</groupId>
 	<artifactId>pdfextentreporter</artifactId>
-	<version>0.3</version>
+	<version>1.0.0</version>
 </dependency>
 ```
 
