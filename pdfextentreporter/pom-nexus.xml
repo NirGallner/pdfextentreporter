@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>tech.grasshopper</groupId>
 	<artifactId>pdfextentreporter</artifactId>
-	<version>1.1.0</version>
+	<version>1.2.0</version>
 	<name>pdfextentreporter</name>
 	<url>https://grasshopper.tech/2555</url>
 	<description>Creating Extent reports in PDF format</description>
@@ -31,13 +31,13 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
 
-		<lombok.version>1.18.16</lombok.version>
-		<pdfbox.version>2.0.22</pdfbox.version>
-		<xchart.version>3.7.0</xchart.version>
+		<lombok.version>1.18.18</lombok.version>
+		<pdfbox.version>2.0.25</pdfbox.version>
+		<xchart.version>3.8.0</xchart.version>
 		<snakeyaml.version>1.27</snakeyaml.version>
 		<extent.version>5.0.9</extent.version>
-		<jsoup.version>1.13.1</jsoup.version>
-		<gson.version>2.8.6</gson.version>
+		<jsoup.version>1.14.3</jsoup.version>
+		<gson.version>2.9.0</gson.version>
 		<table-layout.version>1.4.0</table-layout.version>
 	</properties>
 
