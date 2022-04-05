@@ -92,7 +92,7 @@ public class TestBasicDetailsDisplay extends Display implements TestIndent, Dest
 						.textColor(config.getTestNameColor()).build())
 				.add(TextLabelCell.builder().text(test.getStatus().toString())
 						.labelColor(config.statusColor(test.getStatus())).fontSize(12).font(reportFont.getBoldFont())
-						.padding(0f).build())
+						.padding(0f).verticalAlignment(VerticalAlignment.TOP).build())
 				.build());
 	}
 
