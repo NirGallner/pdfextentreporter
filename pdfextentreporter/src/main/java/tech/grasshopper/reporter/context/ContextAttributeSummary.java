@@ -119,9 +119,4 @@ public class ContextAttributeSummary extends AttributeSummaryDisplay {
 		return TextCell.builder().text(title).lineSpacing(MULTILINE_SPACING).textColor(config.attributeNameColor(type))
 				.horizontalAlignment(HorizontalAlignment.LEFT).build();
 	}
-
-	protected void drawTable() {
-		splitRow = false;
-		super.drawTable();
-	}
 }

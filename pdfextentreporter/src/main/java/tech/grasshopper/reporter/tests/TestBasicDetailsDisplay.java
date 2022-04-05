@@ -20,7 +20,6 @@ import org.vandeseer.easytable.structure.cell.paragraph.StyledText;
 import com.aventstack.extentreports.model.NamedAttribute;
 import com.aventstack.extentreports.model.Test;
 
-import lombok.Builder.Default;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
@@ -58,9 +57,6 @@ public class TestBasicDetailsDisplay extends Display implements TestIndent, Dest
 	private static final float MULTI_LINE_SPACING = 1f;
 
 	protected Test test;
-
-	@Default
-	private int numberOfRowsToRepeat = 2;
 
 	private TableBuilder tableBuilder;
 
@@ -128,9 +124,6 @@ public class TestBasicDetailsDisplay extends Display implements TestIndent, Dest
 		createAttributeText(test.getAuthorSet(), AttributeType.AUTHOR, paraBuilder);
 		createAttributeText(test.getDeviceSet(), AttributeType.DEVICE, paraBuilder);
 
-		if (!test.getCategorySet().isEmpty() || !test.getAuthorSet().isEmpty() || !test.getDeviceSet().isEmpty())
-			numberOfRowsToRepeat++;
-
 		tableBuilder.addRow(
 				Row.builder().fontSize(ATTRIBUTE_FONT_SIZE).add(ParagraphCell.builder().paragraph(paraBuilder.build())
 						.minHeight(ATTRIBUTE_HEIGHT).lineSpacing(MULTI_LINE_SPACING).colSpan(2).build()).build());
@@ -147,7 +140,6 @@ public class TestBasicDetailsDisplay extends Display implements TestIndent, Dest
 
 	private void createDescriptionRow() {
 		if (test.getDescription() != null && !test.getDescription().isEmpty()) {
-			numberOfRowsToRepeat++;
 			tableBuilder.addRow(Row.builder()
 					.add(TextCell.builder().minHeight(DESCRIPTION_HEIGHT).fontSize(DESCRIPTION_FONT_SIZE)
 							.text(textSanitizer.sanitizeText(test.getDescription())).lineSpacing(MULTI_LINE_SPACING)
@@ -162,7 +154,7 @@ public class TestBasicDetailsDisplay extends Display implements TestIndent, Dest
 		destinationY = (int) ylocation;
 
 		TableCreator table = TableCreator.builder().tableBuilder(tableBuilder).document(document).startX(xlocation)
-				.startY(ylocation).repeatRows(numberOfRowsToRepeat).build();
+				.startY(ylocation).repeatRows(0).splitRow(true).build();
 		table.displayTable();
 
 		ylocation = table.getFinalY() - GAP_HEIGHT;
