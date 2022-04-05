@@ -98,7 +98,7 @@ public class TestMediaDisplay extends Display implements TestIndent {
 
 	private void drawTable() {
 		TableCreator table = TableCreator.builder().tableBuilder(tableBuilder).document(document).startX(xlocation)
-				.startY(ylocation).repeatRows(1).build();
+				.startY(ylocation).repeatRows(0).build();
 		table.displayTable();
 
 		ylocation = table.getFinalY() - GAP_HEIGHT;

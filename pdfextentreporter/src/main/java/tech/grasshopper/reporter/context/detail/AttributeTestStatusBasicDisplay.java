@@ -96,7 +96,7 @@ public class AttributeTestStatusBasicDisplay extends Display implements Destinat
 		destinationY = (int) ylocation;
 
 		TableCreator table = TableCreator.builder().tableBuilder(tableBuilder).document(document).startX(xlocation)
-				.startY(ylocation).repeatRows(0).build();
+				.startY(ylocation).repeatRows(0).splitRow(true).build();
 		table.displayTable();
 
 		ylocation = table.getFinalY() - GAP_HEIGHT;

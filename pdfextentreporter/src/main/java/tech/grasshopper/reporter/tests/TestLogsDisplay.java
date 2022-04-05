@@ -138,7 +138,7 @@ public class TestLogsDisplay extends Display implements TestIndent {
 
 	private void drawTable() {
 		TableCreator table = TableCreator.builder().tableBuilder(tableBuilder).document(document).startX(xlocation)
-				.startY(ylocation).splitRow(true).build();
+				.startY(ylocation).repeatRows(1).splitRow(true).build();
 		table.displayTable();
 
 		ylocation = table.getFinalY() - GAP_HEIGHT;

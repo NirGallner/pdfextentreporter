@@ -101,7 +101,7 @@ public abstract class AttributeSummaryDisplay extends Display implements Destina
 		destinationY = (int) ylocation;
 
 		TableCreator table = TableCreator.builder().tableBuilder(tableBuilder).document(document).startX(xlocation)
-				.startY(ylocation).repeatRows(2).splitRow(splitRow).build();
+				.startY(ylocation).repeatRows(2).splitRow(true).build();
 		table.displayTable();
 
 		ylocation = table.getFinalY() - GAP_HEIGHT;
