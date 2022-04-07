@@ -1,7 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## 1.1.0 (2022-3-1)
+## 1.2.1 (2022-4-5)
+
+* Fixed row height exception for long test name & description.
+
+## 1.2.0 (2022-3-1)
 
 * Updated dependencies versions.
 
