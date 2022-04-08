@@ -3,7 +3,6 @@ package tech.grasshopper.reporter.medias;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.HashMap;
 
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
@@ -12,6 +11,7 @@ import org.vandeseer.easytable.structure.cell.ImageCell;
 import com.aventstack.extentreports.model.Media;
 import com.aventstack.extentreports.model.service.MediaService;
 
+import lombok.Getter;
 import lombok.experimental.SuperBuilder;
 
 @SuperBuilder
@@ -23,6 +23,9 @@ public abstract class Medias {
 	protected String[] locations;
 
 	protected float padding;
+
+	@Getter
+	protected boolean imageNotAvailable = false;
 
 	protected static PDImageXObject imageNotFound = null;
 
@@ -47,10 +50,11 @@ public abstract class Medias {
 
 			if (!new File(path).exists()) {
 				// System.out.println(media.getPath());
-				Media m = new Media(media.getPath(), "", media.getResolvedPath(), new HashMap<String, Object>());
-				MediaService.tryResolveMediaPath(m, locations);
-				if (m.getResolvedPath() != null)
-					path = m.getResolvedPath();
+				// Media m = new Media(media.getPath(), "", media.getResolvedPath(), new
+				// HashMap<String, Object>());
+				MediaService.tryResolveMediaPath(media, locations);
+				if (media.getResolvedPath() != null)
+					path = media.getResolvedPath();
 			}
 			// System.out.println("pdf path - " + path);
 			image = PDImageXObject.createFromFile(path, document);
@@ -64,6 +68,7 @@ public abstract class Medias {
 		} catch (Exception e) {
 			// Todo write logger
 			image = imageNotFound;
+			imageNotAvailable = true;
 		}
 		return image;
 	}
