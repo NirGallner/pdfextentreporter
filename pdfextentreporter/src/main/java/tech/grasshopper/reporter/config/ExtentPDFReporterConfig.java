@@ -23,7 +23,9 @@ public class ExtentPDFReporterConfig extends AbstractConfiguration {
 	@Default
 	private boolean displayTestDetails = true;
 	@Default
-	private boolean displayExpandedMedia = true;
+	private boolean displayExpandedMedia = false;
+	@Default
+	private boolean displayAttachedMedia = true;
 
 	private String title;
 	private String titleColor;
@@ -82,7 +84,17 @@ public class ExtentPDFReporterConfig extends AbstractConfiguration {
 	}
 
 	public boolean isDisplayExpandedMedia() {
+		// Attached option takes precedence
+		if (displayAttachedMedia && displayExpandedMedia)
+			return false;
 		return displayExpandedMedia;
+	}
+
+	public boolean isDisplayAttachedMedia() {
+		// Attached option takes precedence
+		if (displayAttachedMedia && displayExpandedMedia)
+			return true;
+		return displayAttachedMedia;
 	}
 
 	public String getReportTitle() {

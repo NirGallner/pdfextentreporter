@@ -10,6 +10,7 @@ import org.vandeseer.easytable.settings.VerticalAlignment;
 import org.vandeseer.easytable.structure.Row;
 import org.vandeseer.easytable.structure.Table;
 import org.vandeseer.easytable.structure.Table.TableBuilder;
+import org.vandeseer.easytable.structure.cell.ImageCell;
 
 import com.aventstack.extentreports.model.Log;
 import com.aventstack.extentreports.model.Media;
@@ -85,10 +86,13 @@ public class ExpandedMediaDisplay extends Display implements DestinationAware {
 		}
 
 		for (Media media : medias) {
-			tableBuilder.addRow(Row.builder()
-					.add(ExpandedMedia.builder().media(media).document(document).padding(PADDING)
-							.locations(config.getMediaFolders()).build().createImageCell())
-					.borderWidth(1f).borderColor(Color.LIGHT_GRAY).build());
+			ExpandedMedia expandedMedia = ExpandedMedia.builder().media(media).document(document).padding(PADDING)
+					.locations(config.getMediaFolders()).build();
+
+			ImageCell image = expandedMedia.createImageCell();
+			boolean imageAbsent = expandedMedia.isImageNotAvailable();
+			if (!imageAbsent)
+				tableBuilder.addRow(Row.builder().add(image).borderWidth(1f).borderColor(Color.LIGHT_GRAY).build());
 		}
 
 		PDPage initialPage = document.getPage(document.getNumberOfPages() - 1);

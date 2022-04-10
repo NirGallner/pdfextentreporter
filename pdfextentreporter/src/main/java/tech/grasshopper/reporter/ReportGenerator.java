@@ -12,6 +12,7 @@ import com.aventstack.extentreports.model.Report;
 import lombok.Getter;
 import tech.grasshopper.reporter.annotation.AnnotationProcessor;
 import tech.grasshopper.reporter.annotation.AnnotationStore;
+import tech.grasshopper.reporter.annotation.FileAnnotationProcessor;
 import tech.grasshopper.reporter.bookmark.Bookmark;
 import tech.grasshopper.reporter.config.ExtentPDFReporterConfig;
 import tech.grasshopper.reporter.context.AttributeSummary;
@@ -64,6 +65,8 @@ public class ReportGenerator {
 
 		processAnnotations();
 
+		processFileAnnotations();
+
 		Bookmark bookmark = Bookmark.builder().destinationStore(destinations).config(config).report(report).build();
 		PDDocumentOutline outline = bookmark.createDocumentOutline();
 
@@ -79,6 +82,11 @@ public class ReportGenerator {
 	protected void processAnnotations() {
 		AnnotationProcessor.builder().annotations(annotations).destinations(destinations).config(config).build()
 				.processAnnotations();
+	}
+
+	protected void processFileAnnotations() {
+		if (config.isDisplayAttachedMedia())
+			FileAnnotationProcessor.builder().annotations(annotations).document(document).build().updateAttachments();
 	}
 
 	protected void createExpandedMediaSection() {

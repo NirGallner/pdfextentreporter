@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.3.0 (2022-4-10)
+
+* Added media display using file attachments
+
 ## 1.2.1 (2022-4-5)
 
 * Fixed row height exception for long test name & description.

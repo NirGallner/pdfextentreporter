@@ -12,6 +12,7 @@ import org.vandeseer.easytable.structure.Row;
 import org.vandeseer.easytable.structure.Table;
 import org.vandeseer.easytable.structure.Table.TableBuilder;
 import org.vandeseer.easytable.structure.cell.AbstractCell;
+import org.vandeseer.easytable.structure.cell.ImageCell;
 import org.vandeseer.easytable.structure.cell.TextCell;
 
 import com.aventstack.extentreports.Status;
@@ -23,7 +24,9 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.experimental.SuperBuilder;
 import tech.grasshopper.pdf.annotation.Annotation;
+import tech.grasshopper.pdf.annotation.FileAnnotation;
 import tech.grasshopper.pdf.structure.cell.TableWithinTableCell;
+import tech.grasshopper.pdf.structure.cell.TextFileLinkCell;
 import tech.grasshopper.pdf.structure.cell.TextLinkCell;
 import tech.grasshopper.reporter.annotation.AnnotationStore;
 import tech.grasshopper.reporter.config.ExtentPDFReporterConfig;
@@ -92,21 +95,41 @@ public class LogDetailsCollector {
 	}
 
 	protected AbstractCell createMediaCell(Log log) {
-		if (config.isDisplayExpandedMedia()) {
+		if (config.isDisplayExpandedMedia() || config.isDisplayAttachedMedia()) {
 			TableBuilder tableBuilder = Table.builder()
 					.addColumnsOfWidth(LOGS_MEDIA_PLUS_WIDTH, width - LOGS_MEDIA_PLUS_WIDTH).padding(0f);
 
-			Annotation annotation = Annotation.builder().id(test.getId()).build();
-			annotations.addTestMediaAnnotation(annotation);
+			TestMedia testMedia = TestMedia.builder().media(log.getMedia()).document(document).padding(PADDING)
+					.width(width - LOGS_MEDIA_PLUS_WIDTH).height(LOGS_MEDIA_HEIGHT).locations(config.getMediaFolders())
+					.build();
 
-			tableBuilder.addRow(Row.builder()
-					.add(TextLinkCell.builder().text("+").annotation(annotation).font(reportFont.getRegularFont())
-							.fontSize(15).textColor(Color.RED).showLine(false).verticalAlignment(VerticalAlignment.TOP)
-							.horizontalAlignment(HorizontalAlignment.CENTER).build())
-					.add(TestMedia.builder().media(log.getMedia()).document(document)
-							.width(width - LOGS_MEDIA_PLUS_WIDTH).height(LOGS_MEDIA_HEIGHT)
-							.locations(config.getMediaFolders()).build().createImageCell())
-					.build());
+			ImageCell image = testMedia.createImageCell();
+			boolean imageAbsent = testMedia.isImageNotAvailable();
+
+			if (imageAbsent) {
+				tableBuilder.addRow(Row.builder().add(TextCell.builder().text(" ").build()).add(image).build());
+			} else {
+				if (config.isDisplayExpandedMedia()) {
+					Annotation annotation = Annotation.builder().id(test.getId()).build();
+					annotations.addTestMediaAnnotation(annotation);
+
+					tableBuilder.addRow(Row.builder()
+							.add(TextLinkCell.builder().text("+").annotation(annotation)
+									.font(reportFont.getRegularFont()).fontSize(15).textColor(Color.RED).showLine(false)
+									.verticalAlignment(VerticalAlignment.TOP)
+									.horizontalAlignment(HorizontalAlignment.CENTER).build())
+							.add(image).build());
+				} else {
+					List<FileAnnotation> fileAnnotations = new ArrayList<>();
+					fileAnnotations
+							.add(FileAnnotation.builder().text(" ").link(log.getMedia().getResolvedPath()).build());
+
+					tableBuilder.addRow(
+							Row.builder().add(TextFileLinkCell.builder().text(" ").annotations(fileAnnotations).build())
+									.add(image).build());
+					annotations.addTestMediaFileAnnotation(fileAnnotations.get(0));
+				}
+			}
 
 			return TableWithinTableCell.builder().table(tableBuilder.build()).width(width - LOGS_MEDIA_PLUS_WIDTH)
 					.build();
