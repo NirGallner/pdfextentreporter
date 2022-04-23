@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## 1.3.0 (2022-4-23)
+
+* Updated table-layout version
+
 ## 1.3.0 (2022-4-10)
 
 * Added media display using file attachments
