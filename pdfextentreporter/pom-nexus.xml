@@ -32,7 +32,7 @@
 		<project.build.resourceEncoding>UTF-8</project.build.resourceEncoding>
 
 		<lombok.version>1.18.18</lombok.version>
-		<pdfbox.version>2.0.26</pdfbox.version>S
+		<pdfbox.version>2.0.26</pdfbox.version>
 		<xchart.version>3.8.0</xchart.version>
 		<snakeyaml.version>1.27</snakeyaml.version>
 		<extent.version>5.0.9</extent.version>
