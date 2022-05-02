@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## 1.3.1 (2022-4-26)
+## 1.3.2 (2022-4-26)
 
 * Updated table-layout version
 
