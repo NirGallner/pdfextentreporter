@@ -1,4 +1,4 @@
-This artifact creates a PDF report format for the popular ExtentReports. Refer to this [article](https://ghchirp.online/2555/) for more details.
+This artifact creates a PDF report format for the popular ExtentReports. Refer to this [article](https://ghchirp.site/2555/) for more details.
 
 [Sample Report](https://github.com/grasshopper7/pdfextentreporter/blob/master/pdfextentreporter/sample/TESTSimplePDFReport.pdf)
 
